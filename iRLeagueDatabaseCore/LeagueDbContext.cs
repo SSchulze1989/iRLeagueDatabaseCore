@@ -26,6 +26,7 @@ namespace iRLeagueDatabaseCore.Models
         public virtual DbSet<DriverStatisticRowEntity> DriverStatisticRowEntities { get; set; }
         public virtual DbSet<IncidentReviewEntity> IncidentReviewEntities { get; set; }
         public virtual DbSet<IncidentReviewInvolvedLeagueMember> IncidentReviewInvolvedLeagueMembers { get; set; }
+        public virtual DbSet<LeagueEntity> Leagues { get; set; }
         public virtual DbSet<MemberEntity> LeagueMemberEntities { get; set; }
         public virtual DbSet<LeagueStatisticSetSeasonStatisticSet> LeagueStatisticSetSeasonStatisticSets { get; set; }
         public virtual DbSet<ResultEntity> ResultEntities { get; set; }
