@@ -10,8 +10,8 @@ namespace iRLeagueDatabaseCore.Models
         public StatisticSetEntity()
         {
             DriverStatisticRowEntities = new HashSet<DriverStatisticRowEntity>();
-            LeagueStatisticSetSeasonStatisticSetLeagueStatisticSetRefs = new HashSet<LeagueStatisticSetSeasonStatisticSet>();
-            LeagueStatisticSetSeasonStatisticSetSeasonStatisticSetRefs = new HashSet<LeagueStatisticSetSeasonStatisticSet>();
+            LeagueStatisticSets = new HashSet<StatisticSetEntity>();
+            DependendStatisticSets = new HashSet<StatisticSetEntity>();
         }
 
         public long Id { get; set; }
@@ -41,7 +41,7 @@ namespace iRLeagueDatabaseCore.Models
         public virtual ScoringTableEntity ScoringTable { get; set; }
         public virtual SeasonEntity Season { get; set; }
         public virtual ICollection<DriverStatisticRowEntity> DriverStatisticRowEntities { get; set; }
-        public virtual ICollection<LeagueStatisticSetSeasonStatisticSet> LeagueStatisticSetSeasonStatisticSetLeagueStatisticSetRefs { get; set; }
-        public virtual ICollection<LeagueStatisticSetSeasonStatisticSet> LeagueStatisticSetSeasonStatisticSetSeasonStatisticSetRefs { get; set; }
+        public virtual ICollection<StatisticSetEntity> LeagueStatisticSets { get; set; }
+        public virtual ICollection<StatisticSetEntity> DependendStatisticSets { get; set; }
     }
 }

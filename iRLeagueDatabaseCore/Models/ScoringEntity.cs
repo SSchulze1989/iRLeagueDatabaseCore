@@ -13,7 +13,7 @@ namespace iRLeagueDatabaseCore.Models
             InverseParentScoring = new HashSet<ScoringEntity>();
             ResultsFilterOptionEntities = new HashSet<ResultsFilterOptionEntity>();
             ScoredResultEntities = new HashSet<ScoredResultEntity>();
-            ScoringSessions = new HashSet<ScoringSession>();
+            Sessions = new HashSet<SessionEntity>();
             ScoringTableMaps = new HashSet<ScoringTableMap>();
             SeasonEntities = new HashSet<SeasonEntity>();
         }
@@ -61,7 +61,7 @@ namespace iRLeagueDatabaseCore.Models
         public virtual ICollection<ScoringEntity> InverseParentScoring { get; set; }
         public virtual ICollection<ResultsFilterOptionEntity> ResultsFilterOptionEntities { get; set; }
         public virtual ICollection<ScoredResultEntity> ScoredResultEntities { get; set; }
-        public virtual ICollection<ScoringSession> ScoringSessions { get; set; }
+        public virtual ICollection<SessionEntity> Sessions { get; set; }
         public virtual ICollection<ScoringTableMap> ScoringTableMaps { get; set; }
         public virtual ICollection<SeasonEntity> SeasonEntities { get; set; }
     }

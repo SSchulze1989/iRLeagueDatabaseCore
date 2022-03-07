@@ -12,5 +12,11 @@ namespace iRLeagueDatabaseCore.Models
         public string Name { get; set; }
         public string NameFull { get; set; }
 
+        public LeagueEntity()
+        {
+            Seasons = new HashSet<SeasonEntity>();
+        }
+
+        public virtual ICollection<SeasonEntity> Seasons { get; set; }
     }
 }

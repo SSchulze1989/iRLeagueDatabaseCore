@@ -25,7 +25,7 @@ namespace iRLeagueDatabaseCore.Models
         public bool RequiresRecalculation { get; set; }
         public long PoleLaptime { get; set; }
 
-        public virtual SessionBaseEntity Session { get; set; }
+        public virtual SessionEntity Session { get; set; }
         public virtual SeasonEntity Season { get; set; }
         public virtual IRSimSessionDetailsEntity IRSimSessionDetails { get; set; }
         public virtual ICollection<ResultRowEntity> ResultRows { get; set; }

@@ -9,7 +9,7 @@ namespace iRLeagueDatabaseCore.Models
     {
         public ScoredTeamResultRowEntity()
         {
-            ScoredTeamResultRowsGroups = new HashSet<ScoredTeamResultRowsGroup>();
+            ScoredResultRows = new HashSet<ScoredResultRowEntity>();
         }
 
         public long ScoredResultRowId { get; set; }
@@ -28,8 +28,8 @@ namespace iRLeagueDatabaseCore.Models
         public long AvgLapTime { get; set; }
         public long FastestLapTime { get; set; }
 
-        public virtual ScoredResultEntity Scor { get; set; }
+        public virtual ScoredResultEntity ScoredResult { get; set; }
         public virtual TeamEntity Team { get; set; }
-        public virtual ICollection<ScoredTeamResultRowsGroup> ScoredTeamResultRowsGroups { get; set; }
+        public virtual ICollection<ScoredResultRowEntity> ScoredResultRows { get; set; }
     }
 }
