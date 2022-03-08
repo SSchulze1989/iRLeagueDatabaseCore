@@ -11,16 +11,15 @@ namespace iRLeagueDatabaseCore.Models
     {
         public SeasonEntity()
         {
-            ResultEntities = new HashSet<ResultEntity>();
-            ScheduleEntities = new HashSet<ScheduleEntity>();
-            ScoringEntities = new HashSet<ScoringEntity>();
-            ScoringTableEntities = new HashSet<ScoringTableEntity>();
-            StatisticSetEntities = new HashSet<StatisticSetEntity>();
+            Results = new HashSet<ResultEntity>();
+            Schedules = new HashSet<ScheduleEntity>();
+            Scorings = new HashSet<ScoringEntity>();
+            ScoringTables = new HashSet<ScoringTableEntity>();
+            StatisticSets = new HashSet<StatisticSetEntity>();
         }
 
         public long SeasonId { get; set; }
         public long LeagueId { get; set; }
-        public LeagueEntity League { get; set; }
         public string SeasonName { get; set; }
         public DateTime? CreatedOn { get; set; }
         public DateTime? LastModifiedOn { get; set; }
@@ -35,11 +34,12 @@ namespace iRLeagueDatabaseCore.Models
         public DateTime? SeasonStart { get; set; }
         public DateTime? SeasonEnd { get; set; }
 
-        public virtual ScoringEntity MainScoringScoring { get; set; }
-        public virtual ICollection<ResultEntity> ResultEntities { get; set; }
-        public virtual ICollection<ScheduleEntity> ScheduleEntities { get; set; }
-        public virtual ICollection<ScoringEntity> ScoringEntities { get; set; }
-        public virtual ICollection<ScoringTableEntity> ScoringTableEntities { get; set; }
-        public virtual ICollection<StatisticSetEntity> StatisticSetEntities { get; set; }
+        public virtual LeagueEntity League { get; set; }
+        public virtual ScoringEntity MainScoring { get; set; }
+        public virtual ICollection<ResultEntity> Results { get; set; }
+        public virtual ICollection<ScheduleEntity> Schedules { get; set; }
+        public virtual ICollection<ScoringEntity> Scorings { get; set; }
+        public virtual ICollection<ScoringTableEntity> ScoringTables { get; set; }
+        public virtual ICollection<StatisticSetEntity> StatisticSets { get; set; }
     }
 }

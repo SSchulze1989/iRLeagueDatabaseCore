@@ -11,7 +11,7 @@ namespace iRLeagueDatabaseCore.Models
         {
             AcceptedReviewVoteEntities = new HashSet<AcceptedReviewVoteEntity>();
             CommentBaseEntities = new HashSet<CommentBaseEntity>();
-            IncidentReviewInvolvedLeagueMembers = new HashSet<IncidentReviewInvolvedLeagueMember>();
+            InvolvedMembers = new HashSet<MemberEntity>();
             ReviewPenaltyEntities = new HashSet<ReviewPenaltyEntity>();
         }
 
@@ -35,10 +35,10 @@ namespace iRLeagueDatabaseCore.Models
         public string ResultLongText { get; set; }
         public string IncidentNr { get; set; }
 
-        public virtual SessionBaseEntity Session { get; set; }
+        public virtual SessionEntity Session { get; set; }
         public virtual ICollection<AcceptedReviewVoteEntity> AcceptedReviewVoteEntities { get; set; }
         public virtual ICollection<CommentBaseEntity> CommentBaseEntities { get; set; }
-        public virtual ICollection<IncidentReviewInvolvedLeagueMember> IncidentReviewInvolvedLeagueMembers { get; set; }
+        public virtual ICollection<MemberEntity> InvolvedMembers { get; set; }
         public virtual ICollection<ReviewPenaltyEntity> ReviewPenaltyEntities { get; set; }
     }
 }

@@ -5,24 +5,24 @@ using System.Collections.Generic;
 
 namespace iRLeagueDatabaseCore.Models
 {
-    public partial class SessionBaseEntity
+    public partial class SessionEntity
     {
-        public SessionBaseEntity()
+        public SessionEntity()
         {
             DriverStatisticRowEntityFirstRaces = new HashSet<DriverStatisticRowEntity>();
             DriverStatisticRowEntityFirstSessions = new HashSet<DriverStatisticRowEntity>();
             DriverStatisticRowEntityLastRaces = new HashSet<DriverStatisticRowEntity>();
             DriverStatisticRowEntityLastSessions = new HashSet<DriverStatisticRowEntity>();
             IncidentReviewEntities = new HashSet<IncidentReviewEntity>();
-            InverseParentSession = new HashSet<SessionBaseEntity>();
-            ScoringSessions = new HashSet<ScoringSession>();
+            InverseParentSession = new HashSet<SessionEntity>();
+            Scorings = new HashSet<ScoringEntity>();
         }
 
         public long SessionId { get; set; }
         public string SessionTitle { get; set; }
         public int SessionType { get; set; }
         public DateTime? Date { get; set; }
-        public string LocationId { get; set; }
+        public long TrackId { get; set; }
         public TimeSpan Duration { get; set; }
         public DateTime? CreatedOn { get; set; }
         public DateTime? LastModifiedOn { get; set; }
@@ -46,15 +46,16 @@ namespace iRLeagueDatabaseCore.Models
         public long? ParentSessionId { get; set; }
         public int SubSessionNr { get; set; }
 
-        public virtual SessionBaseEntity ParentSession { get; set; }
+        public virtual SessionEntity ParentSession { get; set; }
         public virtual ScheduleEntity Schedule { get; set; }
         public virtual ResultEntity ResultEntity { get; set; }
+        public virtual TrackConfigEntity Track { get; set; }
         public virtual ICollection<DriverStatisticRowEntity> DriverStatisticRowEntityFirstRaces { get; set; }
         public virtual ICollection<DriverStatisticRowEntity> DriverStatisticRowEntityFirstSessions { get; set; }
         public virtual ICollection<DriverStatisticRowEntity> DriverStatisticRowEntityLastRaces { get; set; }
         public virtual ICollection<DriverStatisticRowEntity> DriverStatisticRowEntityLastSessions { get; set; }
         public virtual ICollection<IncidentReviewEntity> IncidentReviewEntities { get; set; }
-        public virtual ICollection<SessionBaseEntity> InverseParentSession { get; set; }
-        public virtual ICollection<ScoringSession> ScoringSessions { get; set; }
+        public virtual ICollection<SessionEntity> InverseParentSession { get; set; }
+        public virtual ICollection<ScoringEntity> Scorings { get; set; }
     }
 }

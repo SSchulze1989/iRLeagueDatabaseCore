@@ -25,30 +25,25 @@ namespace iRLeagueDatabaseCore.Models
         public virtual DbSet<CustomIncidentEntity> CustomIncidentEntities { get; set; }
         public virtual DbSet<DriverStatisticRowEntity> DriverStatisticRowEntities { get; set; }
         public virtual DbSet<IncidentReviewEntity> IncidentReviewEntities { get; set; }
-        public virtual DbSet<IncidentReviewInvolvedLeagueMember> IncidentReviewInvolvedLeagueMembers { get; set; }
         public virtual DbSet<LeagueEntity> Leagues { get; set; }
-        public virtual DbSet<MemberEntity> LeagueMemberEntities { get; set; }
-        public virtual DbSet<LeagueStatisticSetSeasonStatisticSet> LeagueStatisticSetSeasonStatisticSets { get; set; }
+        public virtual DbSet<MemberEntity> Members { get; set; }
         public virtual DbSet<ResultEntity> ResultEntities { get; set; }
         public virtual DbSet<ResultRowEntity> ResultRowEntities { get; set; }
         public virtual DbSet<ResultsFilterOptionEntity> ResultsFilterOptionEntities { get; set; }
         public virtual DbSet<ReviewPenaltyEntity> ReviewPenaltyEntities { get; set; }
         public virtual DbSet<ScheduleEntity> ScheduleEntities { get; set; }
-        public virtual DbSet<ScoredResultCleanestDriver> ScoredResultCleanestDrivers { get; set; }
         public virtual DbSet<ScoredResultEntity> ScoredResultEntities { get; set; }
-        public virtual DbSet<ScoredResultHardCharger> ScoredResultHardChargers { get; set; }
         public virtual DbSet<ScoredResultRowEntity> ScoredResultRowEntities { get; set; }
         public virtual DbSet<ScoredTeamResultRowEntity> ScoredTeamResultRowEntities { get; set; }
-        public virtual DbSet<ScoredTeamResultRowsGroup> ScoredTeamResultRowsGroups { get; set; }
         public virtual DbSet<ScoringEntity> ScoringEntities { get; set; }
-        public virtual DbSet<ScoringSession> ScoringSessions { get; set; }
         public virtual DbSet<ScoringTableEntity> ScoringTableEntities { get; set; }
         public virtual DbSet<ScoringTableMap> ScoringTableMaps { get; set; }
         public virtual DbSet<SeasonEntity> SeasonEntities { get; set; }
-        public virtual DbSet<SessionBaseEntity> SessionBaseEntities { get; set; }
+        public virtual DbSet<SessionEntity> SessionEntities { get; set; }
         public virtual DbSet<StatisticSetEntity> StatisticSetEntities { get; set; }
         public virtual DbSet<TeamEntity> TeamEntities { get; set; }
         public virtual DbSet<VoteCategoryEntity> VoteCategoryEntities { get; set; }
+        public virtual DbSet<TrackGroupEntity> TrackGroups { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -214,7 +209,7 @@ namespace iRLeagueDatabaseCore.Models
                 entity.HasOne(d => d.FirstRace)
                     .WithMany(p => p.DriverStatisticRowEntityFirstRaces)
                     .HasForeignKey(d => d.FirstRaceId)
-                    .HasConstraintName("FK_dbo.DriverStatisticRowEntities_dbo.SessionBaseEntities_FirstRaceId");
+                    .HasConstraintName("FK_dbo.DriverStatisticRowEntities_dbo.SessionEntities_FirstRaceId");
 
                 entity.HasOne(d => d.FirstResultRow)
                     .WithMany(p => p.DriverStatisticRowEntityFirstResultRows)
@@ -224,12 +219,12 @@ namespace iRLeagueDatabaseCore.Models
                 entity.HasOne(d => d.FirstSession)
                     .WithMany(p => p.DriverStatisticRowEntityFirstSessions)
                     .HasForeignKey(d => d.FirstSessionId)
-                    .HasConstraintName("FK_dbo.DriverStatisticRowEntities_dbo.SessionBaseEntities_FirstSessionId");
+                    .HasConstraintName("FK_dbo.DriverStatisticRowEntities_dbo.SessionEntities_FirstSessionId");
 
                 entity.HasOne(d => d.LastRace)
                     .WithMany(p => p.DriverStatisticRowEntityLastRaces)
                     .HasForeignKey(d => d.LastRaceId)
-                    .HasConstraintName("FK_dbo.DriverStatisticRowEntities_dbo.SessionBaseEntities_LastRaceId");
+                    .HasConstraintName("FK_dbo.DriverStatisticRowEntities_dbo.SessionEntities_LastRaceId");
 
                 entity.HasOne(d => d.LastResultRow)
                     .WithMany(p => p.DriverStatisticRowEntityLastResultRows)
@@ -239,7 +234,7 @@ namespace iRLeagueDatabaseCore.Models
                 entity.HasOne(d => d.LastSession)
                     .WithMany(p => p.DriverStatisticRowEntityLastSessions)
                     .HasForeignKey(d => d.LastSessionId)
-                    .HasConstraintName("FK_dbo.DriverStatisticRowEntities_dbo.SessionBaseEntities_LastSessionId");
+                    .HasConstraintName("FK_dbo.DriverStatisticRowEntities_dbo.SessionEntities_LastSessionId");
 
                 entity.HasOne(d => d.Member)
                     .WithMany(p => p.DriverStatisticRowEntities)
@@ -266,30 +261,10 @@ namespace iRLeagueDatabaseCore.Models
                 entity.HasOne(d => d.Session)
                     .WithMany(p => p.IncidentReviewEntities)
                     .HasForeignKey(d => d.SessionId)
-                    .HasConstraintName("FK_dbo.IncidentReviewEntities_dbo.SessionBaseEntities_SessionId");
-            });
+                    .HasConstraintName("FK_dbo.IncidentReviewEntities_dbo.SessionEntities_SessionId");
 
-            modelBuilder.Entity<IncidentReviewInvolvedLeagueMember>(entity =>
-            {
-                entity.HasKey(e => new { e.ReviewRefId, e.MemberRefId })
-                    .HasName("PK_dbo.IncidentReview_InvolvedLeagueMember");
-
-                entity.ToTable("IncidentReview_InvolvedLeagueMember");
-
-                entity.HasIndex(e => e.MemberRefId, "IX_MemberRefId");
-
-                entity.HasIndex(e => e.ReviewRefId, "IX_ReviewRefId");
-
-                entity.HasOne(d => d.MemberRef)
-                    .WithMany(p => p.IncidentReviewsInvolved)
-                    .HasForeignKey(d => d.MemberRefId)
-                    .HasConstraintName("FK_dbo.IncidentReview_InvolvedLeagueMember_dbo.LeagueMemberEntities_MemberRefId");
-
-                entity.HasOne(d => d.ReviewRef)
-                    .WithMany(p => p.IncidentReviewInvolvedLeagueMembers)
-                    .HasForeignKey(d => d.ReviewRefId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_dbo.IncidentReview_InvolvedLeagueMember_dbo.IncidentReviewEntities_ReviewRefId");
+                entity.HasMany(d => d.InvolvedMembers)
+                    .WithMany(p => p.InvolvedReviews);
             });
 
             modelBuilder.Entity<MemberEntity>(entity =>
@@ -297,30 +272,6 @@ namespace iRLeagueDatabaseCore.Models
                 entity.HasKey(e => e.MemberId)
                     .HasName("PK_dbo.LeagueMemberEntities");
 
-            });
-
-            modelBuilder.Entity<LeagueStatisticSetSeasonStatisticSet>(entity =>
-            {
-                entity.HasKey(e => new { e.LeagueStatisticSetRefId, e.SeasonStatisticSetRefId })
-                    .HasName("PK_dbo.LeagueStatisticSet_SeasonStatisticSet");
-
-                entity.ToTable("LeagueStatisticSet_SeasonStatisticSet");
-
-                entity.HasIndex(e => e.LeagueStatisticSetRefId, "IX_LeagueStatisticSetRefId");
-
-                entity.HasIndex(e => e.SeasonStatisticSetRefId, "IX_SeasonStatisticSetRefId");
-
-                entity.HasOne(d => d.LeagueStatisticSetRef)
-                    .WithMany(p => p.LeagueStatisticSetSeasonStatisticSetLeagueStatisticSetRefs)
-                    .HasForeignKey(d => d.LeagueStatisticSetRefId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_dbo.LeagueStatisticSet_SeasonStatisticSet_dbo.StatisticSetEntities_LeagueStatisticSetRefId");
-
-                entity.HasOne(d => d.SeasonStatisticSetRef)
-                    .WithMany(p => p.LeagueStatisticSetSeasonStatisticSetSeasonStatisticSetRefs)
-                    .HasForeignKey(d => d.SeasonStatisticSetRefId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_dbo.LeagueStatisticSet_SeasonStatisticSet_dbo.StatisticSetEntities_SeasonStatisticSetRefId");
             });
 
             modelBuilder.Entity<ResultEntity>(entity =>
@@ -341,10 +292,10 @@ namespace iRLeagueDatabaseCore.Models
                 entity.HasOne(d => d.Session)
                     .WithOne(p => p.ResultEntity)
                     .HasForeignKey<ResultEntity>(d => d.ResultId)
-                    .HasConstraintName("FK_dbo.ResultEntities_dbo.SessionBaseEntities_ResultId");
+                    .HasConstraintName("FK_dbo.ResultEntities_dbo.SessionEntities_ResultId");
 
                 entity.HasOne(d => d.Season)
-                    .WithMany(p => p.ResultEntities)
+                    .WithMany(p => p.Results)
                     .HasForeignKey(d => d.SeasonId)
                     .HasConstraintName("FK_dbo.ResultEntities_dbo.SeasonEntities_SeasonId");
 
@@ -471,41 +422,24 @@ namespace iRLeagueDatabaseCore.Models
                 entity.HasKey(e => e.ScheduleId)
                     .HasName("PK_dbo.ScheduleEntities");
 
-                entity.HasIndex(e => e.SeasonSeasonId, "IX_Season_SeasonId");
+                entity.HasIndex(e => e.SeasonId, "IX_SeasonId");
 
                 entity.Property(e => e.CreatedOn).HasColumnType("datetime");
 
                 entity.Property(e => e.LastModifiedOn).HasColumnType("datetime");
 
-                entity.Property(e => e.SeasonSeasonId).HasColumnName("Season_SeasonId");
+                entity.Property(e => e.SeasonId).HasColumnName("SeasonId");
 
-                entity.HasOne(d => d.SeasonSeason)
-                    .WithMany(p => p.ScheduleEntities)
-                    .HasForeignKey(d => d.SeasonSeasonId)
-                    .HasConstraintName("FK_dbo.ScheduleEntities_dbo.SeasonEntities_Season_SeasonId");
-            });
+                entity.HasOne(d => d.Season)
+                    .WithMany(p => p.Schedules)
+                    .HasForeignKey(d => d.SeasonId)
+                    .HasConstraintName("FK_dbo.ScheduleEntities_dbo.SeasonEntities_SeasonId")
+                    .Metadata.PrincipalToDependent.SetPropertyAccessMode(PropertyAccessMode.Property);
 
-            modelBuilder.Entity<ScoredResultCleanestDriver>(entity =>
-            {
-                entity.HasKey(e => new { e.ResultRefId, e.ScoringRefId, e.LeagueMemberRefId })
-                    .HasName("PK_dbo.ScoredResult_CleanestDrivers");
-
-                entity.ToTable("ScoredResult_CleanestDrivers");
-
-                entity.HasIndex(e => e.LeagueMemberRefId, "IX_LeagueMemberRefId");
-
-                entity.HasIndex(e => new { e.ResultRefId, e.ScoringRefId }, "IX_ResultRefId_ScoringRefId");
-
-                entity.HasOne(d => d.LeagueMemberRef)
-                    .WithMany(p => p.CleanestDriverResults)
-                    .HasForeignKey(d => d.LeagueMemberRefId)
-                    .HasConstraintName("FK_dbo.ScoredResult_CleanestDrivers_dbo.LeagueMemberEntities_LeagueMemberRefId");
-
-                entity.HasOne(d => d.ScoredResultEntity)
-                    .WithMany(p => p.ScoredResultCleanestDrivers)
-                    .HasForeignKey(d => new { d.ResultRefId, d.ScoringRefId })
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_dbo.ScoredResult_CleanestDrivers_dbo.ScoredResultEntities_ResultRefId_ScoringRefId");
+                entity.HasOne(d => d.League)
+                    .WithMany()
+                    .HasForeignKey(d => d.LeagueId)
+                    .HasConstraintName("FK_dbo.ScheduleEntities_dbo.LeagueEntities_LeagueId");
             });
 
             modelBuilder.Entity<ScoredResultEntity>(entity =>
@@ -537,17 +471,17 @@ namespace iRLeagueDatabaseCore.Models
 
                 entity.Property(e => e.LastModifiedOn).HasColumnType("datetime");
 
-                entity.HasOne(d => d.FastestAvgLapDriverMember)
+                entity.HasOne(d => d.FastestAvgLapDriver)
                     .WithMany(p => p.FastestAvgLapResults)
                     .HasForeignKey(d => d.FastestAvgLapDriverMemberId)
                     .HasConstraintName("FK_dbo.ScoredResultEntities_dbo.LeagueMemberEntities_FastestAvgLapDriver_MemberId");
 
-                entity.HasOne(d => d.FastestLapDriverMember)
+                entity.HasOne(d => d.FastestLapDriver)
                     .WithMany(p => p.FastestLapResults)
                     .HasForeignKey(d => d.FastestLapDriverMemberId)
                     .HasConstraintName("FK_dbo.ScoredResultEntities_dbo.LeagueMemberEntities_FastestLapDriver_MemberId");
 
-                entity.HasOne(d => d.FastestQualyLapDriverMember)
+                entity.HasOne(d => d.FastestQualyLapDriver)
                     .WithMany(p => p.FastestQualyLapResults)
                     .HasForeignKey(d => d.FastestQualyLapDriverMemberId)
                     .HasConstraintName("FK_dbo.ScoredResultEntities_dbo.LeagueMemberEntities_FastestQualyLapDriver_MemberId");
@@ -562,29 +496,12 @@ namespace iRLeagueDatabaseCore.Models
                     .HasForeignKey(d => d.ScoringId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_dbo.ScoredResultEntities_dbo.ScoringEntities_ScoringId");
-            });
 
-            modelBuilder.Entity<ScoredResultHardCharger>(entity =>
-            {
-                entity.HasKey(e => new { e.ResultRefId, e.ScoringRefId, e.MemberRefId })
-                    .HasName("PK_dbo.ScoredResult_HardChargers");
+                entity.HasMany(d => d.CleanestDrivers)
+                    .WithMany(p => p.CleanestDriverResults);
 
-                entity.ToTable("ScoredResult_HardChargers");
-
-                entity.HasIndex(e => e.MemberRefId, "IX_LeagueMemberRefId");
-
-                entity.HasIndex(e => new { e.ResultRefId, e.ScoringRefId }, "IX_ResultRefId_ScoringRefId");
-
-                entity.HasOne(d => d.MemberRef)
-                    .WithMany(p => p.HardChargerResults)
-                    .HasForeignKey(d => d.MemberRefId)
-                    .HasConstraintName("FK_dbo.ScoredResult_HardChargers_dbo.LeagueMemberEntities_LeagueMemberRefId");
-
-                entity.HasOne(d => d.ScoredResultEntity)
-                    .WithMany(p => p.ScoredResultHardChargers)
-                    .HasForeignKey(d => new { d.ResultRefId, d.ScoringRefId })
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_dbo.ScoredResult_HardChargers_dbo.ScoredResultEntities_ResultRefId_ScoringRefId");
+                entity.HasMany(d => d.HardChargers)
+                    .WithMany(p => p.HardChargerResults);
             });
 
             modelBuilder.Entity<ScoredResultRowEntity>(entity =>
@@ -609,7 +526,7 @@ namespace iRLeagueDatabaseCore.Models
                     .HasConstraintName("FK_dbo.ScoredResultRowEntities_dbo.TeamEntities_TeamId");
 
                 entity.HasOne(d => d.Scor)
-                    .WithMany(p => p.ScoredResultRowEntities)
+                    .WithMany(p => p.ScoredResultRows)
                     .HasForeignKey(d => new { d.ScoredResultId, d.ScoringId })
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_dbo.ScoredResultRowEntities_dbo.ScoredResultEntities_ScoredResultId_ScoringId");
@@ -632,33 +549,13 @@ namespace iRLeagueDatabaseCore.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_dbo.ScoredTeamResultRowEntities_dbo.TeamEntities_TeamId");
 
-                entity.HasOne(d => d.Scor)
-                    .WithMany(p => p.ScoredTeamResultRowEntities)
+                entity.HasOne(d => d.ScoredResult)
+                    .WithMany(p => p.ScoredTeamResultRows)
                     .HasForeignKey(d => new { d.ScoredResultId, d.ScoringId })
                     .HasConstraintName("FK_dbo.ScoredTeamResultRowEntities_dbo.ScoredResultEntities_ScoredResultId_ScoringId");
-            });
 
-            modelBuilder.Entity<ScoredTeamResultRowsGroup>(entity =>
-            {
-                entity.HasKey(e => new { e.ScoredTeamResultRowRefId, e.ScoredResultRowRefId })
-                    .HasName("PK_dbo.ScoredTeamResultRowsGroup");
-
-                entity.ToTable("ScoredTeamResultRowsGroup");
-
-                entity.HasIndex(e => e.ScoredResultRowRefId, "IX_ScoredResultRowRefId");
-
-                entity.HasIndex(e => e.ScoredTeamResultRowRefId, "IX_ScoredTeamResultRowRefId");
-
-                entity.HasOne(d => d.ScoredResultRowRef)
-                    .WithMany(p => p.ScoredTeamResultRowsGroups)
-                    .HasForeignKey(d => d.ScoredResultRowRefId)
-                    .HasConstraintName("FK_dbo.ScoredTeamResultRowsGroup_dbo.ScoredResultRowEntities_ScoredResultRowRefId");
-
-                entity.HasOne(d => d.ScoredTeamResultRowRef)
-                    .WithMany(p => p.ScoredTeamResultRowsGroups)
-                    .HasForeignKey(d => d.ScoredTeamResultRowRefId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_dbo.ScoredTeamResultRowsGroup_dbo.ScoredTeamResultRowEntities_ScoredTeamResultRowRefId");
+                entity.HasMany(d => d.ScoredResultRows)
+                    .WithMany(p => p.ScoredTeamResultRows);
             });
 
             modelBuilder.Entity<ScoringEntity>(entity =>
@@ -683,7 +580,7 @@ namespace iRLeagueDatabaseCore.Models
                     .HasDefaultValueSql("((1))");
 
                 entity.HasOne(d => d.ConnectedSchedule)
-                    .WithMany(p => p.ScoringEntities)
+                    .WithMany(p => p.Scorings)
                     .HasForeignKey(d => d.ConnectedScheduleId)
                     .HasConstraintName("FK_dbo.ScoringEntities_dbo.ScheduleEntities_ConnectedSchedule_ScheduleId");
 
@@ -698,32 +595,9 @@ namespace iRLeagueDatabaseCore.Models
                     .HasConstraintName("FK_dbo.ScoringEntities_dbo.ScoringEntities_ParentScoringId");
 
                 entity.HasOne(d => d.Season)
-                    .WithMany(p => p.ScoringEntities)
+                    .WithMany(p => p.Scorings)
                     .HasForeignKey(d => d.SeasonId)
                     .HasConstraintName("FK_dbo.ScoringEntities_dbo.SeasonEntities_Season_SeasonId");
-            });
-
-            modelBuilder.Entity<ScoringSession>(entity =>
-            {
-                entity.HasKey(e => new { e.ScoringRefId, e.SessionRefId })
-                    .HasName("PK_dbo.Scoring_Session");
-
-                entity.ToTable("Scoring_Session");
-
-                entity.HasIndex(e => e.ScoringRefId, "IX_ScoringRefId");
-
-                entity.HasIndex(e => e.SessionRefId, "IX_SessionRefId");
-
-                entity.HasOne(d => d.ScoringRef)
-                    .WithMany(p => p.ScoringSessions)
-                    .HasForeignKey(d => d.ScoringRefId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_dbo.Scoring_Session_dbo.ScoringEntities_ScoringRefId");
-
-                entity.HasOne(d => d.SessionRef)
-                    .WithMany(p => p.ScoringSessions)
-                    .HasForeignKey(d => d.SessionRefId)
-                    .HasConstraintName("FK_dbo.Scoring_Session_dbo.SessionBaseEntities_SessionRefId");
             });
 
             modelBuilder.Entity<ScoringTableEntity>(entity =>
@@ -738,7 +612,7 @@ namespace iRLeagueDatabaseCore.Models
                 entity.Property(e => e.LastModifiedOn).HasColumnType("datetime");
 
                 entity.HasOne(d => d.Season)
-                    .WithMany(p => p.ScoringTableEntities)
+                    .WithMany(p => p.ScoringTables)
                     .HasForeignKey(d => d.SeasonId)
                     .HasConstraintName("FK_dbo.ScoringTableEntities_dbo.SeasonEntities_Season_SeasonId");
             });
@@ -790,19 +664,19 @@ namespace iRLeagueDatabaseCore.Models
                 entity.Property(e => e.SeasonStart).HasColumnType("datetime");
 
                 entity.HasOne(e => e.League)
-                    .WithMany()
+                    .WithMany(p => p.Seasons)
                     .HasForeignKey(e => e.LeagueId);
 
-                entity.HasOne(d => d.MainScoringScoring)
+                entity.HasOne(d => d.MainScoring)
                     .WithMany(p => p.SeasonEntities)
                     .HasForeignKey(d => d.MainScoringScoringId)
                     .HasConstraintName("FK_dbo.SeasonEntities_dbo.ScoringEntities_MainScoring_ScoringId");
             });
 
-            modelBuilder.Entity<SessionBaseEntity>(entity =>
+            modelBuilder.Entity<SessionEntity>(entity =>
             {
                 entity.HasKey(e => e.SessionId)
-                    .HasName("PK_dbo.SessionBaseEntities");
+                    .HasName("PK_dbo.SessionEntities");
 
                 entity.HasIndex(e => e.ParentSessionId, "IX_ParentSessionId");
 
@@ -821,13 +695,22 @@ namespace iRLeagueDatabaseCore.Models
                 entity.HasOne(d => d.ParentSession)
                     .WithMany(p => p.InverseParentSession)
                     .HasForeignKey(d => d.ParentSessionId)
-                    .HasConstraintName("FK_dbo.SessionBaseEntities_dbo.SessionBaseEntities_ParentSessionId");
+                    .HasConstraintName("FK_dbo.SessionEntities_dbo.SessionEntities_ParentSessionId");
 
                 entity.HasOne(d => d.Schedule)
-                    .WithMany(p => p.SessionBaseEntities)
+                    .WithMany(p => p.Sessions)
                     .HasForeignKey(d => d.ScheduleId)
                     .OnDelete(DeleteBehavior.Cascade)
-                    .HasConstraintName("FK_dbo.SessionBaseEntities_dbo.ScheduleEntities_Schedule_ScheduleId");
+                    .HasConstraintName("FK_dbo.SessionEntities_dbo.ScheduleEntities_Schedule_ScheduleId");
+
+                entity.HasOne(d => d.Track)
+                    .WithMany()
+                    .HasForeignKey(d => d.TrackId)
+                    .OnDelete(DeleteBehavior.SetNull)
+                    .HasConstraintName("FK_dbo.SessionEntities_dbo.TrackConfigEntities_TrackId");
+
+                entity.HasMany(d => d.Scorings)
+                    .WithMany(p => p.Sessions);
             });
 
             modelBuilder.Entity<StatisticSetEntity>(entity =>
@@ -863,10 +746,13 @@ namespace iRLeagueDatabaseCore.Models
                     .HasConstraintName("FK_dbo.StatisticSetEntities_dbo.ScoringTableEntities_ScoringTableId");
 
                 entity.HasOne(d => d.Season)
-                    .WithMany(p => p.StatisticSetEntities)
+                    .WithMany(p => p.StatisticSets)
                     .HasForeignKey(d => d.SeasonId)
                     .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_dbo.StatisticSetEntities_dbo.SeasonEntities_SeasonId");
+
+                entity.HasMany(d => d.LeagueStatisticSets)
+                    .WithMany(p => p.DependendStatisticSets);
             });
 
             modelBuilder.Entity<TeamEntity>(entity =>
@@ -883,6 +769,24 @@ namespace iRLeagueDatabaseCore.Models
             {
                 entity.HasKey(e => e.CatId)
                     .HasName("PK_dbo.VoteCategoryEntities");
+            });
+
+            modelBuilder.Entity<TrackGroupEntity>(entity =>
+            {
+                entity.HasKey(e => e.TrackGroupId)
+                    .HasName("PK_dbo.TrackGroupEntities");
+
+                entity.HasMany(d => d.TrackConfigs)
+                    .WithOne(p => p.TrackGroup)
+                    .HasForeignKey(d => d.TrackGroupId)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("FK_dbo.TrackGroupEntities_dbo.TrackConfigEntities_TrackGroupId");
+            });
+
+            modelBuilder.Entity<TrackConfigEntity>(entity =>
+            {
+                entity.HasKey(e => e.TrackId)
+                    .HasName("PK_dbo.TrackConfigEntities");
             });
 
             OnModelCreatingPartial(modelBuilder);

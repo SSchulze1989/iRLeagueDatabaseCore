@@ -9,10 +9,10 @@ namespace iRLeagueDatabaseCore.Models
     {
         public ScoredResultEntity()
         {
-            ScoredResultCleanestDrivers = new HashSet<ScoredResultCleanestDriver>();
-            ScoredResultHardChargers = new HashSet<ScoredResultHardCharger>();
-            ScoredResultRowEntities = new HashSet<ScoredResultRowEntity>();
-            ScoredTeamResultRowEntities = new HashSet<ScoredTeamResultRowEntity>();
+            CleanestDrivers = new HashSet<MemberEntity>();
+            HardChargers = new HashSet<MemberEntity>();
+            ScoredResultRows = new HashSet<ScoredResultRowEntity>();
+            ScoredTeamResultRows = new HashSet<ScoredTeamResultRowEntity>();
         }
 
         public long ResultId { get; set; }
@@ -32,14 +32,14 @@ namespace iRLeagueDatabaseCore.Models
         public long? FastestLapDriverMemberId { get; set; }
         public long? FastestQualyLapDriverMemberId { get; set; }
 
-        public virtual MemberEntity FastestAvgLapDriverMember { get; set; }
-        public virtual MemberEntity FastestLapDriverMember { get; set; }
-        public virtual MemberEntity FastestQualyLapDriverMember { get; set; }
+        public virtual MemberEntity FastestAvgLapDriver { get; set; }
+        public virtual MemberEntity FastestLapDriver { get; set; }
+        public virtual MemberEntity FastestQualyLapDriver { get; set; }
         public virtual ResultEntity Result { get; set; }
         public virtual ScoringEntity Scoring { get; set; }
-        public virtual ICollection<ScoredResultCleanestDriver> ScoredResultCleanestDrivers { get; set; }
-        public virtual ICollection<ScoredResultHardCharger> ScoredResultHardChargers { get; set; }
-        public virtual ICollection<ScoredResultRowEntity> ScoredResultRowEntities { get; set; }
-        public virtual ICollection<ScoredTeamResultRowEntity> ScoredTeamResultRowEntities { get; set; }
+        public virtual ICollection<MemberEntity> CleanestDrivers { get; set; }
+        public virtual ICollection<MemberEntity> HardChargers { get; set; }
+        public virtual ICollection<ScoredResultRowEntity> ScoredResultRows { get; set; }
+        public virtual ICollection<ScoredTeamResultRowEntity> ScoredTeamResultRows { get; set; }
     }
 }

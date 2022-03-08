@@ -76,12 +76,12 @@ namespace iRLeagueDatabaseCore.Models
         public int HardChargerAwards { get; set; }
         public int CleanestDriverAwards { get; set; }
 
-        public virtual SessionBaseEntity FirstRace { get; set; }
+        public virtual SessionEntity FirstRace { get; set; }
         public virtual ScoredResultRowEntity FirstResultRow { get; set; }
-        public virtual SessionBaseEntity FirstSession { get; set; }
-        public virtual SessionBaseEntity LastRace { get; set; }
+        public virtual SessionEntity FirstSession { get; set; }
+        public virtual SessionEntity LastRace { get; set; }
         public virtual ScoredResultRowEntity LastResultRow { get; set; }
-        public virtual SessionBaseEntity LastSession { get; set; }
+        public virtual SessionEntity LastSession { get; set; }
         public virtual MemberEntity Member { get; set; }
         public virtual StatisticSetEntity StatisticSet { get; set; }
     }
