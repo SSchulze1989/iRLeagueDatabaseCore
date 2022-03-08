@@ -57,5 +57,11 @@ namespace UnitTests.EntityFramework
                 Assert.Equal("TestLeague", dbContext.Leagues.First().Name);
             }
         }
+
+        [Fact]
+        public void TestJustThisOneThing()
+        {
+            Assert.True(true);
+        }
     }
 }
