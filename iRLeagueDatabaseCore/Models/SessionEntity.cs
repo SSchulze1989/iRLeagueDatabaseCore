@@ -22,7 +22,7 @@ namespace iRLeagueDatabaseCore.Models
         public string SessionTitle { get; set; }
         public int SessionType { get; set; }
         public DateTime? Date { get; set; }
-        public long TrackId { get; set; }
+        public long? TrackId { get; set; }
         public TimeSpan Duration { get; set; }
         public DateTime? CreatedOn { get; set; }
         public DateTime? LastModifiedOn { get; set; }
@@ -40,7 +40,6 @@ namespace iRLeagueDatabaseCore.Models
         public string IrResultLink { get; set; }
         public bool? QualyAttached { get; set; }
         public bool? PracticeAttached { get; set; }
-        public string Discriminator { get; set; }
         public long? ScheduleId { get; set; }
         public string Name { get; set; }
         public long? ParentSessionId { get; set; }

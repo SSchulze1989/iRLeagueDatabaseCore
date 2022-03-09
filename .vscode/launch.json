@@ -10,9 +10,10 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/UnitTests/bin/Debug/net5.0/UnitTests.dll",
+            //"program": "${workspaceFolder}/UnitTests/bin/Debug/net5.0/UnitTests.dll",
+            "program": "${workspaceFolder}/TestConsole/bin/Debug/net5.0/TestConsole.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/UnitTests",
+            "cwd": "${workspaceFolder}/TestConsole",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
             "console": "internalConsole",
             "stopAtEntry": false
