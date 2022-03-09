@@ -18,15 +18,22 @@ namespace iRLeagueDatabaseCore.Migrations
                     LeagueId = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(type: "text", nullable: true),
-                    NameFull = table.Column<string>(type: "text", nullable: true)
+                    NameFull = table.Column<string>(type: "text", nullable: true),
+                    CreatedOn = table.Column<DateTime>(type: "datetime", nullable: true),
+                    LastModifiedOn = table.Column<DateTime>(type: "datetime", nullable: true),
+                    Version = table.Column<int>(type: "int", nullable: false),
+                    CreatedByUserId = table.Column<string>(type: "text", nullable: true),
+                    CreatedByUserName = table.Column<string>(type: "text", nullable: true),
+                    LastModifiedByUserId = table.Column<string>(type: "text", nullable: true),
+                    LastModifiedByUserName = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_dbo.LeagueEntities", x => x.LeagueId);
+                    table.PrimaryKey("PK_dbo.Leagues", x => x.LeagueId);
                 });
 
             migrationBuilder.CreateTable(
-                name: "TeamEntities",
+                name: "Teams",
                 columns: table => new
                 {
                     TeamId = table.Column<long>(type: "bigint", nullable: false)
@@ -45,7 +52,7 @@ namespace iRLeagueDatabaseCore.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_dbo.TeamEntities", x => x.TeamId);
+                    table.PrimaryKey("PK_dbo.Teams", x => x.TeamId);
                 });
 
             migrationBuilder.CreateTable(
@@ -59,11 +66,11 @@ namespace iRLeagueDatabaseCore.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_dbo.TrackGroupEntities", x => x.TrackGroupId);
+                    table.PrimaryKey("PK_dbo.TrackGroups", x => x.TrackGroupId);
                 });
 
             migrationBuilder.CreateTable(
-                name: "VoteCategoryEntities",
+                name: "VoteCategorys",
                 columns: table => new
                 {
                     CatId = table.Column<long>(type: "bigint", nullable: false)
@@ -74,11 +81,11 @@ namespace iRLeagueDatabaseCore.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_dbo.VoteCategoryEntities", x => x.CatId);
+                    table.PrimaryKey("PK_dbo.VoteCategorys", x => x.CatId);
                 });
 
             migrationBuilder.CreateTable(
-                name: "CustomIncidentEntities",
+                name: "CustomIncidents",
                 columns: table => new
                 {
                     IncidentId = table.Column<long>(type: "bigint", nullable: false)
@@ -89,9 +96,9 @@ namespace iRLeagueDatabaseCore.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_dbo.CustomIncidentEntities", x => x.IncidentId);
+                    table.PrimaryKey("PK_dbo.CustomIncidents", x => x.IncidentId);
                     table.ForeignKey(
-                        name: "FK_CustomIncidentEntities_Leagues_LeagueId",
+                        name: "FK_CustomIncidents_Leagues_LeagueId",
                         column: x => x.LeagueId,
                         principalTable: "Leagues",
                         principalColumn: "LeagueId",
@@ -113,11 +120,11 @@ namespace iRLeagueDatabaseCore.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_dbo.LeagueMemberEntities", x => x.MemberId);
+                    table.PrimaryKey("PK_dbo.LeagueMembers", x => x.MemberId);
                     table.ForeignKey(
-                        name: "FK_Members_TeamEntities_TeamEntityTeamId",
+                        name: "FK_Members_Teams_TeamEntityTeamId",
                         column: x => x.TeamEntityTeamId,
-                        principalTable: "TeamEntities",
+                        principalTable: "Teams",
                         principalColumn: "TeamId",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -138,7 +145,7 @@ namespace iRLeagueDatabaseCore.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_dbo.TrackConfigEntities", x => x.TrackId);
+                    table.PrimaryKey("PK_dbo.TrackConfigs", x => x.TrackId);
                     table.ForeignKey(
                         name: "FK_dbo.TrackGroups_dbo.TrackConfigs_TrackGroupId",
                         column: x => x.TrackGroupId,
@@ -148,7 +155,7 @@ namespace iRLeagueDatabaseCore.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ReviewPenaltyEntities",
+                name: "ReviewPenaltys",
                 columns: table => new
                 {
                     ResultRowId = table.Column<long>(type: "bigint", nullable: false),
@@ -158,11 +165,11 @@ namespace iRLeagueDatabaseCore.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_dbo.ReviewPenaltyEntities", x => new { x.ResultRowId, x.ReviewId });
+                    table.PrimaryKey("PK_dbo.ReviewPenaltys", x => new { x.ResultRowId, x.ReviewId });
                 });
 
             migrationBuilder.CreateTable(
-                name: "CommentReviewVoteEntities",
+                name: "CommentReviewVotes",
                 columns: table => new
                 {
                     ReviewVoteId = table.Column<long>(type: "bigint", nullable: false)
@@ -176,7 +183,7 @@ namespace iRLeagueDatabaseCore.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_dbo.CommentReviewVoteEntities", x => x.ReviewVoteId);
+                    table.PrimaryKey("PK_dbo.CommentReviewVotes", x => x.ReviewVoteId);
                     table.ForeignKey(
                         name: "FK_dbo.CommentReviewVotes_dbo.LeagueMembers_MemberAtFaultId",
                         column: x => x.MemberAtFaultId,
@@ -186,13 +193,13 @@ namespace iRLeagueDatabaseCore.Migrations
                     table.ForeignKey(
                         name: "FK_dbo.CommentReviewVotes_dbo.VoteCategorys_CustomVoteCatId",
                         column: x => x.CustomVoteCatId,
-                        principalTable: "VoteCategoryEntities",
+                        principalTable: "VoteCategorys",
                         principalColumn: "CatId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "AcceptedReviewVoteEntities",
+                name: "AcceptedReviewVotes",
                 columns: table => new
                 {
                     ReviewVoteId = table.Column<long>(type: "bigint", nullable: false)
@@ -206,7 +213,7 @@ namespace iRLeagueDatabaseCore.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_dbo.AcceptedReviewVoteEntities", x => x.ReviewVoteId);
+                    table.PrimaryKey("PK_dbo.AcceptedReviewVotes", x => x.ReviewVoteId);
                     table.ForeignKey(
                         name: "FK_dbo.AcceptedReviewVotes_dbo.LeagueMembers_MemberAtFaultId",
                         column: x => x.MemberAtFaultId,
@@ -216,13 +223,13 @@ namespace iRLeagueDatabaseCore.Migrations
                     table.ForeignKey(
                         name: "FK_dbo.AcceptedReviewVotes_dbo.VoteCategorys_CustomVoteCatId",
                         column: x => x.CustomVoteCatId,
-                        principalTable: "VoteCategoryEntities",
+                        principalTable: "VoteCategorys",
                         principalColumn: "CatId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "CommentBaseEntities",
+                name: "CommentBases",
                 columns: table => new
                 {
                     CommentId = table.Column<long>(type: "bigint", nullable: false)
@@ -245,11 +252,11 @@ namespace iRLeagueDatabaseCore.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_dbo.CommentBaseEntities", x => x.CommentId);
+                    table.PrimaryKey("PK_dbo.CommentBases", x => x.CommentId);
                     table.ForeignKey(
                         name: "FK_dbo.CommentBases_dbo.CommentBases_ReplyToCommentId",
                         column: x => x.ReplyToCommentId,
-                        principalTable: "CommentBaseEntities",
+                        principalTable: "CommentBases",
                         principalColumn: "CommentId",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -273,7 +280,7 @@ namespace iRLeagueDatabaseCore.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ScheduleEntities",
+                name: "Schedules",
                 columns: table => new
                 {
                     ScheduleId = table.Column<long>(type: "bigint", nullable: false)
@@ -291,7 +298,7 @@ namespace iRLeagueDatabaseCore.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_dbo.ScheduleEntities", x => x.ScheduleId);
+                    table.PrimaryKey("PK_dbo.Schedules", x => x.ScheduleId);
                     table.ForeignKey(
                         name: "FK_dbo.Schedules_dbo.Leagues_LeagueId",
                         column: x => x.LeagueId,
@@ -301,7 +308,7 @@ namespace iRLeagueDatabaseCore.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SessionEntities",
+                name: "Sessions",
                 columns: table => new
                 {
                     SessionId = table.Column<long>(type: "bigint", nullable: false)
@@ -334,17 +341,17 @@ namespace iRLeagueDatabaseCore.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_dbo.SessionEntities", x => x.SessionId);
+                    table.PrimaryKey("PK_dbo.Sessions", x => x.SessionId);
                     table.ForeignKey(
                         name: "FK_dbo.Sessions_dbo.Schedules_Schedule_ScheduleId",
                         column: x => x.ScheduleId,
-                        principalTable: "ScheduleEntities",
+                        principalTable: "Schedules",
                         principalColumn: "ScheduleId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_dbo.Sessions_dbo.Sessions_ParentSessionId",
                         column: x => x.ParentSessionId,
-                        principalTable: "SessionEntities",
+                        principalTable: "Sessions",
                         principalColumn: "SessionId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -356,7 +363,7 @@ namespace iRLeagueDatabaseCore.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "IncidentReviewEntities",
+                name: "IncidentReviews",
                 columns: table => new
                 {
                     ReviewId = table.Column<long>(type: "bigint", nullable: false)
@@ -382,41 +389,41 @@ namespace iRLeagueDatabaseCore.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_dbo.IncidentReviewEntities", x => x.ReviewId);
+                    table.PrimaryKey("PK_dbo.IncidentReviews", x => x.ReviewId);
                     table.ForeignKey(
                         name: "FK_dbo.IncidentReviews_dbo.Sessions_SessionId",
                         column: x => x.SessionId,
-                        principalTable: "SessionEntities",
+                        principalTable: "Sessions",
                         principalColumn: "SessionId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "SeasonEntities",
+                name: "Seasons",
                 columns: table => new
                 {
                     SeasonId = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     LeagueId = table.Column<long>(type: "bigint", nullable: false),
                     SeasonName = table.Column<string>(type: "text", nullable: true),
+                    MainScoring_ScoringId = table.Column<long>(type: "bigint", nullable: true),
+                    HideCommentsBeforeVoted = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    Finished = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    SeasonStart = table.Column<DateTime>(type: "datetime", nullable: true),
+                    SeasonEnd = table.Column<DateTime>(type: "datetime", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "datetime", nullable: true),
                     LastModifiedOn = table.Column<DateTime>(type: "datetime", nullable: true),
                     Version = table.Column<int>(type: "int", nullable: false),
                     CreatedByUserId = table.Column<string>(type: "text", nullable: true),
                     CreatedByUserName = table.Column<string>(type: "text", nullable: true),
                     LastModifiedByUserId = table.Column<string>(type: "text", nullable: true),
-                    LastModifiedByUserName = table.Column<string>(type: "text", nullable: true),
-                    MainScoring_ScoringId = table.Column<long>(type: "bigint", nullable: true),
-                    HideCommentsBeforeVoted = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    Finished = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    SeasonStart = table.Column<DateTime>(type: "datetime", nullable: true),
-                    SeasonEnd = table.Column<DateTime>(type: "datetime", nullable: true)
+                    LastModifiedByUserName = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_dbo.SeasonEntities", x => x.SeasonId);
+                    table.PrimaryKey("PK_dbo.Seasons", x => x.SeasonId);
                     table.ForeignKey(
-                        name: "FK_SeasonEntities_Leagues_LeagueId",
+                        name: "FK_Seasons_Leagues_LeagueId",
                         column: x => x.LeagueId,
                         principalTable: "Leagues",
                         principalColumn: "LeagueId",
@@ -424,7 +431,7 @@ namespace iRLeagueDatabaseCore.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ResultEntities",
+                name: "Results",
                 columns: table => new
                 {
                     ResultId = table.Column<long>(type: "bigint", nullable: false),
@@ -441,23 +448,23 @@ namespace iRLeagueDatabaseCore.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_dbo.ResultEntities", x => x.ResultId);
+                    table.PrimaryKey("PK_dbo.Results", x => x.ResultId);
                     table.ForeignKey(
                         name: "FK_dbo.Results_dbo.Seasons_SeasonId",
                         column: x => x.SeasonId,
-                        principalTable: "SeasonEntities",
+                        principalTable: "Seasons",
                         principalColumn: "SeasonId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_dbo.Results_dbo.Sessions_ResultId",
                         column: x => x.ResultId,
-                        principalTable: "SessionEntities",
+                        principalTable: "Sessions",
                         principalColumn: "SessionId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ScoringEntities",
+                name: "Scorings",
                 columns: table => new
                 {
                     ScoringId = table.Column<long>(type: "bigint", nullable: false)
@@ -498,35 +505,35 @@ namespace iRLeagueDatabaseCore.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_dbo.ScoringEntities", x => x.ScoringId);
+                    table.PrimaryKey("PK_dbo.Scorings", x => x.ScoringId);
                     table.ForeignKey(
                         name: "FK_dbo.Scorings_dbo.Schedules_ConnectedSchedule_ScheduleId",
                         column: x => x.ConnectedScheduleId,
-                        principalTable: "ScheduleEntities",
+                        principalTable: "Schedules",
                         principalColumn: "ScheduleId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_dbo.Scorings_dbo.Scorings_ExtScoringSourceId",
                         column: x => x.ExtScoringSourceId,
-                        principalTable: "ScoringEntities",
+                        principalTable: "Scorings",
                         principalColumn: "ScoringId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_dbo.Scorings_dbo.Scorings_ParentScoringId",
                         column: x => x.ParentScoringId,
-                        principalTable: "ScoringEntities",
+                        principalTable: "Scorings",
                         principalColumn: "ScoringId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_dbo.Scorings_dbo.Seasons_Season_SeasonId",
                         column: x => x.SeasonId,
-                        principalTable: "SeasonEntities",
+                        principalTable: "Seasons",
                         principalColumn: "SeasonId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ScoringTableEntities",
+                name: "ScoringTables",
                 columns: table => new
                 {
                     ScoringTableId = table.Column<long>(type: "bigint", nullable: false)
@@ -549,11 +556,11 @@ namespace iRLeagueDatabaseCore.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_dbo.ScoringTableEntities", x => x.ScoringTableId);
+                    table.PrimaryKey("PK_dbo.ScoringTables", x => x.ScoringTableId);
                     table.ForeignKey(
                         name: "FK_dbo.ScoringTables_dbo.Seasons_Season_SeasonId",
                         column: x => x.SeasonId,
-                        principalTable: "SeasonEntities",
+                        principalTable: "Seasons",
                         principalColumn: "SeasonId",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -618,13 +625,13 @@ namespace iRLeagueDatabaseCore.Migrations
                     table.ForeignKey(
                         name: "FK_dbo.IRSimSessionDetailss_dbo.Results_ResultId",
                         column: x => x.ResultId,
-                        principalTable: "ResultEntities",
+                        principalTable: "Results",
                         principalColumn: "ResultId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ResultRowEntities",
+                name: "ResultRows",
                 columns: table => new
                 {
                     ResultRowId = table.Column<long>(type: "bigint", nullable: false)
@@ -677,7 +684,7 @@ namespace iRLeagueDatabaseCore.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_dbo.ResultRowEntities", x => x.ResultRowId);
+                    table.PrimaryKey("PK_dbo.ResultRows", x => x.ResultRowId);
                     table.ForeignKey(
                         name: "FK_dbo.ResultRows_dbo.LeagueMembers_MemberId",
                         column: x => x.MemberId,
@@ -687,19 +694,19 @@ namespace iRLeagueDatabaseCore.Migrations
                     table.ForeignKey(
                         name: "FK_dbo.ResultRows_dbo.Results_ResultId",
                         column: x => x.ResultId,
-                        principalTable: "ResultEntities",
+                        principalTable: "Results",
                         principalColumn: "ResultId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_dbo.ResultRows_dbo.Teams_TeamId",
                         column: x => x.TeamId,
-                        principalTable: "TeamEntities",
+                        principalTable: "Teams",
                         principalColumn: "TeamId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ResultsFilterOptionEntities",
+                name: "ResultsFilterOptions",
                 columns: table => new
                 {
                     ResultsFilterId = table.Column<long>(type: "bigint", nullable: false)
@@ -721,17 +728,17 @@ namespace iRLeagueDatabaseCore.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_dbo.ResultsFilterOptionEntities", x => x.ResultsFilterId);
+                    table.PrimaryKey("PK_dbo.ResultsFilterOptions", x => x.ResultsFilterId);
                     table.ForeignKey(
                         name: "FK_dbo.ResultsFilterOptions_dbo.Scorings_ScoringId",
                         column: x => x.ScoringId,
-                        principalTable: "ScoringEntities",
+                        principalTable: "Scorings",
                         principalColumn: "ScoringId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ScoredResultEntities",
+                name: "ScoredResults",
                 columns: table => new
                 {
                     ResultId = table.Column<long>(type: "bigint", nullable: false),
@@ -753,7 +760,7 @@ namespace iRLeagueDatabaseCore.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_dbo.ScoredResultEntities", x => new { x.ResultId, x.ScoringId });
+                    table.PrimaryKey("PK_dbo.ScoredResults", x => new { x.ResultId, x.ScoringId });
                     table.ForeignKey(
                         name: "FK_dbo.ScoredResults_dbo.LeagueMembers_FAvgLapDriver_MemberId",
                         column: x => x.FastestAvgLapDriver_MemberId,
@@ -775,13 +782,13 @@ namespace iRLeagueDatabaseCore.Migrations
                     table.ForeignKey(
                         name: "FK_dbo.ScoredResults_dbo.Results_ResultId",
                         column: x => x.ResultId,
-                        principalTable: "ResultEntities",
+                        principalTable: "Results",
                         principalColumn: "ResultId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_dbo.ScoredResults_dbo.Scorings_ScoringId",
                         column: x => x.ScoringId,
-                        principalTable: "ScoringEntities",
+                        principalTable: "Scorings",
                         principalColumn: "ScoringId",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -797,15 +804,15 @@ namespace iRLeagueDatabaseCore.Migrations
                 {
                     table.PrimaryKey("PK_ScoringEntitySessionEntity", x => new { x.ScoringsScoringId, x.SessionsSessionId });
                     table.ForeignKey(
-                        name: "FK_ScoringEntitySessionEntity_ScoringEntities_ScoringsScoringId",
+                        name: "FK_ScoringEntitySessionEntity_Scorings_ScoringsScoringId",
                         column: x => x.ScoringsScoringId,
-                        principalTable: "ScoringEntities",
+                        principalTable: "Scorings",
                         principalColumn: "ScoringId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ScoringEntitySessionEntity_SessionEntities_SessionsSessionId",
+                        name: "FK_ScoringEntitySessionEntity_Sessions_SessionsSessionId",
                         column: x => x.SessionsSessionId,
-                        principalTable: "SessionEntities",
+                        principalTable: "Sessions",
                         principalColumn: "SessionId",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -823,19 +830,19 @@ namespace iRLeagueDatabaseCore.Migrations
                     table.ForeignKey(
                         name: "FK_dbo.ScoringTableMap_dbo.Scorings_ScoringRefId",
                         column: x => x.ScoringRefId,
-                        principalTable: "ScoringEntities",
+                        principalTable: "Scorings",
                         principalColumn: "ScoringId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_dbo.ScrTableMap_dbo.ScrTables_ScrTableRefId",
                         column: x => x.ScoringTableRefId,
-                        principalTable: "ScoringTableEntities",
+                        principalTable: "ScoringTables",
                         principalColumn: "ScoringTableId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "StatisticSetEntities",
+                name: "StatisticSets",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -864,7 +871,7 @@ namespace iRLeagueDatabaseCore.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_StatisticSetEntities", x => x.Id);
+                    table.PrimaryKey("PK_StatisticSets", x => x.Id);
                     table.ForeignKey(
                         name: "FK_dbo.StatisticSets_dbo.LeagueMembers_CurrentChampId",
                         column: x => x.CurrentChampId,
@@ -874,13 +881,13 @@ namespace iRLeagueDatabaseCore.Migrations
                     table.ForeignKey(
                         name: "FK_dbo.StatisticSets_dbo.ScoringTables_ScoringTableId",
                         column: x => x.ScoringTableId,
-                        principalTable: "ScoringTableEntities",
+                        principalTable: "ScoringTables",
                         principalColumn: "ScoringTableId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_dbo.StatisticSets_dbo.Seasons_SeasonId",
                         column: x => x.SeasonId,
-                        principalTable: "SeasonEntities",
+                        principalTable: "Seasons",
                         principalColumn: "SeasonId",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -903,9 +910,9 @@ namespace iRLeagueDatabaseCore.Migrations
                         principalColumn: "MemberId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_MemberEntityScoredResultEntity_ScoredResultEntities_Cleanest~",
+                        name: "FK_MemberEntityScoredResultEntity_ScoredResults_CleanestDriverR~",
                         columns: x => new { x.CleanestDriverResultsResultId, x.CleanestDriverResultsScoringId },
-                        principalTable: "ScoredResultEntities",
+                        principalTable: "ScoredResults",
                         principalColumns: new[] { "ResultId", "ScoringId" },
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -928,15 +935,15 @@ namespace iRLeagueDatabaseCore.Migrations
                         principalColumn: "MemberId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_MemberEntityScoredResultEntity1_ScoredResultEntities_HardCha~",
+                        name: "FK_MemberEntityScoredResultEntity1_ScoredResults_HardChargerRes~",
                         columns: x => new { x.HardChargerResultsResultId, x.HardChargerResultsScoringId },
-                        principalTable: "ScoredResultEntities",
+                        principalTable: "ScoredResults",
                         principalColumns: new[] { "ResultId", "ScoringId" },
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ScoredResultRowEntities",
+                name: "ScoredResultRows",
                 columns: table => new
                 {
                     ScoredResultRowId = table.Column<long>(type: "bigint", nullable: false)
@@ -955,29 +962,29 @@ namespace iRLeagueDatabaseCore.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_dbo.ScoredResultRowEntities", x => x.ScoredResultRowId);
+                    table.PrimaryKey("PK_dbo.ScoredResultRows", x => x.ScoredResultRowId);
                     table.ForeignKey(
                         name: "FK_dbo.ScoredResultRows_dbo.ResultRows_ResultRowId",
                         column: x => x.ResultRowId,
-                        principalTable: "ResultRowEntities",
+                        principalTable: "ResultRows",
                         principalColumn: "ResultRowId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_dbo.ScoredResultRows_dbo.Teams_TeamId",
                         column: x => x.TeamId,
-                        principalTable: "TeamEntities",
+                        principalTable: "Teams",
                         principalColumn: "TeamId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_dbo.ScrResultRows_dbo.ScrResults_ScrResultId_ScoringId",
                         columns: x => new { x.ScoredResultId, x.ScoringId },
-                        principalTable: "ScoredResultEntities",
+                        principalTable: "ScoredResults",
                         principalColumns: new[] { "ResultId", "ScoringId" },
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ScoredTeamResultRowEntities",
+                name: "ScoredTeamResultRows",
                 columns: table => new
                 {
                     ScoredResultRowId = table.Column<long>(type: "bigint", nullable: false)
@@ -999,17 +1006,17 @@ namespace iRLeagueDatabaseCore.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_dbo.ScoredTeamResultRowEntities", x => x.ScoredResultRowId);
+                    table.PrimaryKey("PK_dbo.ScoredTeamResultRows", x => x.ScoredResultRowId);
                     table.ForeignKey(
                         name: "FK_dbo.ScoredTeamResultRows_dbo.Teams_TeamId",
                         column: x => x.TeamId,
-                        principalTable: "TeamEntities",
+                        principalTable: "Teams",
                         principalColumn: "TeamId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_dbo.ScrTeamResultRows_dbo.ScrResults_ScrResultId_ScoringId",
                         columns: x => new { x.ScoredResultId, x.ScoringId },
-                        principalTable: "ScoredResultEntities",
+                        principalTable: "ScoredResults",
                         principalColumns: new[] { "ResultId", "ScoringId" },
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -1025,21 +1032,21 @@ namespace iRLeagueDatabaseCore.Migrations
                 {
                     table.PrimaryKey("PK_StatisticSetEntityStatisticSetEntity", x => new { x.DependendStatisticSetsId, x.LeagueStatisticSetsId });
                     table.ForeignKey(
-                        name: "FK_StatisticSetEntityStatisticSetEntity_StatisticSetEntities_De~",
+                        name: "FK_StatisticSetEntityStatisticSetEntity_StatisticSets_Dependend~",
                         column: x => x.DependendStatisticSetsId,
-                        principalTable: "StatisticSetEntities",
+                        principalTable: "StatisticSets",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_StatisticSetEntityStatisticSetEntity_StatisticSetEntities_Le~",
+                        name: "FK_StatisticSetEntityStatisticSetEntity_StatisticSets_LeagueSta~",
                         column: x => x.LeagueStatisticSetsId,
-                        principalTable: "StatisticSetEntities",
+                        principalTable: "StatisticSets",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "AddPenaltyEntities",
+                name: "AddPenaltys",
                 columns: table => new
                 {
                     ScoredResultRowId = table.Column<long>(type: "bigint", nullable: false),
@@ -1048,17 +1055,17 @@ namespace iRLeagueDatabaseCore.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_dbo.AddPenaltyEntities", x => x.ScoredResultRowId);
+                    table.PrimaryKey("PK_dbo.AddPenaltys", x => x.ScoredResultRowId);
                     table.ForeignKey(
                         name: "FK_dbo.AddPenaltys_dbo.ScoredResultRows_ScoredResultRowId",
                         column: x => x.ScoredResultRowId,
-                        principalTable: "ScoredResultRowEntities",
+                        principalTable: "ScoredResultRows",
                         principalColumn: "ScoredResultRowId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "DriverStatisticRowEntities",
+                name: "DriverStatisticRows",
                 columns: table => new
                 {
                     StatisticSetId = table.Column<long>(type: "bigint", nullable: false),
@@ -1128,11 +1135,15 @@ namespace iRLeagueDatabaseCore.Migrations
                     LastRaceStartPosition = table.Column<double>(type: "double", nullable: false),
                     Titles = table.Column<int>(type: "int", nullable: false),
                     HardChargerAwards = table.Column<int>(type: "int", nullable: false),
-                    CleanestDriverAwards = table.Column<int>(type: "int", nullable: false)
+                    CleanestDriverAwards = table.Column<int>(type: "int", nullable: false),
+                    SessionEntitySessionId = table.Column<long>(type: "bigint", nullable: true),
+                    SessionEntitySessionId1 = table.Column<long>(type: "bigint", nullable: true),
+                    SessionEntitySessionId2 = table.Column<long>(type: "bigint", nullable: true),
+                    SessionEntitySessionId3 = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_dbo.DriverStatisticRowEntities", x => new { x.StatisticSetId, x.MemberId });
+                    table.PrimaryKey("PK_dbo.DriverStatisticRows", x => new { x.StatisticSetId, x.MemberId });
                     table.ForeignKey(
                         name: "FK_dbo.DriverStatisticRows_dbo.LeagueMembers_MemberId",
                         column: x => x.MemberId,
@@ -1142,45 +1153,69 @@ namespace iRLeagueDatabaseCore.Migrations
                     table.ForeignKey(
                         name: "FK_dbo.DriverStatisticRows_dbo.ScoredResultRows_FirstResultRowId",
                         column: x => x.FirstResultRowId,
-                        principalTable: "ScoredResultRowEntities",
+                        principalTable: "ScoredResultRows",
                         principalColumn: "ScoredResultRowId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_dbo.DriverStatisticRows_dbo.ScoredResultRows_LastResultRowId",
                         column: x => x.LastResultRowId,
-                        principalTable: "ScoredResultRowEntities",
+                        principalTable: "ScoredResultRows",
                         principalColumn: "ScoredResultRowId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_dbo.DriverStatisticRows_dbo.Sessions_FirstRaceId",
                         column: x => x.FirstRaceId,
-                        principalTable: "SessionEntities",
+                        principalTable: "Sessions",
                         principalColumn: "SessionId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_dbo.DriverStatisticRows_dbo.Sessions_FirstSessionId",
                         column: x => x.FirstSessionId,
-                        principalTable: "SessionEntities",
+                        principalTable: "Sessions",
                         principalColumn: "SessionId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_dbo.DriverStatisticRows_dbo.Sessions_LastRaceId",
                         column: x => x.LastRaceId,
-                        principalTable: "SessionEntities",
+                        principalTable: "Sessions",
                         principalColumn: "SessionId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_dbo.DriverStatisticRows_dbo.Sessions_LastSessionId",
                         column: x => x.LastSessionId,
-                        principalTable: "SessionEntities",
+                        principalTable: "Sessions",
                         principalColumn: "SessionId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_dbo.DriverStatisticRows_dbo.StatisticSets_StatisticSetId",
                         column: x => x.StatisticSetId,
-                        principalTable: "StatisticSetEntities",
+                        principalTable: "StatisticSets",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_DriverStatisticRows_Sessions_SessionEntitySessionId",
+                        column: x => x.SessionEntitySessionId,
+                        principalTable: "Sessions",
+                        principalColumn: "SessionId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_DriverStatisticRows_Sessions_SessionEntitySessionId1",
+                        column: x => x.SessionEntitySessionId1,
+                        principalTable: "Sessions",
+                        principalColumn: "SessionId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_DriverStatisticRows_Sessions_SessionEntitySessionId2",
+                        column: x => x.SessionEntitySessionId2,
+                        principalTable: "Sessions",
+                        principalColumn: "SessionId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_DriverStatisticRows_Sessions_SessionEntitySessionId3",
+                        column: x => x.SessionEntitySessionId3,
+                        principalTable: "Sessions",
+                        principalColumn: "SessionId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -1196,116 +1231,136 @@ namespace iRLeagueDatabaseCore.Migrations
                     table.ForeignKey(
                         name: "FK_ScoredResultRowEntityScoredTeamResultRowEntity_ScoredResultR~",
                         column: x => x.ScoredResultRowsScoredResultRowId,
-                        principalTable: "ScoredResultRowEntities",
+                        principalTable: "ScoredResultRows",
                         principalColumn: "ScoredResultRowId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ScoredResultRowEntityScoredTeamResultRowEntity_ScoredTeamRes~",
                         column: x => x.ScoredTeamResultRowsScoredResultRowId,
-                        principalTable: "ScoredTeamResultRowEntities",
+                        principalTable: "ScoredTeamResultRows",
                         principalColumn: "ScoredResultRowId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_CustomVoteCatId",
-                table: "AcceptedReviewVoteEntities",
+                table: "AcceptedReviewVotes",
                 column: "CustomVoteCatId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MemberAtFaultId",
-                table: "AcceptedReviewVoteEntities",
+                table: "AcceptedReviewVotes",
                 column: "MemberAtFaultId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ReviewId",
-                table: "AcceptedReviewVoteEntities",
+                table: "AcceptedReviewVotes",
                 column: "ReviewId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ScoredResultRowId",
-                table: "AddPenaltyEntities",
+                table: "AddPenaltys",
                 column: "ScoredResultRowId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ReplyToCommentId",
-                table: "CommentBaseEntities",
+                table: "CommentBases",
                 column: "ReplyToCommentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ReviewId1",
-                table: "CommentBaseEntities",
+                table: "CommentBases",
                 column: "ReviewId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CommentId",
-                table: "CommentReviewVoteEntities",
+                table: "CommentReviewVotes",
                 column: "CommentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CustomVoteCatId1",
-                table: "CommentReviewVoteEntities",
+                table: "CommentReviewVotes",
                 column: "CustomVoteCatId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MemberAtFaultId1",
-                table: "CommentReviewVoteEntities",
+                table: "CommentReviewVotes",
                 column: "MemberAtFaultId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CustomIncidentEntities_LeagueId",
-                table: "CustomIncidentEntities",
+                name: "IX_CustomIncidents_LeagueId",
+                table: "CustomIncidents",
                 column: "LeagueId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_DriverStatisticRows_SessionEntitySessionId",
+                table: "DriverStatisticRows",
+                column: "SessionEntitySessionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DriverStatisticRows_SessionEntitySessionId1",
+                table: "DriverStatisticRows",
+                column: "SessionEntitySessionId1");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DriverStatisticRows_SessionEntitySessionId2",
+                table: "DriverStatisticRows",
+                column: "SessionEntitySessionId2");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DriverStatisticRows_SessionEntitySessionId3",
+                table: "DriverStatisticRows",
+                column: "SessionEntitySessionId3");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_FirstRaceId",
-                table: "DriverStatisticRowEntities",
+                table: "DriverStatisticRows",
                 column: "FirstRaceId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FirstResultRowId",
-                table: "DriverStatisticRowEntities",
+                table: "DriverStatisticRows",
                 column: "FirstResultRowId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FirstSessionId",
-                table: "DriverStatisticRowEntities",
+                table: "DriverStatisticRows",
                 column: "FirstSessionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_LastRaceId",
-                table: "DriverStatisticRowEntities",
+                table: "DriverStatisticRows",
                 column: "LastRaceId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_LastResultRowId",
-                table: "DriverStatisticRowEntities",
+                table: "DriverStatisticRows",
                 column: "LastResultRowId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_LastSessionId",
-                table: "DriverStatisticRowEntities",
+                table: "DriverStatisticRows",
                 column: "LastSessionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MemberId",
-                table: "DriverStatisticRowEntities",
+                table: "DriverStatisticRows",
                 column: "MemberId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_StatisticSetId",
-                table: "DriverStatisticRowEntities",
+                table: "DriverStatisticRows",
                 column: "StatisticSetId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SessionId",
-                table: "IncidentReviewEntities",
-                column: "SessionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_IncidentReviewEntityMemberEntity_InvolvedReviewsReviewId",
                 table: "IncidentReviewEntityMemberEntity",
                 column: "InvolvedReviewsReviewId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SessionId",
+                table: "IncidentReviews",
+                column: "SessionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MemberEntityScoredResultEntity_CleanestDriverResultsResultId~",
@@ -1323,99 +1378,59 @@ namespace iRLeagueDatabaseCore.Migrations
                 column: "TeamEntityTeamId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ResultId",
-                table: "ResultEntities",
-                column: "ResultId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SeasonId",
-                table: "ResultEntities",
-                column: "SeasonId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_MemberId1",
-                table: "ResultRowEntities",
+                table: "ResultRows",
                 column: "MemberId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ResultId1",
-                table: "ResultRowEntities",
+                table: "ResultRows",
                 column: "ResultId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TeamId",
-                table: "ResultRowEntities",
+                table: "ResultRows",
                 column: "TeamId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ResultId",
+                table: "Results",
+                column: "ResultId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SeasonId",
+                table: "Results",
+                column: "SeasonId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ScoringId",
-                table: "ResultsFilterOptionEntities",
+                table: "ResultsFilterOptions",
                 column: "ScoringId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ResultRowId",
-                table: "ReviewPenaltyEntities",
+                table: "ReviewPenaltys",
                 column: "ResultRowId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ReviewId2",
-                table: "ReviewPenaltyEntities",
+                table: "ReviewPenaltys",
                 column: "ReviewId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ReviewVoteId",
-                table: "ReviewPenaltyEntities",
+                table: "ReviewPenaltys",
                 column: "ReviewVoteId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ScheduleEntities_LeagueId",
-                table: "ScheduleEntities",
+                name: "IX_Schedules_LeagueId",
+                table: "Schedules",
                 column: "LeagueId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SeasonId1",
-                table: "ScheduleEntities",
+                table: "Schedules",
                 column: "SeasonId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_FastestAvgLapDriver_MemberId",
-                table: "ScoredResultEntities",
-                column: "FastestAvgLapDriver_MemberId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_FastestLapDriver_MemberId",
-                table: "ScoredResultEntities",
-                column: "FastestLapDriver_MemberId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_FastestQualyLapDriver_MemberId",
-                table: "ScoredResultEntities",
-                column: "FastestQualyLapDriver_MemberId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ResultId2",
-                table: "ScoredResultEntities",
-                column: "ResultId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ScoringId1",
-                table: "ScoredResultEntities",
-                column: "ScoringId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ResultRowId1",
-                table: "ScoredResultRowEntities",
-                column: "ResultRowId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ScoredResultId_ScoringId",
-                table: "ScoredResultRowEntities",
-                columns: new[] { "ScoredResultId", "ScoringId" });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TeamId1",
-                table: "ScoredResultRowEntities",
-                column: "TeamId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ScoredResultRowEntityScoredTeamResultRowEntity_ScoredTeamRes~",
@@ -1423,34 +1438,54 @@ namespace iRLeagueDatabaseCore.Migrations
                 column: "ScoredTeamResultRowsScoredResultRowId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ResultRowId1",
+                table: "ScoredResultRows",
+                column: "ResultRowId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ScoredResultId_ScoringId",
+                table: "ScoredResultRows",
+                columns: new[] { "ScoredResultId", "ScoringId" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TeamId1",
+                table: "ScoredResultRows",
+                column: "TeamId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FastestAvgLapDriver_MemberId",
+                table: "ScoredResults",
+                column: "FastestAvgLapDriver_MemberId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FastestLapDriver_MemberId",
+                table: "ScoredResults",
+                column: "FastestLapDriver_MemberId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FastestQualyLapDriver_MemberId",
+                table: "ScoredResults",
+                column: "FastestQualyLapDriver_MemberId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ResultId2",
+                table: "ScoredResults",
+                column: "ResultId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ScoringId1",
+                table: "ScoredResults",
+                column: "ScoringId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ScoredResultId_ScoringId1",
-                table: "ScoredTeamResultRowEntities",
+                table: "ScoredTeamResultRows",
                 columns: new[] { "ScoredResultId", "ScoringId" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_TeamId2",
-                table: "ScoredTeamResultRowEntities",
+                table: "ScoredTeamResultRows",
                 column: "TeamId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ConnectedScheduleId",
-                table: "ScoringEntities",
-                column: "ConnectedScheduleId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ExtScoringSourceId",
-                table: "ScoringEntities",
-                column: "ExtScoringSourceId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ParentScoringId",
-                table: "ScoringEntities",
-                column: "ParentScoringId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SeasonId2",
-                table: "ScoringEntities",
-                column: "SeasonId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ScoringEntitySessionEntity_SessionsSessionId",
@@ -1458,8 +1493,23 @@ namespace iRLeagueDatabaseCore.Migrations
                 column: "SessionsSessionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SeasonId3",
-                table: "ScoringTableEntities",
+                name: "IX_ConnectedScheduleId",
+                table: "Scorings",
+                column: "ConnectedScheduleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ExtScoringSourceId",
+                table: "Scorings",
+                column: "ExtScoringSourceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ParentScoringId",
+                table: "Scorings",
+                column: "ParentScoringId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SeasonId2",
+                table: "Scorings",
                 column: "SeasonId");
 
             migrationBuilder.CreateIndex(
@@ -1473,49 +1523,54 @@ namespace iRLeagueDatabaseCore.Migrations
                 column: "ScoringTableRefId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_SeasonId3",
+                table: "ScoringTables",
+                column: "SeasonId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_MainScoring_ScoringId",
-                table: "SeasonEntities",
+                table: "Seasons",
                 column: "MainScoring_ScoringId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SeasonEntities_LeagueId",
-                table: "SeasonEntities",
+                name: "IX_Seasons_LeagueId",
+                table: "Seasons",
                 column: "LeagueId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ParentSessionId",
-                table: "SessionEntities",
+                table: "Sessions",
                 column: "ParentSessionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ScheduleId",
-                table: "SessionEntities",
+                table: "Sessions",
                 column: "ScheduleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SessionEntities_TrackId",
-                table: "SessionEntities",
+                name: "IX_Sessions_TrackId",
+                table: "Sessions",
                 column: "TrackId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CurrentChampId",
-                table: "StatisticSetEntities",
-                column: "CurrentChampId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ScoringTableId",
-                table: "StatisticSetEntities",
-                column: "ScoringTableId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SeasonId4",
-                table: "StatisticSetEntities",
-                column: "SeasonId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_StatisticSetEntityStatisticSetEntity_LeagueStatisticSetsId",
                 table: "StatisticSetEntityStatisticSetEntity",
                 column: "LeagueStatisticSetsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CurrentChampId",
+                table: "StatisticSets",
+                column: "CurrentChampId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ScoringTableId",
+                table: "StatisticSets",
+                column: "ScoringTableId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SeasonId4",
+                table: "StatisticSets",
+                column: "SeasonId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TrackConfigEntity_TrackGroupId",
@@ -1524,73 +1579,73 @@ namespace iRLeagueDatabaseCore.Migrations
 
             migrationBuilder.AddForeignKey(
                 name: "FK_dbo.ReviewPenaltys_dbo.AcceptedReviewVotes_ReviewVoteId",
-                table: "ReviewPenaltyEntities",
+                table: "ReviewPenaltys",
                 column: "ReviewVoteId",
-                principalTable: "AcceptedReviewVoteEntities",
+                principalTable: "AcceptedReviewVotes",
                 principalColumn: "ReviewVoteId",
                 onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_dbo.ReviewPenaltys_dbo.IncidentReviews_ReviewId",
-                table: "ReviewPenaltyEntities",
+                table: "ReviewPenaltys",
                 column: "ReviewId",
-                principalTable: "IncidentReviewEntities",
+                principalTable: "IncidentReviews",
                 principalColumn: "ReviewId",
                 onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_dbo.ReviewPenaltys_dbo.ScoredResultRows_ResultRowId",
-                table: "ReviewPenaltyEntities",
+                table: "ReviewPenaltys",
                 column: "ResultRowId",
-                principalTable: "ScoredResultRowEntities",
+                principalTable: "ScoredResultRows",
                 principalColumn: "ScoredResultRowId",
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_dbo.CommentReviewVotes_dbo.CommentBases_CommentId",
-                table: "CommentReviewVoteEntities",
+                table: "CommentReviewVotes",
                 column: "CommentId",
-                principalTable: "CommentBaseEntities",
+                principalTable: "CommentBases",
                 principalColumn: "CommentId",
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_dbo.AcceptedReviewVotes_dbo.IncidentReviews_ReviewId",
-                table: "AcceptedReviewVoteEntities",
+                table: "AcceptedReviewVotes",
                 column: "ReviewId",
-                principalTable: "IncidentReviewEntities",
+                principalTable: "IncidentReviews",
                 principalColumn: "ReviewId",
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_dbo.CommentBases_dbo.IncidentReviews_ReviewId",
-                table: "CommentBaseEntities",
+                table: "CommentBases",
                 column: "ReviewId",
-                principalTable: "IncidentReviewEntities",
+                principalTable: "IncidentReviews",
                 principalColumn: "ReviewId",
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_IncidentReviewEntityMemberEntity_IncidentReviewEntities_Invo~",
+                name: "FK_IncidentReviewEntityMemberEntity_IncidentReviews_InvolvedRev~",
                 table: "IncidentReviewEntityMemberEntity",
                 column: "InvolvedReviewsReviewId",
-                principalTable: "IncidentReviewEntities",
+                principalTable: "IncidentReviews",
                 principalColumn: "ReviewId",
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_dbo.Schedules_dbo.Seasons_SeasonId",
-                table: "ScheduleEntities",
+                table: "Schedules",
                 column: "SeasonId",
-                principalTable: "SeasonEntities",
+                principalTable: "Seasons",
                 principalColumn: "SeasonId",
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_dbo.Seasons_dbo.Scorings_MainScoring_ScoringId",
-                table: "SeasonEntities",
+                table: "Seasons",
                 column: "MainScoring_ScoringId",
-                principalTable: "ScoringEntities",
+                principalTable: "Scorings",
                 principalColumn: "ScoringId",
                 onDelete: ReferentialAction.Restrict);
         }
@@ -1599,31 +1654,31 @@ namespace iRLeagueDatabaseCore.Migrations
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_dbo.Schedules_dbo.Leagues_LeagueId",
-                table: "ScheduleEntities");
+                table: "Schedules");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_SeasonEntities_Leagues_LeagueId",
-                table: "SeasonEntities");
+                name: "FK_Seasons_Leagues_LeagueId",
+                table: "Seasons");
 
             migrationBuilder.DropForeignKey(
                 name: "FK_dbo.Schedules_dbo.Seasons_SeasonId",
-                table: "ScheduleEntities");
+                table: "Schedules");
 
             migrationBuilder.DropForeignKey(
                 name: "FK_dbo.Scorings_dbo.Seasons_Season_SeasonId",
-                table: "ScoringEntities");
+                table: "Scorings");
 
             migrationBuilder.DropTable(
-                name: "AddPenaltyEntities");
+                name: "AddPenaltys");
 
             migrationBuilder.DropTable(
-                name: "CommentReviewVoteEntities");
+                name: "CommentReviewVotes");
 
             migrationBuilder.DropTable(
-                name: "CustomIncidentEntities");
+                name: "CustomIncidents");
 
             migrationBuilder.DropTable(
-                name: "DriverStatisticRowEntities");
+                name: "DriverStatisticRows");
 
             migrationBuilder.DropTable(
                 name: "IncidentReviewEntityMemberEntity");
@@ -1638,10 +1693,10 @@ namespace iRLeagueDatabaseCore.Migrations
                 name: "MemberEntityScoredResultEntity1");
 
             migrationBuilder.DropTable(
-                name: "ResultsFilterOptionEntities");
+                name: "ResultsFilterOptions");
 
             migrationBuilder.DropTable(
-                name: "ReviewPenaltyEntities");
+                name: "ReviewPenaltys");
 
             migrationBuilder.DropTable(
                 name: "ScoredResultRowEntityScoredTeamResultRowEntity");
@@ -1656,46 +1711,46 @@ namespace iRLeagueDatabaseCore.Migrations
                 name: "StatisticSetEntityStatisticSetEntity");
 
             migrationBuilder.DropTable(
-                name: "CommentBaseEntities");
+                name: "CommentBases");
 
             migrationBuilder.DropTable(
-                name: "AcceptedReviewVoteEntities");
+                name: "AcceptedReviewVotes");
 
             migrationBuilder.DropTable(
-                name: "ScoredResultRowEntities");
+                name: "ScoredResultRows");
 
             migrationBuilder.DropTable(
-                name: "ScoredTeamResultRowEntities");
+                name: "ScoredTeamResultRows");
 
             migrationBuilder.DropTable(
-                name: "StatisticSetEntities");
+                name: "StatisticSets");
 
             migrationBuilder.DropTable(
-                name: "IncidentReviewEntities");
+                name: "IncidentReviews");
 
             migrationBuilder.DropTable(
-                name: "VoteCategoryEntities");
+                name: "VoteCategorys");
 
             migrationBuilder.DropTable(
-                name: "ResultRowEntities");
+                name: "ResultRows");
 
             migrationBuilder.DropTable(
-                name: "ScoredResultEntities");
+                name: "ScoredResults");
 
             migrationBuilder.DropTable(
-                name: "ScoringTableEntities");
+                name: "ScoringTables");
 
             migrationBuilder.DropTable(
                 name: "Members");
 
             migrationBuilder.DropTable(
-                name: "ResultEntities");
+                name: "Results");
 
             migrationBuilder.DropTable(
-                name: "TeamEntities");
+                name: "Teams");
 
             migrationBuilder.DropTable(
-                name: "SessionEntities");
+                name: "Sessions");
 
             migrationBuilder.DropTable(
                 name: "TrackConfigEntity");
@@ -1707,13 +1762,13 @@ namespace iRLeagueDatabaseCore.Migrations
                 name: "Leagues");
 
             migrationBuilder.DropTable(
-                name: "SeasonEntities");
+                name: "Seasons");
 
             migrationBuilder.DropTable(
-                name: "ScoringEntities");
+                name: "Scorings");
 
             migrationBuilder.DropTable(
-                name: "ScheduleEntities");
+                name: "Schedules");
 
             migrationBuilder.AlterDatabase(
                 oldCollation: "Latin1_General_CI_AS");

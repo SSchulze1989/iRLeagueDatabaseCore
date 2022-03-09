@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace iRLeagueDatabaseCore.Models
 {
-    public partial class SeasonEntity
+    public partial class SeasonEntity : Revision
     {
         public SeasonEntity()
         {
@@ -21,13 +21,6 @@ namespace iRLeagueDatabaseCore.Models
         public long SeasonId { get; set; }
         public long LeagueId { get; set; }
         public string SeasonName { get; set; }
-        public DateTime? CreatedOn { get; set; }
-        public DateTime? LastModifiedOn { get; set; }
-        public int Version { get; set; }
-        public string CreatedByUserId { get; set; }
-        public string CreatedByUserName { get; set; }
-        public string LastModifiedByUserId { get; set; }
-        public string LastModifiedByUserName { get; set; }
         public long? MainScoringScoringId { get; set; }
         public bool HideCommentsBeforeVoted { get; set; }
         public bool Finished { get; set; }

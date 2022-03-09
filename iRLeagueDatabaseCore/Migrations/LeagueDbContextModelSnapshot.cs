@@ -139,7 +139,7 @@ namespace iRLeagueDatabaseCore.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("ReviewVoteId")
-                        .HasName("PK_dbo.AcceptedReviewVoteEntities");
+                        .HasName("PK_dbo.AcceptedReviewVotes");
 
                     b.HasIndex(new[] { "CustomVoteCatId" }, "IX_CustomVoteCatId");
 
@@ -147,7 +147,7 @@ namespace iRLeagueDatabaseCore.Migrations
 
                     b.HasIndex(new[] { "ReviewId" }, "IX_ReviewId");
 
-                    b.ToTable("AcceptedReviewVoteEntities");
+                    b.ToTable("AcceptedReviewVotes");
                 });
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.AddPenaltyEntity", b =>
@@ -162,11 +162,11 @@ namespace iRLeagueDatabaseCore.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("ScoredResultRowId")
-                        .HasName("PK_dbo.AddPenaltyEntities");
+                        .HasName("PK_dbo.AddPenaltys");
 
                     b.HasIndex(new[] { "ScoredResultRowId" }, "IX_ScoredResultRowId");
 
-                    b.ToTable("AddPenaltyEntities");
+                    b.ToTable("AddPenaltys");
                 });
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.CommentBaseEntity", b =>
@@ -223,14 +223,14 @@ namespace iRLeagueDatabaseCore.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("CommentId")
-                        .HasName("PK_dbo.CommentBaseEntities");
+                        .HasName("PK_dbo.CommentBases");
 
                     b.HasIndex(new[] { "ReplyToCommentId" }, "IX_ReplyToCommentId");
 
                     b.HasIndex(new[] { "ReviewId" }, "IX_ReviewId")
                         .HasDatabaseName("IX_ReviewId1");
 
-                    b.ToTable("CommentBaseEntities");
+                    b.ToTable("CommentBases");
                 });
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.CommentReviewVoteEntity", b =>
@@ -258,7 +258,7 @@ namespace iRLeagueDatabaseCore.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("ReviewVoteId")
-                        .HasName("PK_dbo.CommentReviewVoteEntities");
+                        .HasName("PK_dbo.CommentReviewVotes");
 
                     b.HasIndex(new[] { "CommentId" }, "IX_CommentId");
 
@@ -268,7 +268,7 @@ namespace iRLeagueDatabaseCore.Migrations
                     b.HasIndex(new[] { "MemberAtFaultId" }, "IX_MemberAtFaultId")
                         .HasDatabaseName("IX_MemberAtFaultId1");
 
-                    b.ToTable("CommentReviewVoteEntities");
+                    b.ToTable("CommentReviewVotes");
                 });
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.CustomIncidentEntity", b =>
@@ -287,11 +287,11 @@ namespace iRLeagueDatabaseCore.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("IncidentId")
-                        .HasName("PK_dbo.CustomIncidentEntities");
+                        .HasName("PK_dbo.CustomIncidents");
 
                     b.HasIndex("LeagueId");
 
-                    b.ToTable("CustomIncidentEntities");
+                    b.ToTable("CustomIncidents");
                 });
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.DriverStatisticRowEntity", b =>
@@ -462,6 +462,18 @@ namespace iRLeagueDatabaseCore.Migrations
                     b.Property<int>("RacesInPoints")
                         .HasColumnType("int");
 
+                    b.Property<long?>("SessionEntitySessionId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("SessionEntitySessionId1")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("SessionEntitySessionId2")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("SessionEntitySessionId3")
+                        .HasColumnType("bigint");
+
                     b.Property<int>("StartIrating")
                         .HasColumnType("int")
                         .HasColumnName("StartIRating");
@@ -507,7 +519,15 @@ namespace iRLeagueDatabaseCore.Migrations
                         .HasColumnType("double");
 
                     b.HasKey("StatisticSetId", "MemberId")
-                        .HasName("PK_dbo.DriverStatisticRowEntities");
+                        .HasName("PK_dbo.DriverStatisticRows");
+
+                    b.HasIndex("SessionEntitySessionId");
+
+                    b.HasIndex("SessionEntitySessionId1");
+
+                    b.HasIndex("SessionEntitySessionId2");
+
+                    b.HasIndex("SessionEntitySessionId3");
 
                     b.HasIndex(new[] { "FirstRaceId" }, "IX_FirstRaceId");
 
@@ -525,7 +545,7 @@ namespace iRLeagueDatabaseCore.Migrations
 
                     b.HasIndex(new[] { "StatisticSetId" }, "IX_StatisticSetId");
 
-                    b.ToTable("DriverStatisticRowEntities");
+                    b.ToTable("DriverStatisticRows");
                 });
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.IRSimSessionDetailsEntity", b =>
@@ -745,11 +765,11 @@ namespace iRLeagueDatabaseCore.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("ReviewId")
-                        .HasName("PK_dbo.IncidentReviewEntities");
+                        .HasName("PK_dbo.IncidentReviews");
 
                     b.HasIndex(new[] { "SessionId" }, "IX_SessionId");
 
-                    b.ToTable("IncidentReviewEntities");
+                    b.ToTable("IncidentReviews");
                 });
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.LeagueEntity", b =>
@@ -758,14 +778,35 @@ namespace iRLeagueDatabaseCore.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
+                    b.Property<string>("CreatedByUserId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CreatedByUserName")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("CreatedOn")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("LastModifiedByUserId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("LastModifiedByUserName")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("LastModifiedOn")
+                        .HasColumnType("datetime");
+
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
                     b.Property<string>("NameFull")
                         .HasColumnType("text");
 
+                    b.Property<int>("Version")
+                        .HasColumnType("int");
+
                     b.HasKey("LeagueId")
-                        .HasName("PK_dbo.LeagueEntities");
+                        .HasName("PK_dbo.Leagues");
 
                     b.ToTable("Leagues");
                 });
@@ -795,7 +836,7 @@ namespace iRLeagueDatabaseCore.Migrations
                         .HasColumnType("bigint");
 
                     b.HasKey("MemberId")
-                        .HasName("PK_dbo.LeagueMemberEntities");
+                        .HasName("PK_dbo.LeagueMembers");
 
                     b.HasIndex("TeamEntityTeamId");
 
@@ -838,13 +879,13 @@ namespace iRLeagueDatabaseCore.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("ResultId")
-                        .HasName("PK_dbo.ResultEntities");
+                        .HasName("PK_dbo.Results");
 
                     b.HasIndex(new[] { "ResultId" }, "IX_ResultId");
 
                     b.HasIndex(new[] { "SeasonId" }, "IX_SeasonId");
 
-                    b.ToTable("ResultEntities");
+                    b.ToTable("Results");
                 });
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.ResultRowEntity", b =>
@@ -997,7 +1038,7 @@ namespace iRLeagueDatabaseCore.Migrations
                         .HasColumnType("bigint");
 
                     b.HasKey("ResultRowId")
-                        .HasName("PK_dbo.ResultRowEntities");
+                        .HasName("PK_dbo.ResultRows");
 
                     b.HasIndex(new[] { "MemberId" }, "IX_MemberId")
                         .HasDatabaseName("IX_MemberId1");
@@ -1007,7 +1048,7 @@ namespace iRLeagueDatabaseCore.Migrations
 
                     b.HasIndex(new[] { "TeamId" }, "IX_TeamId");
 
-                    b.ToTable("ResultRowEntities");
+                    b.ToTable("ResultRows");
                 });
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.ResultsFilterOptionEntity", b =>
@@ -1059,11 +1100,11 @@ namespace iRLeagueDatabaseCore.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("ResultsFilterId")
-                        .HasName("PK_dbo.ResultsFilterOptionEntities");
+                        .HasName("PK_dbo.ResultsFilterOptions");
 
                     b.HasIndex(new[] { "ScoringId" }, "IX_ScoringId");
 
-                    b.ToTable("ResultsFilterOptionEntities");
+                    b.ToTable("ResultsFilterOptions");
                 });
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.ReviewPenaltyEntity", b =>
@@ -1081,7 +1122,7 @@ namespace iRLeagueDatabaseCore.Migrations
                         .HasColumnType("bigint");
 
                     b.HasKey("ResultRowId", "ReviewId")
-                        .HasName("PK_dbo.ReviewPenaltyEntities");
+                        .HasName("PK_dbo.ReviewPenaltys");
 
                     b.HasIndex(new[] { "ResultRowId" }, "IX_ResultRowId");
 
@@ -1090,7 +1131,7 @@ namespace iRLeagueDatabaseCore.Migrations
 
                     b.HasIndex(new[] { "ReviewVoteId" }, "IX_ReviewVoteId");
 
-                    b.ToTable("ReviewPenaltyEntities");
+                    b.ToTable("ReviewPenaltys");
                 });
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.ScheduleEntity", b =>
@@ -1131,14 +1172,14 @@ namespace iRLeagueDatabaseCore.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("ScheduleId")
-                        .HasName("PK_dbo.ScheduleEntities");
+                        .HasName("PK_dbo.Schedules");
 
                     b.HasIndex("LeagueId");
 
                     b.HasIndex(new[] { "SeasonId" }, "IX_SeasonId")
                         .HasDatabaseName("IX_SeasonId1");
 
-                    b.ToTable("ScheduleEntities");
+                    b.ToTable("Schedules");
                 });
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.ScoredResultEntity", b =>
@@ -1197,7 +1238,7 @@ namespace iRLeagueDatabaseCore.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("ResultId", "ScoringId")
-                        .HasName("PK_dbo.ScoredResultEntities");
+                        .HasName("PK_dbo.ScoredResults");
 
                     b.HasIndex(new[] { "FastestAvgLapDriverMemberId" }, "IX_FastestAvgLapDriver_MemberId");
 
@@ -1211,7 +1252,7 @@ namespace iRLeagueDatabaseCore.Migrations
                     b.HasIndex(new[] { "ScoringId" }, "IX_ScoringId")
                         .HasDatabaseName("IX_ScoringId1");
 
-                    b.ToTable("ScoredResultEntities");
+                    b.ToTable("ScoredResults");
                 });
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.ScoredResultRowEntity", b =>
@@ -1254,7 +1295,7 @@ namespace iRLeagueDatabaseCore.Migrations
                         .HasColumnType("double");
 
                     b.HasKey("ScoredResultRowId")
-                        .HasName("PK_dbo.ScoredResultRowEntities");
+                        .HasName("PK_dbo.ScoredResultRows");
 
                     b.HasIndex(new[] { "ResultRowId" }, "IX_ResultRowId")
                         .HasDatabaseName("IX_ResultRowId1");
@@ -1264,7 +1305,7 @@ namespace iRLeagueDatabaseCore.Migrations
                     b.HasIndex(new[] { "TeamId" }, "IX_TeamId")
                         .HasDatabaseName("IX_TeamId1");
 
-                    b.ToTable("ScoredResultRowEntities");
+                    b.ToTable("ScoredResultRows");
                 });
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.ScoredTeamResultRowEntity", b =>
@@ -1316,7 +1357,7 @@ namespace iRLeagueDatabaseCore.Migrations
                         .HasColumnType("double");
 
                     b.HasKey("ScoredResultRowId")
-                        .HasName("PK_dbo.ScoredTeamResultRowEntities");
+                        .HasName("PK_dbo.ScoredTeamResultRows");
 
                     b.HasIndex(new[] { "ScoredResultId", "ScoringId" }, "IX_ScoredResultId_ScoringId")
                         .HasDatabaseName("IX_ScoredResultId_ScoringId1");
@@ -1324,7 +1365,7 @@ namespace iRLeagueDatabaseCore.Migrations
                     b.HasIndex(new[] { "TeamId" }, "IX_TeamId")
                         .HasDatabaseName("IX_TeamId2");
 
-                    b.ToTable("ScoredTeamResultRowEntities");
+                    b.ToTable("ScoredTeamResultRows");
                 });
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.ScoringEntity", b =>
@@ -1435,7 +1476,7 @@ namespace iRLeagueDatabaseCore.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("ScoringId")
-                        .HasName("PK_dbo.ScoringEntities");
+                        .HasName("PK_dbo.Scorings");
 
                     b.HasIndex(new[] { "ConnectedScheduleId" }, "IX_ConnectedScheduleId");
 
@@ -1446,7 +1487,7 @@ namespace iRLeagueDatabaseCore.Migrations
                     b.HasIndex(new[] { "SeasonId" }, "IX_SeasonId")
                         .HasDatabaseName("IX_SeasonId2");
 
-                    b.ToTable("ScoringEntities");
+                    b.ToTable("Scorings");
                 });
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.ScoringTableEntity", b =>
@@ -1501,12 +1542,12 @@ namespace iRLeagueDatabaseCore.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("ScoringTableId")
-                        .HasName("PK_dbo.ScoringTableEntities");
+                        .HasName("PK_dbo.ScoringTables");
 
                     b.HasIndex(new[] { "SeasonId" }, "IX_SeasonId")
                         .HasDatabaseName("IX_SeasonId3");
 
-                    b.ToTable("ScoringTableEntities");
+                    b.ToTable("ScoringTables");
                 });
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.ScoringTableMap", b =>
@@ -1577,13 +1618,13 @@ namespace iRLeagueDatabaseCore.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("SeasonId")
-                        .HasName("PK_dbo.SeasonEntities");
+                        .HasName("PK_dbo.Seasons");
 
                     b.HasIndex("LeagueId");
 
                     b.HasIndex(new[] { "MainScoringScoringId" }, "IX_MainScoring_ScoringId");
 
-                    b.ToTable("SeasonEntities");
+                    b.ToTable("Seasons");
                 });
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.SessionEntity", b =>
@@ -1668,7 +1709,7 @@ namespace iRLeagueDatabaseCore.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("SessionId")
-                        .HasName("PK_dbo.SessionEntities");
+                        .HasName("PK_dbo.Sessions");
 
                     b.HasIndex("TrackId");
 
@@ -1676,7 +1717,7 @@ namespace iRLeagueDatabaseCore.Migrations
 
                     b.HasIndex(new[] { "ScheduleId" }, "IX_ScheduleId");
 
-                    b.ToTable("SessionEntities");
+                    b.ToTable("Sessions");
                 });
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.StatisticSetEntity", b =>
@@ -1759,7 +1800,7 @@ namespace iRLeagueDatabaseCore.Migrations
                     b.HasIndex(new[] { "SeasonId" }, "IX_SeasonId")
                         .HasDatabaseName("IX_SeasonId4");
 
-                    b.ToTable("StatisticSetEntities");
+                    b.ToTable("StatisticSets");
                 });
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.TeamEntity", b =>
@@ -1802,9 +1843,9 @@ namespace iRLeagueDatabaseCore.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("TeamId")
-                        .HasName("PK_dbo.TeamEntities");
+                        .HasName("PK_dbo.Teams");
 
-                    b.ToTable("TeamEntities");
+                    b.ToTable("Teams");
                 });
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.TrackConfigEntity", b =>
@@ -1835,7 +1876,7 @@ namespace iRLeagueDatabaseCore.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("TrackId")
-                        .HasName("PK_dbo.TrackConfigEntities");
+                        .HasName("PK_dbo.TrackConfigs");
 
                     b.HasIndex("TrackGroupId");
 
@@ -1855,7 +1896,7 @@ namespace iRLeagueDatabaseCore.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("TrackGroupId")
-                        .HasName("PK_dbo.TrackGroupEntities");
+                        .HasName("PK_dbo.TrackGroups");
 
                     b.ToTable("TrackGroups");
                 });
@@ -1876,9 +1917,9 @@ namespace iRLeagueDatabaseCore.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("CatId")
-                        .HasName("PK_dbo.VoteCategoryEntities");
+                        .HasName("PK_dbo.VoteCategorys");
 
-                    b.ToTable("VoteCategoryEntities");
+                    b.ToTable("VoteCategorys");
                 });
 
             modelBuilder.Entity("IncidentReviewEntityMemberEntity", b =>
@@ -1974,17 +2015,17 @@ namespace iRLeagueDatabaseCore.Migrations
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.AcceptedReviewVoteEntity", b =>
                 {
                     b.HasOne("iRLeagueDatabaseCore.Models.VoteCategoryEntity", "CustomVoteCat")
-                        .WithMany("AcceptedReviewVoteEntities")
+                        .WithMany("AcceptedReviewVotes")
                         .HasForeignKey("CustomVoteCatId")
                         .HasConstraintName("FK_dbo.AcceptedReviewVotes_dbo.VoteCategorys_CustomVoteCatId");
 
                     b.HasOne("iRLeagueDatabaseCore.Models.MemberEntity", "MemberAtFault")
-                        .WithMany("AcceptedReviewVoteEntities")
+                        .WithMany("AcceptedReviewVotes")
                         .HasForeignKey("MemberAtFaultId")
                         .HasConstraintName("FK_dbo.AcceptedReviewVotes_dbo.LeagueMembers_MemberAtFaultId");
 
                     b.HasOne("iRLeagueDatabaseCore.Models.IncidentReviewEntity", "Review")
-                        .WithMany("AcceptedReviewVoteEntities")
+                        .WithMany("AcceptedReviewVotes")
                         .HasForeignKey("ReviewId")
                         .HasConstraintName("FK_dbo.AcceptedReviewVotes_dbo.IncidentReviews_ReviewId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2000,7 +2041,7 @@ namespace iRLeagueDatabaseCore.Migrations
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.AddPenaltyEntity", b =>
                 {
                     b.HasOne("iRLeagueDatabaseCore.Models.ScoredResultRowEntity", "ScoredResultRow")
-                        .WithOne("AddPenaltyEntity")
+                        .WithOne("AddPenalty")
                         .HasForeignKey("iRLeagueDatabaseCore.Models.AddPenaltyEntity", "ScoredResultRowId")
                         .HasConstraintName("FK_dbo.AddPenaltys_dbo.ScoredResultRows_ScoredResultRowId")
                         .IsRequired();
@@ -2016,7 +2057,7 @@ namespace iRLeagueDatabaseCore.Migrations
                         .HasConstraintName("FK_dbo.CommentBases_dbo.CommentBases_ReplyToCommentId");
 
                     b.HasOne("iRLeagueDatabaseCore.Models.IncidentReviewEntity", "Review")
-                        .WithMany("CommentBaseEntities")
+                        .WithMany("Comments")
                         .HasForeignKey("ReviewId")
                         .HasConstraintName("FK_dbo.CommentBases_dbo.IncidentReviews_ReviewId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -2029,19 +2070,19 @@ namespace iRLeagueDatabaseCore.Migrations
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.CommentReviewVoteEntity", b =>
                 {
                     b.HasOne("iRLeagueDatabaseCore.Models.CommentBaseEntity", "Comment")
-                        .WithMany("CommentReviewVoteEntities")
+                        .WithMany("CommentReviewVotes")
                         .HasForeignKey("CommentId")
                         .HasConstraintName("FK_dbo.CommentReviewVotes_dbo.CommentBases_CommentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("iRLeagueDatabaseCore.Models.VoteCategoryEntity", "CustomVoteCat")
-                        .WithMany("CommentReviewVoteEntities")
+                        .WithMany("CommentReviewVotes")
                         .HasForeignKey("CustomVoteCatId")
                         .HasConstraintName("FK_dbo.CommentReviewVotes_dbo.VoteCategorys_CustomVoteCatId");
 
                     b.HasOne("iRLeagueDatabaseCore.Models.MemberEntity", "MemberAtFault")
-                        .WithMany("CommentReviewVoteEntities")
+                        .WithMany("CommentReviewVotes")
                         .HasForeignKey("MemberAtFaultId")
                         .HasConstraintName("FK_dbo.CommentReviewVotes_dbo.LeagueMembers_MemberAtFaultId");
 
@@ -2066,44 +2107,60 @@ namespace iRLeagueDatabaseCore.Migrations
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.DriverStatisticRowEntity", b =>
                 {
                     b.HasOne("iRLeagueDatabaseCore.Models.SessionEntity", "FirstRace")
-                        .WithMany("DriverStatisticRowEntityFirstRaces")
+                        .WithMany()
                         .HasForeignKey("FirstRaceId")
                         .HasConstraintName("FK_dbo.DriverStatisticRows_dbo.Sessions_FirstRaceId");
 
                     b.HasOne("iRLeagueDatabaseCore.Models.ScoredResultRowEntity", "FirstResultRow")
-                        .WithMany("DriverStatisticRowEntityFirstResultRows")
+                        .WithMany()
                         .HasForeignKey("FirstResultRowId")
                         .HasConstraintName("FK_dbo.DriverStatisticRows_dbo.ScoredResultRows_FirstResultRowId");
 
                     b.HasOne("iRLeagueDatabaseCore.Models.SessionEntity", "FirstSession")
-                        .WithMany("DriverStatisticRowEntityFirstSessions")
+                        .WithMany()
                         .HasForeignKey("FirstSessionId")
                         .HasConstraintName("FK_dbo.DriverStatisticRows_dbo.Sessions_FirstSessionId");
 
                     b.HasOne("iRLeagueDatabaseCore.Models.SessionEntity", "LastRace")
-                        .WithMany("DriverStatisticRowEntityLastRaces")
+                        .WithMany()
                         .HasForeignKey("LastRaceId")
                         .HasConstraintName("FK_dbo.DriverStatisticRows_dbo.Sessions_LastRaceId");
 
                     b.HasOne("iRLeagueDatabaseCore.Models.ScoredResultRowEntity", "LastResultRow")
-                        .WithMany("DriverStatisticRowEntityLastResultRows")
+                        .WithMany()
                         .HasForeignKey("LastResultRowId")
                         .HasConstraintName("FK_dbo.DriverStatisticRows_dbo.ScoredResultRows_LastResultRowId");
 
                     b.HasOne("iRLeagueDatabaseCore.Models.SessionEntity", "LastSession")
-                        .WithMany("DriverStatisticRowEntityLastSessions")
+                        .WithMany()
                         .HasForeignKey("LastSessionId")
                         .HasConstraintName("FK_dbo.DriverStatisticRows_dbo.Sessions_LastSessionId");
 
                     b.HasOne("iRLeagueDatabaseCore.Models.MemberEntity", "Member")
-                        .WithMany("DriverStatisticRowEntities")
+                        .WithMany("DriverStatisticRows")
                         .HasForeignKey("MemberId")
                         .HasConstraintName("FK_dbo.DriverStatisticRows_dbo.LeagueMembers_MemberId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("iRLeagueDatabaseCore.Models.SessionEntity", null)
+                        .WithMany("DriverStatisticRowFirstRaces")
+                        .HasForeignKey("SessionEntitySessionId");
+
+                    b.HasOne("iRLeagueDatabaseCore.Models.SessionEntity", null)
+                        .WithMany("DriverStatisticRowFirstSessions")
+                        .HasForeignKey("SessionEntitySessionId1");
+
+                    b.HasOne("iRLeagueDatabaseCore.Models.SessionEntity", null)
+                        .WithMany("DriverStatisticRowLastRaces")
+                        .HasForeignKey("SessionEntitySessionId2");
+
+                    b.HasOne("iRLeagueDatabaseCore.Models.SessionEntity", null)
+                        .WithMany("DriverStatisticRowLastSessions")
+                        .HasForeignKey("SessionEntitySessionId3");
+
                     b.HasOne("iRLeagueDatabaseCore.Models.StatisticSetEntity", "StatisticSet")
-                        .WithMany("DriverStatisticRowEntities")
+                        .WithMany("DriverStatisticRows")
                         .HasForeignKey("StatisticSetId")
                         .HasConstraintName("FK_dbo.DriverStatisticRows_dbo.StatisticSets_StatisticSetId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2141,7 +2198,7 @@ namespace iRLeagueDatabaseCore.Migrations
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.IncidentReviewEntity", b =>
                 {
                     b.HasOne("iRLeagueDatabaseCore.Models.SessionEntity", "Session")
-                        .WithMany("IncidentReviewEntities")
+                        .WithMany("IncidentReviews")
                         .HasForeignKey("SessionId")
                         .HasConstraintName("FK_dbo.IncidentReviews_dbo.Sessions_SessionId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2179,7 +2236,7 @@ namespace iRLeagueDatabaseCore.Migrations
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.ResultRowEntity", b =>
                 {
                     b.HasOne("iRLeagueDatabaseCore.Models.MemberEntity", "Member")
-                        .WithMany("ResultRowEntities")
+                        .WithMany("ResultRows")
                         .HasForeignKey("MemberId")
                         .HasConstraintName("FK_dbo.ResultRows_dbo.LeagueMembers_MemberId")
                         .IsRequired();
@@ -2192,7 +2249,7 @@ namespace iRLeagueDatabaseCore.Migrations
                         .IsRequired();
 
                     b.HasOne("iRLeagueDatabaseCore.Models.TeamEntity", "Team")
-                        .WithMany("ResultRowEntities")
+                        .WithMany("ResultRows")
                         .HasForeignKey("TeamId")
                         .HasConstraintName("FK_dbo.ResultRows_dbo.Teams_TeamId");
 
@@ -2206,7 +2263,7 @@ namespace iRLeagueDatabaseCore.Migrations
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.ResultsFilterOptionEntity", b =>
                 {
                     b.HasOne("iRLeagueDatabaseCore.Models.ScoringEntity", "Scoring")
-                        .WithMany("ResultsFilterOptionEntities")
+                        .WithMany("ResultsFilterOptions")
                         .HasForeignKey("ScoringId")
                         .HasConstraintName("FK_dbo.ResultsFilterOptions_dbo.Scorings_ScoringId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2218,20 +2275,20 @@ namespace iRLeagueDatabaseCore.Migrations
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.ReviewPenaltyEntity", b =>
                 {
                     b.HasOne("iRLeagueDatabaseCore.Models.ScoredResultRowEntity", "ResultRow")
-                        .WithMany("ReviewPenaltyEntities")
+                        .WithMany("ReviewPenalty")
                         .HasForeignKey("ResultRowId")
                         .HasConstraintName("FK_dbo.ReviewPenaltys_dbo.ScoredResultRows_ResultRowId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("iRLeagueDatabaseCore.Models.IncidentReviewEntity", "Review")
-                        .WithMany("ReviewPenaltyEntities")
+                        .WithMany("ReviewPenaltys")
                         .HasForeignKey("ReviewId")
                         .HasConstraintName("FK_dbo.ReviewPenaltys_dbo.IncidentReviews_ReviewId")
                         .IsRequired();
 
                     b.HasOne("iRLeagueDatabaseCore.Models.AcceptedReviewVoteEntity", "ReviewVote")
-                        .WithMany("ReviewPenaltyEntities")
+                        .WithMany("ReviewPenaltys")
                         .HasForeignKey("ReviewVoteId")
                         .HasConstraintName("FK_dbo.ReviewPenaltys_dbo.AcceptedReviewVotes_ReviewVoteId");
 
@@ -2288,7 +2345,7 @@ namespace iRLeagueDatabaseCore.Migrations
                         .IsRequired();
 
                     b.HasOne("iRLeagueDatabaseCore.Models.ScoringEntity", "Scoring")
-                        .WithMany("ScoredResultEntities")
+                        .WithMany("ScoredResults")
                         .HasForeignKey("ScoringId")
                         .HasConstraintName("FK_dbo.ScoredResults_dbo.Scorings_ScoringId")
                         .IsRequired();
@@ -2307,14 +2364,14 @@ namespace iRLeagueDatabaseCore.Migrations
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.ScoredResultRowEntity", b =>
                 {
                     b.HasOne("iRLeagueDatabaseCore.Models.ResultRowEntity", "ResultRow")
-                        .WithMany("ScoredResultRowEntities")
+                        .WithMany("ScoredResultRows")
                         .HasForeignKey("ResultRowId")
                         .HasConstraintName("FK_dbo.ScoredResultRows_dbo.ResultRows_ResultRowId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("iRLeagueDatabaseCore.Models.TeamEntity", "Team")
-                        .WithMany("ScoredResultRowEntities")
+                        .WithMany("ScoredResultRows")
                         .HasForeignKey("TeamId")
                         .HasConstraintName("FK_dbo.ScoredResultRows_dbo.Teams_TeamId");
 
@@ -2334,7 +2391,7 @@ namespace iRLeagueDatabaseCore.Migrations
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.ScoredTeamResultRowEntity", b =>
                 {
                     b.HasOne("iRLeagueDatabaseCore.Models.TeamEntity", "Team")
-                        .WithMany("ScoredTeamResultRowEntities")
+                        .WithMany("ScoredTeamResultRows")
                         .HasForeignKey("TeamId")
                         .HasConstraintName("FK_dbo.ScoredTeamResultRows_dbo.Teams_TeamId")
                         .IsRequired();
@@ -2425,7 +2482,7 @@ namespace iRLeagueDatabaseCore.Migrations
                         .IsRequired();
 
                     b.HasOne("iRLeagueDatabaseCore.Models.ScoringEntity", "MainScoring")
-                        .WithMany("SeasonEntities")
+                        .WithMany("Seasons")
                         .HasForeignKey("MainScoringScoringId")
                         .HasConstraintName("FK_dbo.Seasons_dbo.Scorings_MainScoring_ScoringId");
 
@@ -2437,7 +2494,7 @@ namespace iRLeagueDatabaseCore.Migrations
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.SessionEntity", b =>
                 {
                     b.HasOne("iRLeagueDatabaseCore.Models.SessionEntity", "ParentSession")
-                        .WithMany("InverseParentSession")
+                        .WithMany("SubSessions")
                         .HasForeignKey("ParentSessionId")
                         .HasConstraintName("FK_dbo.Sessions_dbo.Sessions_ParentSessionId");
 
@@ -2463,12 +2520,12 @@ namespace iRLeagueDatabaseCore.Migrations
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.StatisticSetEntity", b =>
                 {
                     b.HasOne("iRLeagueDatabaseCore.Models.MemberEntity", "CurrentChamp")
-                        .WithMany("StatisticSetEntities")
+                        .WithMany("StatisticSets")
                         .HasForeignKey("CurrentChampId")
                         .HasConstraintName("FK_dbo.StatisticSets_dbo.LeagueMembers_CurrentChampId");
 
                     b.HasOne("iRLeagueDatabaseCore.Models.ScoringTableEntity", "ScoringTable")
-                        .WithMany("StatisticSetEntities")
+                        .WithMany("StatisticSets")
                         .HasForeignKey("ScoringTableId")
                         .HasConstraintName("FK_dbo.StatisticSets_dbo.ScoringTables_ScoringTableId");
 
@@ -2499,23 +2556,23 @@ namespace iRLeagueDatabaseCore.Migrations
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.AcceptedReviewVoteEntity", b =>
                 {
-                    b.Navigation("ReviewPenaltyEntities");
+                    b.Navigation("ReviewPenaltys");
                 });
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.CommentBaseEntity", b =>
                 {
-                    b.Navigation("CommentReviewVoteEntities");
+                    b.Navigation("CommentReviewVotes");
 
                     b.Navigation("InverseReplyToComment");
                 });
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.IncidentReviewEntity", b =>
                 {
-                    b.Navigation("AcceptedReviewVoteEntities");
+                    b.Navigation("AcceptedReviewVotes");
 
-                    b.Navigation("CommentBaseEntities");
+                    b.Navigation("Comments");
 
-                    b.Navigation("ReviewPenaltyEntities");
+                    b.Navigation("ReviewPenaltys");
                 });
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.LeagueEntity", b =>
@@ -2525,11 +2582,11 @@ namespace iRLeagueDatabaseCore.Migrations
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.MemberEntity", b =>
                 {
-                    b.Navigation("AcceptedReviewVoteEntities");
+                    b.Navigation("AcceptedReviewVotes");
 
-                    b.Navigation("CommentReviewVoteEntities");
+                    b.Navigation("CommentReviewVotes");
 
-                    b.Navigation("DriverStatisticRowEntities");
+                    b.Navigation("DriverStatisticRows");
 
                     b.Navigation("FastestAvgLapResults");
 
@@ -2537,9 +2594,9 @@ namespace iRLeagueDatabaseCore.Migrations
 
                     b.Navigation("FastestQualyLapResults");
 
-                    b.Navigation("ResultRowEntities");
+                    b.Navigation("ResultRows");
 
-                    b.Navigation("StatisticSetEntities");
+                    b.Navigation("StatisticSets");
                 });
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.ResultEntity", b =>
@@ -2553,7 +2610,7 @@ namespace iRLeagueDatabaseCore.Migrations
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.ResultRowEntity", b =>
                 {
-                    b.Navigation("ScoredResultRowEntities");
+                    b.Navigation("ScoredResultRows");
                 });
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.ScheduleEntity", b =>
@@ -2572,13 +2629,9 @@ namespace iRLeagueDatabaseCore.Migrations
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.ScoredResultRowEntity", b =>
                 {
-                    b.Navigation("AddPenaltyEntity");
+                    b.Navigation("AddPenalty");
 
-                    b.Navigation("DriverStatisticRowEntityFirstResultRows");
-
-                    b.Navigation("DriverStatisticRowEntityLastResultRows");
-
-                    b.Navigation("ReviewPenaltyEntities");
+                    b.Navigation("ReviewPenalty");
                 });
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.ScoringEntity", b =>
@@ -2587,20 +2640,20 @@ namespace iRLeagueDatabaseCore.Migrations
 
                     b.Navigation("InverseParentScoring");
 
-                    b.Navigation("ResultsFilterOptionEntities");
+                    b.Navigation("ResultsFilterOptions");
 
-                    b.Navigation("ScoredResultEntities");
+                    b.Navigation("ScoredResults");
 
                     b.Navigation("ScoringTableMaps");
 
-                    b.Navigation("SeasonEntities");
+                    b.Navigation("Seasons");
                 });
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.ScoringTableEntity", b =>
                 {
                     b.Navigation("ScoringTableMaps");
 
-                    b.Navigation("StatisticSetEntities");
+                    b.Navigation("StatisticSets");
                 });
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.SeasonEntity", b =>
@@ -2618,35 +2671,35 @@ namespace iRLeagueDatabaseCore.Migrations
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.SessionEntity", b =>
                 {
-                    b.Navigation("DriverStatisticRowEntityFirstRaces");
+                    b.Navigation("DriverStatisticRowFirstRaces");
 
-                    b.Navigation("DriverStatisticRowEntityFirstSessions");
+                    b.Navigation("DriverStatisticRowFirstSessions");
 
-                    b.Navigation("DriverStatisticRowEntityLastRaces");
+                    b.Navigation("DriverStatisticRowLastRaces");
 
-                    b.Navigation("DriverStatisticRowEntityLastSessions");
+                    b.Navigation("DriverStatisticRowLastSessions");
 
-                    b.Navigation("IncidentReviewEntities");
-
-                    b.Navigation("InverseParentSession");
+                    b.Navigation("IncidentReviews");
 
                     b.Navigation("ResultEntity");
+
+                    b.Navigation("SubSessions");
                 });
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.StatisticSetEntity", b =>
                 {
-                    b.Navigation("DriverStatisticRowEntities");
+                    b.Navigation("DriverStatisticRows");
                 });
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.TeamEntity", b =>
                 {
                     b.Navigation("LeagueMemberEntities");
 
-                    b.Navigation("ResultRowEntities");
+                    b.Navigation("ResultRows");
 
-                    b.Navigation("ScoredResultRowEntities");
+                    b.Navigation("ScoredResultRows");
 
-                    b.Navigation("ScoredTeamResultRowEntities");
+                    b.Navigation("ScoredTeamResultRows");
                 });
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.TrackGroupEntity", b =>
@@ -2656,9 +2709,9 @@ namespace iRLeagueDatabaseCore.Migrations
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.VoteCategoryEntity", b =>
                 {
-                    b.Navigation("AcceptedReviewVoteEntities");
+                    b.Navigation("AcceptedReviewVotes");
 
-                    b.Navigation("CommentReviewVoteEntities");
+                    b.Navigation("CommentReviewVotes");
                 });
 #pragma warning restore 612, 618
         }

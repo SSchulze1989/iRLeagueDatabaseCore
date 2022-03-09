@@ -14,4 +14,15 @@
     <PackageReference Include="MySql.EntityFrameworkCore" Version="5.0.0+m8.0.23" />
   </ItemGroup>
 
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+	<TargetFramework>netcoreapp5.0</TargetFramework>
+    <PackageId>iRLeagueDatabaseCore</PackageId>
+    <Version>0.0.1</Version>
+    <Authors>Simon Schulze</Authors>
+    <Company>Simon Schulze</Company>
+    <PackageDescription>This package contains the Entityframework configuration for a Code first project</PackageDescription>
+    <RepositoryUrl>https://github.com/SSchulze1989/iRLeagueDatabaseCore</RepositoryUrl>
+  </PropertyGroup>
+
 </Project>
