@@ -9,7 +9,7 @@ namespace iRLeagueDatabaseCore.Models
     {
         public AcceptedReviewVoteEntity()
         {
-            ReviewPenaltyEntities = new HashSet<ReviewPenaltyEntity>();
+            ReviewPenaltys = new HashSet<ReviewPenaltyEntity>();
         }
 
         public long ReviewVoteId { get; set; }
@@ -23,6 +23,6 @@ namespace iRLeagueDatabaseCore.Models
         public virtual VoteCategoryEntity CustomVoteCat { get; set; }
         public virtual MemberEntity MemberAtFault { get; set; }
         public virtual IncidentReviewEntity Review { get; set; }
-        public virtual ICollection<ReviewPenaltyEntity> ReviewPenaltyEntities { get; set; }
+        public virtual ICollection<ReviewPenaltyEntity> ReviewPenaltys { get; set; }
     }
 }

@@ -9,7 +9,7 @@ namespace iRLeagueDatabaseCore.Models
     {
         public StatisticSetEntity()
         {
-            DriverStatisticRowEntities = new HashSet<DriverStatisticRowEntity>();
+            DriverStatisticRows = new HashSet<DriverStatisticRowEntity>();
             LeagueStatisticSets = new HashSet<StatisticSetEntity>();
             DependendStatisticSets = new HashSet<StatisticSetEntity>();
         }
@@ -40,7 +40,7 @@ namespace iRLeagueDatabaseCore.Models
         public virtual MemberEntity CurrentChamp { get; set; }
         public virtual ScoringTableEntity ScoringTable { get; set; }
         public virtual SeasonEntity Season { get; set; }
-        public virtual ICollection<DriverStatisticRowEntity> DriverStatisticRowEntities { get; set; }
+        public virtual ICollection<DriverStatisticRowEntity> DriverStatisticRows { get; set; }
         public virtual ICollection<StatisticSetEntity> LeagueStatisticSets { get; set; }
         public virtual ICollection<StatisticSetEntity> DependendStatisticSets { get; set; }
     }

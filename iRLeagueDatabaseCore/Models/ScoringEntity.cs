@@ -11,11 +11,11 @@ namespace iRLeagueDatabaseCore.Models
         {
             InverseExtScoringSource = new HashSet<ScoringEntity>();
             InverseParentScoring = new HashSet<ScoringEntity>();
-            ResultsFilterOptionEntities = new HashSet<ResultsFilterOptionEntity>();
-            ScoredResultEntities = new HashSet<ScoredResultEntity>();
+            ResultsFilterOptions = new HashSet<ResultsFilterOptionEntity>();
+            ScoredResults = new HashSet<ScoredResultEntity>();
             Sessions = new HashSet<SessionEntity>();
             ScoringTableMaps = new HashSet<ScoringTableMap>();
-            SeasonEntities = new HashSet<SeasonEntity>();
+            Seasons = new HashSet<SeasonEntity>();
         }
 
         public long ScoringId { get; set; }
@@ -59,10 +59,10 @@ namespace iRLeagueDatabaseCore.Models
         public virtual SeasonEntity Season { get; set; }
         public virtual ICollection<ScoringEntity> InverseExtScoringSource { get; set; }
         public virtual ICollection<ScoringEntity> InverseParentScoring { get; set; }
-        public virtual ICollection<ResultsFilterOptionEntity> ResultsFilterOptionEntities { get; set; }
-        public virtual ICollection<ScoredResultEntity> ScoredResultEntities { get; set; }
+        public virtual ICollection<ResultsFilterOptionEntity> ResultsFilterOptions { get; set; }
+        public virtual ICollection<ScoredResultEntity> ScoredResults { get; set; }
         public virtual ICollection<SessionEntity> Sessions { get; set; }
         public virtual ICollection<ScoringTableMap> ScoringTableMaps { get; set; }
-        public virtual ICollection<SeasonEntity> SeasonEntities { get; set; }
+        public virtual ICollection<SeasonEntity> Seasons { get; set; }
     }
 }

@@ -9,9 +9,7 @@ namespace iRLeagueDatabaseCore.Models
     {
         public ScoredResultRowEntity()
         {
-            DriverStatisticRowEntityFirstResultRows = new HashSet<DriverStatisticRowEntity>();
-            DriverStatisticRowEntityLastResultRows = new HashSet<DriverStatisticRowEntity>();
-            ReviewPenaltyEntities = new HashSet<ReviewPenaltyEntity>();
+            ReviewPenalty = new HashSet<ReviewPenaltyEntity>();
             ScoredTeamResultRows = new HashSet<ScoredTeamResultRowEntity>();
         }
 
@@ -31,10 +29,8 @@ namespace iRLeagueDatabaseCore.Models
         public virtual ResultRowEntity ResultRow { get; set; }
         public virtual ScoredResultEntity Scor { get; set; }
         public virtual TeamEntity Team { get; set; }
-        public virtual AddPenaltyEntity AddPenaltyEntity { get; set; }
-        public virtual ICollection<DriverStatisticRowEntity> DriverStatisticRowEntityFirstResultRows { get; set; }
-        public virtual ICollection<DriverStatisticRowEntity> DriverStatisticRowEntityLastResultRows { get; set; }
-        public virtual ICollection<ReviewPenaltyEntity> ReviewPenaltyEntities { get; set; }
+        public virtual AddPenaltyEntity AddPenalty { get; set; }
+        public virtual ICollection<ReviewPenaltyEntity> ReviewPenalty { get; set; }
         public virtual ICollection<ScoredTeamResultRowEntity> ScoredTeamResultRows { get; set; }
     }
 }

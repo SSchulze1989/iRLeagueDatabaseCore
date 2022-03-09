@@ -10,7 +10,7 @@ namespace iRLeagueDatabaseCore.Models
         public ScoringTableEntity()
         {
             ScoringTableMaps = new HashSet<ScoringTableMap>();
-            StatisticSetEntities = new HashSet<StatisticSetEntity>();
+            StatisticSets = new HashSet<StatisticSetEntity>();
         }
 
         public long ScoringTableId { get; set; }
@@ -32,6 +32,6 @@ namespace iRLeagueDatabaseCore.Models
 
         public virtual SeasonEntity Season { get; set; }
         public virtual ICollection<ScoringTableMap> ScoringTableMaps { get; set; }
-        public virtual ICollection<StatisticSetEntity> StatisticSetEntities { get; set; }
+        public virtual ICollection<StatisticSetEntity> StatisticSets { get; set; }
     }
 }

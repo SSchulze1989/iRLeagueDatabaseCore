@@ -10,9 +10,9 @@ namespace iRLeagueDatabaseCore.Models
         public TeamEntity()
         {
             LeagueMemberEntities = new HashSet<MemberEntity>();
-            ResultRowEntities = new HashSet<ResultRowEntity>();
-            ScoredResultRowEntities = new HashSet<ScoredResultRowEntity>();
-            ScoredTeamResultRowEntities = new HashSet<ScoredTeamResultRowEntity>();
+            ResultRows = new HashSet<ResultRowEntity>();
+            ScoredResultRows = new HashSet<ScoredResultRowEntity>();
+            ScoredTeamResultRows = new HashSet<ScoredTeamResultRowEntity>();
         }
 
         public long TeamId { get; set; }
@@ -29,8 +29,8 @@ namespace iRLeagueDatabaseCore.Models
         public string LastModifiedByUserName { get; set; }
 
         public virtual ICollection<MemberEntity> LeagueMemberEntities { get; set; }
-        public virtual ICollection<ResultRowEntity> ResultRowEntities { get; set; }
-        public virtual ICollection<ScoredResultRowEntity> ScoredResultRowEntities { get; set; }
-        public virtual ICollection<ScoredTeamResultRowEntity> ScoredTeamResultRowEntities { get; set; }
+        public virtual ICollection<ResultRowEntity> ResultRows { get; set; }
+        public virtual ICollection<ScoredResultRowEntity> ScoredResultRows { get; set; }
+        public virtual ICollection<ScoredTeamResultRowEntity> ScoredTeamResultRows { get; set; }
     }
 }

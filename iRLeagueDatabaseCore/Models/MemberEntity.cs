@@ -9,17 +9,17 @@ namespace iRLeagueDatabaseCore.Models
     {
         public MemberEntity()
         {
-            AcceptedReviewVoteEntities = new HashSet<AcceptedReviewVoteEntity>();
-            CommentReviewVoteEntities = new HashSet<CommentReviewVoteEntity>();
-            DriverStatisticRowEntities = new HashSet<DriverStatisticRowEntity>();
+            AcceptedReviewVotes = new HashSet<AcceptedReviewVoteEntity>();
+            CommentReviewVotes = new HashSet<CommentReviewVoteEntity>();
+            DriverStatisticRows = new HashSet<DriverStatisticRowEntity>();
             InvolvedReviews = new HashSet<IncidentReviewEntity>();
-            ResultRowEntities = new HashSet<ResultRowEntity>();
+            ResultRows = new HashSet<ResultRowEntity>();
             CleanestDriverResults = new HashSet<ScoredResultEntity>();
             FastestAvgLapResults = new HashSet<ScoredResultEntity>();
             FastestLapResults = new HashSet<ScoredResultEntity>();
             FastestQualyLapResults = new HashSet<ScoredResultEntity>();
             HardChargerResults = new HashSet<ScoredResultEntity>();
-            StatisticSetEntities = new HashSet<StatisticSetEntity>();
+            StatisticSets = new HashSet<StatisticSetEntity>();
         }
 
         public long MemberId { get; set; }
@@ -29,16 +29,16 @@ namespace iRLeagueDatabaseCore.Models
         public string DanLisaId { get; set; }
         public string DiscordId { get; set; }
 
-        public virtual ICollection<AcceptedReviewVoteEntity> AcceptedReviewVoteEntities { get; set; }
-        public virtual ICollection<CommentReviewVoteEntity> CommentReviewVoteEntities { get; set; }
-        public virtual ICollection<DriverStatisticRowEntity> DriverStatisticRowEntities { get; set; }
+        public virtual ICollection<AcceptedReviewVoteEntity> AcceptedReviewVotes { get; set; }
+        public virtual ICollection<CommentReviewVoteEntity> CommentReviewVotes { get; set; }
+        public virtual ICollection<DriverStatisticRowEntity> DriverStatisticRows { get; set; }
         public virtual ICollection<IncidentReviewEntity> InvolvedReviews { get; set; }
-        public virtual ICollection<ResultRowEntity> ResultRowEntities { get; set; }
+        public virtual ICollection<ResultRowEntity> ResultRows { get; set; }
         public virtual ICollection<ScoredResultEntity> CleanestDriverResults { get; set; }
         public virtual ICollection<ScoredResultEntity> FastestAvgLapResults { get; set; }
         public virtual ICollection<ScoredResultEntity> FastestLapResults { get; set; }
         public virtual ICollection<ScoredResultEntity> FastestQualyLapResults { get; set; }
         public virtual ICollection<ScoredResultEntity> HardChargerResults { get; set; }
-        public virtual ICollection<StatisticSetEntity> StatisticSetEntities { get; set; }
+        public virtual ICollection<StatisticSetEntity> StatisticSets { get; set; }
     }
 }

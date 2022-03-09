@@ -157,7 +157,7 @@ namespace DbIntegrationTests
             {
                 dbContext.ChangeTracker.LazyLoadingEnabled = false;
                 var league = dbContext.Leagues.First();
-                dbContext.SeasonEntities.Load();
+                dbContext.Seasons.Load();
 
                 Assert.NotNull(league);
                 Assert.Equal(2, league.Seasons.Count);

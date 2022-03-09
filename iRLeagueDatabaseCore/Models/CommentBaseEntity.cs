@@ -9,7 +9,7 @@ namespace iRLeagueDatabaseCore.Models
     {
         public CommentBaseEntity()
         {
-            CommentReviewVoteEntities = new HashSet<CommentReviewVoteEntity>();
+            CommentReviewVotes = new HashSet<CommentReviewVoteEntity>();
             InverseReplyToComment = new HashSet<CommentBaseEntity>();
         }
 
@@ -32,7 +32,7 @@ namespace iRLeagueDatabaseCore.Models
 
         public virtual CommentBaseEntity ReplyToComment { get; set; }
         public virtual IncidentReviewEntity Review { get; set; }
-        public virtual ICollection<CommentReviewVoteEntity> CommentReviewVoteEntities { get; set; }
+        public virtual ICollection<CommentReviewVoteEntity> CommentReviewVotes { get; set; }
         public virtual ICollection<CommentBaseEntity> InverseReplyToComment { get; set; }
     }
 }

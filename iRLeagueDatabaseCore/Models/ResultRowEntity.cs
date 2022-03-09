@@ -9,7 +9,7 @@ namespace iRLeagueDatabaseCore.Models
     {
         public ResultRowEntity()
         {
-            ScoredResultRowEntities = new HashSet<ScoredResultRowEntity>();
+            ScoredResultRows = new HashSet<ScoredResultRowEntity>();
         }
 
         public long ResultRowId { get; set; }
@@ -62,6 +62,6 @@ namespace iRLeagueDatabaseCore.Models
         public virtual MemberEntity Member { get; set; }
         public virtual ResultEntity Result { get; set; }
         public virtual TeamEntity Team { get; set; }
-        public virtual ICollection<ScoredResultRowEntity> ScoredResultRowEntities { get; set; }
+        public virtual ICollection<ScoredResultRowEntity> ScoredResultRows { get; set; }
     }
 }
