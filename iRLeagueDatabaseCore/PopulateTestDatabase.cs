@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using iRLeagueDatabaseCore.Models;
 using Microsoft.EntityFrameworkCore;
@@ -96,7 +96,7 @@ namespace DbIntegrationTests
                 League = league
             };
             // Create sessions on schedule1
-            for (int i = 0; i<5; i++)
+            for (int i = 0; i < 5; i++)
             {
                 var session = new SessionEntity()
                 {
@@ -144,7 +144,7 @@ namespace DbIntegrationTests
             var memberCount = random.Next(maxMemberCount - minMemberCount + 1) + minMemberCount;
             var members = context.Set<MemberEntity>();
 
-            for (int i = 0; i< memberCount; i++)
+            for (int i = 0; i < memberCount; i++)
             {
                 var member = new MemberEntity()
                 {
@@ -176,7 +176,7 @@ namespace DbIntegrationTests
         {
             var len = 6;
             char[] id = new char[len];
-            for (int i = 0;i < len; i++)
+            for (int i = 0; i < len; i++)
             {
                 id[i] = (char)('0' + random.Next(10));
             }

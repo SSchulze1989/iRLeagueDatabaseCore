@@ -18,7 +18,7 @@
     <OutputType>Library</OutputType>
 	<TargetFramework>netcoreapp5.0</TargetFramework>
     <PackageId>iRLeagueDatabaseCore</PackageId>
-    <Version>0.0.1</Version>
+    <Version>0.0.2</Version>
     <Authors>Simon Schulze</Authors>
     <Company>Simon Schulze</Company>
     <PackageDescription>This package contains the Entityframework configuration for a Code first project</PackageDescription>
