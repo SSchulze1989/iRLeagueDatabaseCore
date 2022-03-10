@@ -73,7 +73,6 @@ namespace UnitTests.EntityFramework
                 {
                     Assert.Equal(season, schedule.Season);
                     Assert.Equal(league.LeagueId, schedule.LeagueId);
-                    Assert.Equal(league, schedule.League);
                 }
             }
         }
@@ -227,8 +226,7 @@ namespace UnitTests.EntityFramework
                 CreatedByUserId = ClientGuid,
                 LastModifiedOn = DateTime.Now,
                 LastModifiedByUserName = ClientUserName,
-                LastModifiedByUserId = ClientGuid,
-                League = league
+                LastModifiedByUserId = ClientGuid
             };
             var schedule2 = new ScheduleEntity()
             {
@@ -238,8 +236,7 @@ namespace UnitTests.EntityFramework
                 CreatedByUserId = ClientGuid,
                 LastModifiedOn = DateTime.Now,
                 LastModifiedByUserName = ClientUserName,
-                LastModifiedByUserId = ClientGuid,
-                League = league
+                LastModifiedByUserId = ClientGuid
             };
             var schedule3 = new ScheduleEntity()
             {
@@ -249,8 +246,7 @@ namespace UnitTests.EntityFramework
                 CreatedByUserId = ClientGuid,
                 LastModifiedOn = DateTime.Now,
                 LastModifiedByUserName = ClientUserName,
-                LastModifiedByUserId = ClientGuid,
-                League = league
+                LastModifiedByUserId = ClientGuid
             };
             // Create sessions on schedule1
             for (int i = 0; i<5; i++)

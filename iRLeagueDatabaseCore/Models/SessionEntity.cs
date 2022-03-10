@@ -19,6 +19,7 @@ namespace iRLeagueDatabaseCore.Models
         }
 
         public long SessionId { get; set; }
+        public long LeagueId { get; set; }
         public string SessionTitle { get; set; }
         public int SessionType { get; set; }
         public DateTime? Date { get; set; }

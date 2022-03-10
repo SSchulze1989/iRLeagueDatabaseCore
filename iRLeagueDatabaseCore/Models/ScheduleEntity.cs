@@ -25,7 +25,6 @@ namespace iRLeagueDatabaseCore.Models
         public string LastModifiedByUserName { get; set; }
         public long SeasonId { get; set; }
         public virtual SeasonEntity Season { get; set; }
-        public virtual LeagueEntity League { get; set; }
         public virtual ICollection<ScoringEntity> Scorings { get; set; }
         public virtual ICollection<SessionEntity> Sessions { get; set; }
     }

@@ -28,6 +28,7 @@ namespace iRLeagueDatabaseCore.Models
         public string LastModifiedByUserName { get; set; }
         public long? CurrentChampId { get; set; }
         public long? SeasonId { get; set; }
+        public long LeagueId { get; set; }
         public long? ScoringTableId { get; set; }
         public int? FinishedRaces { get; set; }
         public bool? IsSeasonFinished { get; set; }

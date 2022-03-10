@@ -50,7 +50,8 @@ namespace DbIntegrationTests
                 CreatedByUserId = ClientGuid,
                 LastModifiedOn = DateTime.Now,
                 LastModifiedByUserName = ClientUserName,
-                LastModifiedByUserId = ClientGuid
+                LastModifiedByUserId = ClientGuid,
+                League = league
             };
             var season2 = new SeasonEntity()
             {
@@ -60,7 +61,8 @@ namespace DbIntegrationTests
                 CreatedByUserId = ClientGuid,
                 LastModifiedOn = DateTime.Now,
                 LastModifiedByUserName = ClientUserName,
-                LastModifiedByUserId = ClientGuid
+                LastModifiedByUserId = ClientGuid,
+                League = league
             };
             var schedule1 = new ScheduleEntity()
             {
@@ -70,8 +72,7 @@ namespace DbIntegrationTests
                 CreatedByUserId = ClientGuid,
                 LastModifiedOn = DateTime.Now,
                 LastModifiedByUserName = ClientUserName,
-                LastModifiedByUserId = ClientGuid,
-                League = league
+                LastModifiedByUserId = ClientGuid
             };
             var schedule2 = new ScheduleEntity()
             {
@@ -81,8 +82,7 @@ namespace DbIntegrationTests
                 CreatedByUserId = ClientGuid,
                 LastModifiedOn = DateTime.Now,
                 LastModifiedByUserName = ClientUserName,
-                LastModifiedByUserId = ClientGuid,
-                League = league
+                LastModifiedByUserId = ClientGuid
             };
             var schedule3 = new ScheduleEntity()
             {
@@ -92,8 +92,7 @@ namespace DbIntegrationTests
                 CreatedByUserId = ClientGuid,
                 LastModifiedOn = DateTime.Now,
                 LastModifiedByUserName = ClientUserName,
-                LastModifiedByUserId = ClientGuid,
-                League = league
+                LastModifiedByUserId = ClientGuid
             };
             // Create sessions on schedule1
             for (int i = 0; i < 5; i++)
@@ -115,12 +114,12 @@ namespace DbIntegrationTests
                 };
                 schedule1.Sessions.Add(session);
             }
+            context.Leagues.Add(league);
             league.Seasons.Add(season1);
             league.Seasons.Add(season2);
             season1.Schedules.Add(schedule1);
             season2.Schedules.Add(schedule2);
             season2.Schedules.Add(schedule3);
-            context.Leagues.Add(league);
 
             GenerateMembers(context, random);
 

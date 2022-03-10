@@ -22,6 +22,7 @@ namespace iRLeagueDatabaseCore.Models
         public string LastModifiedByUserId { get; set; }
         public string LastModifiedByUserName { get; set; }
         public long? SeasonId { get; set; }
+        public long LeagueId { get; set; }
         public bool RequiresRecalculation { get; set; }
         public long PoleLaptime { get; set; }
 

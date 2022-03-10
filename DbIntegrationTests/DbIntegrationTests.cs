@@ -43,6 +43,7 @@ namespace DbIntegrationTests
             var optionsBuilder = new DbContextOptionsBuilder<LeagueDbContext>();
             optionsBuilder.UseMySQL(_config["Db:ConnectionString"])
                 .UseLazyLoadingProxies();
+            optionsBuilder.EnableSensitiveDataLogging();
             var dbContext = new LeagueDbContext(optionsBuilder.Options);
             return dbContext;
         }
@@ -69,7 +70,6 @@ namespace DbIntegrationTests
                 {
                     Assert.Equal(season, schedule.Season);
                     Assert.Equal(league.LeagueId, schedule.LeagueId);
-                    Assert.Equal(league, schedule.League);
                 }
             }
         }
@@ -77,9 +77,9 @@ namespace DbIntegrationTests
         [Fact]
         public void TestCreateLeague()
         {
-            using (var tx = new TransactionScope())
-            {
-                using (var dbContext = GetTestDatabaseContext())
+            //    using (var tx = new TransactionScope())
+            //    {
+            using (var dbContext = GetTestDatabaseContext())
                 {
                     var league = new LeagueEntity()
                     {
@@ -107,14 +107,14 @@ namespace DbIntegrationTests
                     Assert.Equal(1, league.Seasons.Count);
                     Assert.Equal(league, league.Seasons.First().League);
                 }
-            }
+            //}
 
-            // clean up after testing
+            //// clean up after testing
 
-            using (var dbContext = GetTestDatabaseContext())
-            {
-                Assert.Equal(1, dbContext.Leagues.Count());
-            }
+            //using (var dbContext = GetTestDatabaseContext())
+            //{
+            //    Assert.Equal(1, dbContext.Leagues.Count());
+            //}
         }
 
         [Fact]

@@ -276,7 +276,7 @@ namespace iRLeagueDatabaseCore.Models
 
                 entity.HasIndex(e => e.ResultId, "IX_ResultId");
 
-                entity.HasIndex(e => e.SeasonId, "IX_SeasonId");
+                entity.HasIndex(e => new { e.LeagueId, e.SeasonId }, "IX_SeasonId");
 
                 entity.Property(e => e.ResultId).ValueGeneratedNever();
 
@@ -291,7 +291,7 @@ namespace iRLeagueDatabaseCore.Models
 
                 entity.HasOne(d => d.Season)
                     .WithMany(p => p.Results)
-                    .HasForeignKey(d => d.SeasonId)
+                    .HasForeignKey(d => new { d.LeagueId, d.SeasonId })
                     .HasConstraintName("FK_dbo.Results_dbo.Seasons_SeasonId");
 
                 entity.HasOne(d => d.IRSimSessionDetails)
@@ -414,10 +414,16 @@ namespace iRLeagueDatabaseCore.Models
 
             modelBuilder.Entity<ScheduleEntity>(entity =>
             {
-                entity.HasKey(e => e.ScheduleId)
+                entity.HasKey(e => new { e.LeagueId, e.ScheduleId })
                     .HasName("PK_dbo.Schedules");
 
-                entity.HasIndex(e => e.SeasonId, "IX_SeasonId");
+                entity.HasAlternateKey(e => e.ScheduleId)
+                    .HasName("AK_dbo.Schedules");
+
+                entity.Property(e => e.ScheduleId)
+                    .ValueGeneratedOnAdd();
+
+                entity.HasIndex(e => new { e.LeagueId, e.SeasonId }, "IX_SeasonId");
 
                 entity.Property(e => e.CreatedOn).HasColumnType("datetime");
 
@@ -427,14 +433,8 @@ namespace iRLeagueDatabaseCore.Models
 
                 entity.HasOne(d => d.Season)
                     .WithMany(p => p.Schedules)
-                    .HasForeignKey(d => d.SeasonId)
-                    .HasConstraintName("FK_dbo.Schedules_dbo.Seasons_SeasonId")
-                    .Metadata.PrincipalToDependent.SetPropertyAccessMode(PropertyAccessMode.Property);
-
-                entity.HasOne(d => d.League)
-                    .WithMany()
-                    .HasForeignKey(d => d.LeagueId)
-                    .HasConstraintName("FK_dbo.Schedules_dbo.Leagues_LeagueId");
+                    .HasForeignKey(d => new { d.LeagueId, d.SeasonId })
+                    .HasConstraintName("FK_dbo.Schedules_dbo.Seasons_SeasonId");
             });
 
             modelBuilder.Entity<ScoredResultEntity>(entity =>
@@ -564,7 +564,7 @@ namespace iRLeagueDatabaseCore.Models
 
                 entity.HasIndex(e => e.ParentScoringId, "IX_ParentScoringId");
 
-                entity.HasIndex(e => e.SeasonId, "IX_SeasonId");
+                entity.HasIndex(e => new { e.LeagueId, e.SeasonId}, "IX_SeasonId");
 
                 entity.Property(e => e.CreatedOn).HasColumnType("datetime");
 
@@ -576,7 +576,7 @@ namespace iRLeagueDatabaseCore.Models
 
                 entity.HasOne(d => d.ConnectedSchedule)
                     .WithMany(p => p.Scorings)
-                    .HasForeignKey(d => d.ConnectedScheduleId)
+                    .HasForeignKey(d => new { d.LeagueId, d.ConnectedScheduleId })
                     .HasConstraintName("FK_dbo.Scorings_dbo.Schedules_ConnectedSchedule_ScheduleId");
 
                 entity.HasOne(d => d.ExtScoringSource)
@@ -591,7 +591,7 @@ namespace iRLeagueDatabaseCore.Models
 
                 entity.HasOne(d => d.Season)
                     .WithMany(p => p.Scorings)
-                    .HasForeignKey(d => d.SeasonId)
+                    .HasForeignKey(d => new { d.LeagueId, d.SeasonId })
                     .HasConstraintName("FK_dbo.Scorings_dbo.Seasons_Season_SeasonId");
             });
 
@@ -600,7 +600,7 @@ namespace iRLeagueDatabaseCore.Models
                 entity.HasKey(e => e.ScoringTableId)
                     .HasName("PK_dbo.ScoringTables");
 
-                entity.HasIndex(e => e.SeasonId, "IX_SeasonId");
+                entity.HasIndex(e => new { e.LeagueId, e.SeasonId }, "IX_SeasonId");
 
                 entity.Property(e => e.CreatedOn).HasColumnType("datetime");
 
@@ -608,7 +608,7 @@ namespace iRLeagueDatabaseCore.Models
 
                 entity.HasOne(d => d.Season)
                     .WithMany(p => p.ScoringTables)
-                    .HasForeignKey(d => d.SeasonId)
+                    .HasForeignKey(d => new { d.LeagueId, d.SeasonId })
                     .HasConstraintName("FK_dbo.ScoringTables_dbo.Seasons_Season_SeasonId");
             });
 
@@ -643,8 +643,14 @@ namespace iRLeagueDatabaseCore.Models
 
             modelBuilder.Entity<SeasonEntity>(entity =>
             {
-                entity.HasKey(e => e.SeasonId )
+                entity.HasKey(e => new { e.LeagueId, e.SeasonId } )
                     .HasName("PK_dbo.Seasons");
+
+                entity.HasAlternateKey(e => e.SeasonId)
+                    .HasName("AK_dbo.Seasons");
+
+                entity.Property(e => e.SeasonId)
+                    .ValueGeneratedOnAdd();
 
                 entity.HasIndex(e => e.MainScoringScoringId, "IX_MainScoring_ScoringId");
 
@@ -675,7 +681,7 @@ namespace iRLeagueDatabaseCore.Models
 
                 entity.HasIndex(e => e.ParentSessionId, "IX_ParentSessionId");
 
-                entity.HasIndex(e => e.ScheduleId, "IX_ScheduleId");
+                entity.HasIndex(e => new { e.LeagueId, e.ScheduleId }, "IX_ScheduleId");
 
                 entity.Property(e => e.CreatedOn).HasColumnType("datetime");
 
@@ -690,7 +696,7 @@ namespace iRLeagueDatabaseCore.Models
 
                 entity.HasOne(d => d.Schedule)
                     .WithMany(p => p.Sessions)
-                    .HasForeignKey(d => d.ScheduleId)
+                    .HasForeignKey(d => new { d.LeagueId, d.ScheduleId })
                     .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_dbo.Sessions_dbo.Schedules_Schedule_ScheduleId");
 
@@ -711,7 +717,7 @@ namespace iRLeagueDatabaseCore.Models
 
                 entity.HasIndex(e => e.ScoringTableId, "IX_ScoringTableId");
 
-                entity.HasIndex(e => e.SeasonId, "IX_SeasonId");
+                entity.HasIndex(e => new { e.LeagueId, e.SeasonId }, "IX_SeasonId");
 
                 entity.Property(e => e.CreatedOn).HasColumnType("datetime");
 
@@ -739,7 +745,7 @@ namespace iRLeagueDatabaseCore.Models
 
                 entity.HasOne(d => d.Season)
                     .WithMany(p => p.StatisticSets)
-                    .HasForeignKey(d => d.SeasonId)
+                    .HasForeignKey(d => new { d.LeagueId, d.SeasonId })
                     .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_dbo.StatisticSets_dbo.Seasons_SeasonId");
 
