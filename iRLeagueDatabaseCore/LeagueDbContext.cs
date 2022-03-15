@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
+using iRLeagueApiCore.Communication.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -688,6 +689,9 @@ namespace iRLeagueDatabaseCore.Models
                 entity.Property(e => e.Date).HasColumnType("datetime");
 
                 entity.Property(e => e.LastModifiedOn).HasColumnType("datetime");
+
+                entity.Property(e => e.SessionType)
+                    .HasConversion<string>();
 
                 entity.HasOne(d => d.ParentSession)
                     .WithMany(p => p.SubSessions)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using iRLeagueApiCore.Communication.Enums;
 using iRLeagueDatabaseCore.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -111,6 +112,7 @@ namespace DbIntegrationTests
                         .Skip(i)
                         .FirstOrDefault(),
                     SessionTitle = $"S1 Session {i}",
+                    SessionType = (SessionTypeEnum)i + 1
                 };
                 schedule1.Sessions.Add(session);
             }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using iRLeagueApiCore.Communication.Enums;
+using System;
 using System.Collections.Generic;
 
 #nullable disable
@@ -21,7 +22,7 @@ namespace iRLeagueDatabaseCore.Models
         public long SessionId { get; set; }
         public long LeagueId { get; set; }
         public string SessionTitle { get; set; }
-        public int SessionType { get; set; }
+        public SessionTypeEnum SessionType { get; set; }
         public DateTime? Date { get; set; }
         public long? TrackId { get; set; }
         public TimeSpan Duration { get; set; }
