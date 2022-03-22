@@ -49,7 +49,7 @@ namespace DbIntegrationTests
         }
 
         [Fact]
-        public void TestPopulate()
+        public async void TestPopulate()
         {
             using (var dbContext = GetTestDatabaseContext())
             {
@@ -71,6 +71,21 @@ namespace DbIntegrationTests
                     Assert.Equal(season, schedule.Season);
                     Assert.Equal(league.LeagueId, schedule.LeagueId);
                 }
+
+                // check for result rows
+                var scoredResultRow = await dbContext.ScoredResultRows
+                    .Include(x => x.ResultRow)
+                        .ThenInclude(x => x.Member)
+                    .Include(x => x.ResultRow)
+                        .ThenInclude(x => x.Result)
+                            .ThenInclude(x => x.Session)
+                    .FirstOrDefaultAsync();
+
+                Assert.NotNull(scoredResultRow);
+                Assert.NotNull(scoredResultRow.ResultRow);
+                Assert.NotNull(scoredResultRow.ResultRow.Member);
+                Assert.NotNull(scoredResultRow.ResultRow.Result);
+                Assert.NotNull(scoredResultRow.ResultRow.Result.Session);
             }
         }
 

@@ -327,6 +327,9 @@ namespace iRLeagueDatabaseCore.Models
                 entity.HasAlternateKey(e => e.ResultRowId)
                     .HasName("Ak_dbo.ResultRows");
 
+                entity.Property(e => e.ResultRowId)
+                    .ValueGeneratedOnAdd();
+
                 entity.HasIndex(e => e.ResultRowId, "IX_ResultRowId");
 
                 entity.HasIndex(e => e.MemberId, "IX_MemberId");
@@ -340,10 +343,6 @@ namespace iRLeagueDatabaseCore.Models
                 entity.Property(e => e.NewIrating).HasColumnName("NewIRating");
 
                 entity.Property(e => e.OldIrating).HasColumnName("OldIRating");
-
-                entity.Property(e => e.PointsEligible)
-                    .IsRequired()
-                    .HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.QualifyingTimeAt).HasColumnType("datetime");
 

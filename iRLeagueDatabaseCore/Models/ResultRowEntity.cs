@@ -57,7 +57,7 @@ namespace iRLeagueDatabaseCore.Models
         public int NumContactLaps { get; set; }
         public string ContactLaps { get; set; }
         public long? TeamId { get; set; }
-        public bool? PointsEligible { get; set; }
+        public bool PointsEligible { get; set; }
 
         public virtual MemberEntity Member { get; set; }
         public virtual ResultEntity Result { get; set; }

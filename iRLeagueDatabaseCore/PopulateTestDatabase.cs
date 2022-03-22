@@ -150,18 +150,21 @@ namespace DbIntegrationTests
             result.ScoredResults.Add(scoredResult);
             for (int i = 0; i < 10; i++)
             {
+                var resultRow = new ResultRowEntity()
+                {
+                    StartPosition = i + 1,
+                    FinishPosition = i + 1,
+                    Member = context.Members.Local.ElementAt(i),
+                };
+                result.ResultRows.Add(resultRow);
                 var scoredResultRow = new ScoredResultRowEntity()
                 {
-                    ResultRow = new ResultRowEntity()
-                    {
-                        StartPosition = i + 1,
-                        FinishPosition = i + 1,
-                        Member = context.Members.Local.ElementAt(i),
-                    },
                     FinalPosition = i + 1,
                     RacePoints = 10 - i,
                     TotalPoints = 10 - i
                 };
+                scoredResult.ScoredResultRows.Add(scoredResultRow);
+                resultRow.ScoredResultRows.Add(scoredResultRow);
             }
             schedule1.Sessions
                 .First()
