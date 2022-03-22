@@ -41,7 +41,7 @@ namespace DbIntegrationTests
         public static LeagueDbContext  GetTestDatabaseContext()
         {
             var optionsBuilder = new DbContextOptionsBuilder<LeagueDbContext>();
-            optionsBuilder.UseMySQL(_config["Db:ConnectionString"])
+            optionsBuilder.UseMySQL(_config.GetConnectionString("ModelDb"))
                 .UseLazyLoadingProxies();
             optionsBuilder.EnableSensitiveDataLogging();
             var dbContext = new LeagueDbContext(optionsBuilder.Options);
@@ -165,9 +165,51 @@ namespace DbIntegrationTests
         }
 
         [Fact]
-        public void TestJustThisOneThing()
+        public async void TestAddScoring()
         {
-            Assert.True(true);
+            using (var tx = new TransactionScope())
+            using (var dbContext = GetTestDatabaseContext())
+            {
+                var scoring = new ScoringEntity()
+                {
+                    Name = "TestScoring",
+                    ShowResults = true
+                };
+
+                var season = await dbContext.Seasons.FirstAsync();
+                season.Scorings.Add(scoring);
+
+                await dbContext.SaveChangesAsync();
+
+                Assert.Equal(2, dbContext.Scorings.Count());
+                Assert.Contains(dbContext.Scorings, x => x.Name == "TestScoring");
+            }
+        }
+
+        [Fact]
+        public async void TestAddResult()
+        {
+            using (var tx = new TransactionScope())
+            using (var context = GetTestDatabaseContext())
+            {
+                const int testSessionId = 2;
+
+                var testSession = await context.Sessions
+                    .Include(x => x.Result)
+                    .SingleAsync(x => x.SessionId == testSessionId);
+
+                var result = new ResultEntity();
+                testSession.Result = result;
+
+                await context.SaveChangesAsync();
+
+                var dbResult = await context.Results
+                    .Include(x => x.Session)
+                    .SingleOrDefaultAsync(x => x.ResultId == testSessionId);
+
+                Assert.NotNull(dbResult);
+                Assert.Equal(testSession, dbResult.Session);
+            }
         }
     }
 }

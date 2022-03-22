@@ -8,6 +8,7 @@ namespace iRLeagueDatabaseCore.Models
     public partial class ResultsFilterOptionEntity
     {
         public long ResultsFilterId { get; set; }
+        public long LeagueId { get; set; }
         public long ScoringId { get; set; }
         public string ResultsFilterType { get; set; }
         public string ColumnPropertyName { get; set; }

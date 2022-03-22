@@ -126,15 +126,47 @@ namespace DbIntegrationTests
             GenerateMembers(context, random);
 
             // assign members to league
-            foreach (var member in context.Members)
+            //foreach (var member in context.Members.Local)
+            //{
+            //    var leagueMember = new LeagueMemberEntity()
+            //    {
+            //        Member = member,
+            //        League = league
+            //    };
+            //    context.Set<LeagueMemberEntity>().Add(leagueMember);
+            //}
+
+            // create result
+            var scoredResult = new ScoredResultEntity();
+            var scoring = new ScoringEntity()
             {
-                var leagueMember = new LeagueMemberEntity()
+                Name = "Testscoring",
+                ShowResults = true
+            };
+            season1.Scorings.Add(scoring);
+            scoring.ScoredResults.Add(scoredResult);
+            scoredResult.Scoring = scoring;
+            var result = new ResultEntity();
+            result.ScoredResults.Add(scoredResult);
+            for (int i = 0; i < 10; i++)
+            {
+                var scoredResultRow = new ScoredResultRowEntity()
                 {
-                    Member = member,
-                    League = league
+                    ResultRow = new ResultRowEntity()
+                    {
+                        StartPosition = i + 1,
+                        FinishPosition = i + 1,
+                        Member = context.Members.Local.ElementAt(i),
+                    },
+                    FinalPosition = i + 1,
+                    RacePoints = 10 - i,
+                    TotalPoints = 10 - i
                 };
-                context.Set<LeagueMemberEntity>().Add(leagueMember);
             }
+            schedule1.Sessions
+                .First()
+                .Result = result;
+            result.Session = schedule1.Sessions.First();
         }
 
         private static void GenerateMembers(LeagueDbContext context, Random random)

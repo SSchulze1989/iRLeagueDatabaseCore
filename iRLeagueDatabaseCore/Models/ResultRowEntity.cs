@@ -13,6 +13,7 @@ namespace iRLeagueDatabaseCore.Models
         }
 
         public long ResultRowId { get; set; }
+        public long LeagueId { get; set; }
         public long ResultId { get; set; }
         public double StartPosition { get; set; }
         public double FinishPosition { get; set; }
@@ -32,7 +33,6 @@ namespace iRLeagueDatabaseCore.Models
         public long FastestLapTime { get; set; }
         public double PositionChange { get; set; }
         public string IracingId { get; set; }
-        public string Discriminator { get; set; }
         public int SimSessionType { get; set; }
         public int OldIrating { get; set; }
         public int NewIrating { get; set; }

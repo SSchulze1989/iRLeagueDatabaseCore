@@ -49,7 +49,7 @@ namespace iRLeagueDatabaseCore.Models
 
         public virtual SessionEntity ParentSession { get; set; }
         public virtual ScheduleEntity Schedule { get; set; }
-        public virtual ResultEntity ResultEntity { get; set; }
+        public virtual ResultEntity Result { get; set; }
         public virtual TrackConfigEntity Track { get; set; }
         public virtual ICollection<DriverStatisticRowEntity> DriverStatisticRowFirstRaces { get; set; }
         public virtual ICollection<DriverStatisticRowEntity> DriverStatisticRowFirstSessions { get; set; }

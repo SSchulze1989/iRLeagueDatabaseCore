@@ -36,7 +36,6 @@ namespace iRLeagueDatabaseCore.Models
         public string Description { get; set; }
         public DateTime? FirstDate { get; set; }
         public DateTime? LastDate { get; set; }
-        public string Discriminator { get; set; }
 
         public virtual MemberEntity CurrentChamp { get; set; }
         public virtual ScoringTableEntity ScoringTable { get; set; }

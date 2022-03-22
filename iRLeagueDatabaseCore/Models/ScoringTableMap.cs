@@ -7,6 +7,7 @@ namespace iRLeagueDatabaseCore.Models
 {
     public partial class ScoringTableMap
     {
+        public long LeagueId { get; set; }
         public long ScoringTableRefId { get; set; }
         public long ScoringRefId { get; set; }
 
