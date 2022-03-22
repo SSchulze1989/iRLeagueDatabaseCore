@@ -41,7 +41,7 @@ namespace DbIntegrationTests
         public static LeagueDbContext  GetTestDatabaseContext()
         {
             var optionsBuilder = new DbContextOptionsBuilder<LeagueDbContext>();
-            optionsBuilder.UseMySQL(_config["Db:ConnectionString"])
+            optionsBuilder.UseMySQL(_config.GetConnectionString("ModelDb"))
                 .UseLazyLoadingProxies();
             optionsBuilder.EnableSensitiveDataLogging();
             var dbContext = new LeagueDbContext(optionsBuilder.Options);
@@ -49,7 +49,7 @@ namespace DbIntegrationTests
         }
 
         [Fact]
-        public void TestPopulate()
+        public async void TestPopulate()
         {
             using (var dbContext = GetTestDatabaseContext())
             {
@@ -71,6 +71,21 @@ namespace DbIntegrationTests
                     Assert.Equal(season, schedule.Season);
                     Assert.Equal(league.LeagueId, schedule.LeagueId);
                 }
+
+                // check for result rows
+                var scoredResultRow = await dbContext.ScoredResultRows
+                    .Include(x => x.ResultRow)
+                        .ThenInclude(x => x.Member)
+                    .Include(x => x.ResultRow)
+                        .ThenInclude(x => x.Result)
+                            .ThenInclude(x => x.Session)
+                    .FirstOrDefaultAsync();
+
+                Assert.NotNull(scoredResultRow);
+                Assert.NotNull(scoredResultRow.ResultRow);
+                Assert.NotNull(scoredResultRow.ResultRow.Member);
+                Assert.NotNull(scoredResultRow.ResultRow.Result);
+                Assert.NotNull(scoredResultRow.ResultRow.Result.Session);
             }
         }
 
@@ -165,9 +180,51 @@ namespace DbIntegrationTests
         }
 
         [Fact]
-        public void TestJustThisOneThing()
+        public async void TestAddScoring()
         {
-            Assert.True(true);
+            using (var tx = new TransactionScope())
+            using (var dbContext = GetTestDatabaseContext())
+            {
+                var scoring = new ScoringEntity()
+                {
+                    Name = "TestScoring",
+                    ShowResults = true
+                };
+
+                var season = await dbContext.Seasons.FirstAsync();
+                season.Scorings.Add(scoring);
+
+                await dbContext.SaveChangesAsync();
+
+                Assert.Equal(2, dbContext.Scorings.Count());
+                Assert.Contains(dbContext.Scorings, x => x.Name == "TestScoring");
+            }
+        }
+
+        [Fact]
+        public async void TestAddResult()
+        {
+            using (var tx = new TransactionScope())
+            using (var context = GetTestDatabaseContext())
+            {
+                const int testSessionId = 2;
+
+                var testSession = await context.Sessions
+                    .Include(x => x.Result)
+                    .SingleAsync(x => x.SessionId == testSessionId);
+
+                var result = new ResultEntity();
+                testSession.Result = result;
+
+                await context.SaveChangesAsync();
+
+                var dbResult = await context.Results
+                    .Include(x => x.Session)
+                    .SingleOrDefaultAsync(x => x.ResultId == testSessionId);
+
+                Assert.NotNull(dbResult);
+                Assert.Equal(testSession, dbResult.Session);
+            }
         }
     }
 }

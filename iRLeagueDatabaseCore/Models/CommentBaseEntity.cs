@@ -28,7 +28,6 @@ namespace iRLeagueDatabaseCore.Models
         public string LastModifiedByUserId { get; set; }
         public string LastModifiedByUserName { get; set; }
         public long? ReviewId { get; set; }
-        public string Discriminator { get; set; }
 
         public virtual CommentBaseEntity ReplyToComment { get; set; }
         public virtual IncidentReviewEntity Review { get; set; }

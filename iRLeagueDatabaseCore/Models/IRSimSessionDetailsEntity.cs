@@ -9,6 +9,7 @@ namespace iRLeagueDatabaseCore.Models
     public partial class IRSimSessionDetailsEntity
     {
         public long ResultId { get; set; }
+        public long LeagueId { get; set; }
         public long IRSubsessionId { get; set; }
         public long IRSeasonId { get; set; }
         public string IRSeasonName { get; set; }

@@ -9,8 +9,7 @@ namespace iRLeagueDatabaseCore.Models
     {
         public ScoringEntity()
         {
-            InverseExtScoringSource = new HashSet<ScoringEntity>();
-            InverseParentScoring = new HashSet<ScoringEntity>();
+            DependendScorings = new HashSet<ScoringEntity>();
             ResultsFilterOptions = new HashSet<ResultsFilterOptionEntity>();
             ScoredResults = new HashSet<ScoredResultEntity>();
             Sessions = new HashSet<SessionEntity>();
@@ -50,15 +49,14 @@ namespace iRLeagueDatabaseCore.Models
         public int AccumulateResultsOption { get; set; }
         public string PointsSortOptions { get; set; }
         public string FinalSortOptions { get; set; }
-        public bool? ShowResults { get; set; }
+        public bool ShowResults { get; set; }
         public string Description { get; set; }
 
         public virtual ScheduleEntity ConnectedSchedule { get; set; }
         public virtual ScoringEntity ExtScoringSource { get; set; }
         public virtual ScoringEntity ParentScoring { get; set; }
         public virtual SeasonEntity Season { get; set; }
-        public virtual ICollection<ScoringEntity> InverseExtScoringSource { get; set; }
-        public virtual ICollection<ScoringEntity> InverseParentScoring { get; set; }
+        public virtual ICollection<ScoringEntity> DependendScorings { get; set; }
         public virtual ICollection<ResultsFilterOptionEntity> ResultsFilterOptions { get; set; }
         public virtual ICollection<ScoredResultEntity> ScoredResults { get; set; }
         public virtual ICollection<SessionEntity> Sessions { get; set; }

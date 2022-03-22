@@ -14,6 +14,7 @@ namespace iRLeagueDatabaseCore.Models
         }
 
         public long ScoredResultRowId { get; set; }
+        public long LeagueId { get; set; }
         public long ScoredResultId { get; set; }
         public long ScoringId { get; set; }
         public long ResultRowId { get; set; }
@@ -27,7 +28,7 @@ namespace iRLeagueDatabaseCore.Models
         public bool PointsEligible { get; set; }
 
         public virtual ResultRowEntity ResultRow { get; set; }
-        public virtual ScoredResultEntity Scor { get; set; }
+        public virtual ScoredResultEntity Scoring { get; set; }
         public virtual TeamEntity Team { get; set; }
         public virtual AddPenaltyEntity AddPenalty { get; set; }
         public virtual ICollection<ReviewPenaltyEntity> ReviewPenalty { get; set; }

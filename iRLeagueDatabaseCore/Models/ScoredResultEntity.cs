@@ -16,6 +16,7 @@ namespace iRLeagueDatabaseCore.Models
         }
 
         public long ResultId { get; set; }
+        public long LeagueId { get; set; }
         public long ScoringId { get; set; }
         public long FastestLap { get; set; }
         public long FastestQualyLap { get; set; }
