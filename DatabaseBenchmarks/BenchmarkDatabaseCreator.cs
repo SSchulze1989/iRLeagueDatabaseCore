@@ -69,7 +69,7 @@ namespace DatabaseBenchmarks
 
             // generate leagues, seasons, schedules and scorings
             var leaguesList = new List<LeagueEntity>();
-            var leagueCount = 10;
+            var leagueCount = 20;
             for(int i=0; i<leagueCount; i++)
             {
                 leaguesList.Add(CreateRandomLeague(random));
@@ -81,7 +81,7 @@ namespace DatabaseBenchmarks
             foreach (var league in leagues)
             {
                 //var seasonsCount = random.Next(9) + 1;
-                var seasonsCount = 5;
+                var seasonsCount = 10;
                 for (int i=0; i<seasonsCount; i++)
                 {
                     league.Seasons.Add(CreateRandomSeason(random));
@@ -99,7 +99,7 @@ namespace DatabaseBenchmarks
                     season.Schedules.Add(CreateRandomSchedule(random));
                 }
                 //var scoringCount = random.Next(3) + 1;
-                var scoringCount = 1;
+                var scoringCount = 5;
                 for (int i=0; i<scoringCount; i++)
                 {
                     season.Scorings.Add(CreateRandomScoring(random));
@@ -165,6 +165,19 @@ namespace DatabaseBenchmarks
 
             // save that motherfucker
             await context.SaveChangesAsync();
+
+            Console.Write($"Database created with\n" +
+                $"- {leagueCount} leagues\n" +
+                $"- {membersCount} members" +
+                $"- {trackConfigs.Count()} track configs" +
+                $"- {seasons.Count()} seasons\n" +
+                $"- {schedules.Count()} schedules\n" +
+                $"- {scorings.Count()} scorings\n" +
+                $"- {sessions.Count()} sessions\n" +
+                $"- {results.Count()} results with\n" +
+                $"-   {context.ResultRows.Count()} result rows\n" +
+                $"- {context.ScoredResults.Count()} scored results with\n" +
+                $"-   {context.ScoredResultRows.Count()} scored result rows\n");
         }
 
         private static MemberEntity CreateRandomMember(Random random)
