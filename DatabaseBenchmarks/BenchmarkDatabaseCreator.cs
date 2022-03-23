@@ -13,7 +13,7 @@ namespace DatabaseBenchmarks
     {
         private static IConfiguration Configuration { get; }
         private static readonly int Seed = 12345;
-        private static readonly int leagueCount = 1;
+        private static readonly int leagueCount = 10;
 
         static BenchmarkDatabaseCreator()
         {
@@ -99,7 +99,7 @@ namespace DatabaseBenchmarks
                     season.Schedules.Add(CreateRandomSchedule(random));
                 }
                 //var scoringCount = random.Next(3) + 1;
-                var scoringCount = 5;
+                var scoringCount = 2;
                 for (int i=0; i<scoringCount; i++)
                 {
                     season.Scorings.Add(CreateRandomScoring(random));
