@@ -15,7 +15,7 @@ namespace iRLeagueDatabaseCore.Models
 
         public long ScoredResultRowId { get; set; }
         public long LeagueId { get; set; }
-        public long ScoredResultId { get; set; }
+        public long ResultId { get; set; }
         public long ScoringId { get; set; }
         public long ResultRowId { get; set; }
         public double RacePoints { get; set; }
