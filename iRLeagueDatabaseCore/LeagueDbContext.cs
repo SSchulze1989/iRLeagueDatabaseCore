@@ -503,7 +503,7 @@ namespace iRLeagueDatabaseCore.Models
 
                 entity.HasIndex(e => e.ResultRowId, "IX_ResultRowId");
 
-                entity.HasIndex(e => new { e.ScoredResultId, e.ScoringId }, "IX_ScoredResultId_ScoringId");
+                entity.HasIndex(e => new { e.ResultId, e.ScoringId }, "IX_ScoredResultId_ScoringId");
 
                 entity.HasIndex(e => e.TeamId, "IX_TeamId");
 
@@ -519,7 +519,7 @@ namespace iRLeagueDatabaseCore.Models
 
                 entity.HasOne(d => d.Scoring)
                     .WithMany(p => p.ScoredResultRows)
-                    .HasForeignKey(d => new {d.LeagueId, d.ScoredResultId, d.ScoringId })
+                    .HasForeignKey(d => new {d.LeagueId, d.ResultId, d.ScoringId })
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_dbo.ScrResultRows_dbo.ScrResults_ScrResultId_ScoringId");
             });
