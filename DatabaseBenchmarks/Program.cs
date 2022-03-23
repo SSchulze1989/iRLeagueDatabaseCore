@@ -2,6 +2,7 @@
 using BenchmarkDotNet.Running;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,18 +14,51 @@ namespace DatabaseBenchmarks
         {
             //Console.WriteLine("Hello World!");
 
-            Console.WriteLine("Creating benchmark database...");
-            using (var context = BenchmarkDatabaseCreator.CreateStaticDbContext())
+            if (args.Contains("--build-db"))
             {
-                BenchmarkDatabaseCreator.PopulateBenchmarkDatabase(context).Wait();
+                Console.WriteLine("Creating benchmark database...");
+                using (var context = BenchmarkDatabaseCreator.CreateStaticDbContext())
+                {
+                    BenchmarkDatabaseCreator.PopulateBenchmarkDatabase(context).Wait();
+                }
+                Console.Write("Finished creating");
             }
-            Console.Write("Finished creating");
 
-            //var qb = new QueryBenchmarks();
-            //qb.TestQueryWithDep();
-            //qb.TestQueryWithoutDep();
+#if DEBUG
+            var qb = new QueryBenchmarks();
+            var stopWatch = new Stopwatch();
+            int loops = 50;
 
+            stopWatch.Start();
+            Console.WriteLine("Test normal for loop...");
+            Console.WriteLine("Elapsed: {0} s", stopWatch.ElapsedMilliseconds / 1000);
+            for (int i=0; i<loops; i++)
+            {
+                qb.TestSeparateQuery().Wait();
+                qb.TestDirectQuery().Wait();
+            }
+            stopWatch.Stop();
+            Console.WriteLine("Elapsed: {0} s", (stopWatch.ElapsedMilliseconds / 1000).ToString());
+
+            stopWatch.Restart();
+            Console.WriteLine("Test parallel for loop...");
+            Parallel.For(0, loops, async i =>
+            {
+                try
+                {
+                    await qb.TestSeparateQuery();
+                    await qb.TestDirectQuery();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                }
+            });
+            stopWatch.Stop();
+            Console.WriteLine("Elapsed: {0} s", stopWatch.ElapsedMilliseconds/1000);
+#else
             var summary = BenchmarkRunner.Run<QueryBenchmarks>();
+#endif
         }
     }
 
@@ -32,6 +66,7 @@ namespace DatabaseBenchmarks
     public class QueryBenchmarks
     {
         private readonly long[] seasonIds;
+        private readonly long seasonId = 10;
 
         public QueryBenchmarks()
         {
@@ -41,30 +76,41 @@ namespace DatabaseBenchmarks
             }
         }
 
-
         [Benchmark]
-        public void TestQueryWithoutDep()
+        public async Task TestIncludeQueryWithoutRows()
         {
-            var seasonId = 10;
             using (var dbContext = BenchmarkDatabaseCreator.CreateStaticDbContext())
             {
-                var seasonResults = dbContext.ScoredResults
+                var seasonResults = await dbContext.ScoredResults
+                    .Include(x => x.Result)
+                        .ThenInclude(x => x.Session)
+                            .ThenInclude(x => x.Schedule)
+                    .Where(x => x.Result.Session.Schedule.SeasonId == seasonId)
+                    .ToListAsync();
+            }
+        }
+
+        [Benchmark]
+        public async Task TestIncludeQuery()
+        { 
+            using (var dbContext = BenchmarkDatabaseCreator.CreateStaticDbContext())
+            {
+                var seasonResults = await dbContext.ScoredResults
                     .Include(x => x.Result)
                         .ThenInclude(x => x.Session)
                             .ThenInclude(x => x.Schedule)
                     .Include(x => x.ScoredResultRows)
                     .Where(x => x.Result.Session.Schedule.SeasonId == seasonId)
-                    .ToList();
+                    .ToListAsync();
             }
         }
 
         [Benchmark]
-        public void TestQueryFullResult()
+        public async Task TestIncludeQueryFullResult()
         {
-            var seasonId = 10;
             using (var dbContext = BenchmarkDatabaseCreator.CreateStaticDbContext())
             {
-                var seasonResults = dbContext.ScoredResults
+                var seasonResults = await dbContext.ScoredResults
                     .Include(x => x.Result)
                         .ThenInclude(x => x.Session)
                             .ThenInclude(x => x.Schedule)
@@ -74,17 +120,41 @@ namespace DatabaseBenchmarks
                     .Include(x => x.ScoredResultRows)
                         .ThenInclude(x => x.Team)
                     .Where(x => x.Result.Session.Schedule.SeasonId == seasonId)
-                    .ToList();
+                    .ToListAsync();
             }
         }
 
         [Benchmark]
-        public void TestQueryWithDep()
+        public async Task TestSeparateQuery()
+        {
+            using (var dbContext = BenchmarkDatabaseCreator.CreateStaticDbContext())
+            {
+                var seasonResults = await dbContext.ScoredResults
+                    .Include(x => x.Result)
+                        .ThenInclude(x => x.Session)
+                            .ThenInclude(x => x.Schedule)
+                    .Include(x => x.ScoredResultRows)
+                    .Where(x => x.Result.Session.Schedule.SeasonId == seasonId)
+                    .ToListAsync();
+
+                var seasonResultsIds = seasonResults.Select(x => x.ResultId).Distinct();
+                var seasonScoringIds = seasonResults.Select(x => x.ScoringId).Distinct();
+
+                await dbContext.ScoredResultRows
+                    .Where(x => seasonResultsIds.Contains(x.ResultId) && seasonScoringIds.Contains(x.ScoringId))
+                    .LoadAsync();
+
+                Debug.Assert(seasonResults.SelectMany(x => x.ScoredResultRows).Count() > 0);
+            }
+        }
+
+        [Benchmark]
+        public async Task TestDirectQuery()
         {
             var seasonId = 10;
             using (var dbContext = BenchmarkDatabaseCreator.CreateStaticDbContext())
             {
-                var seasonResults = dbContext.ScoredResults
+                var seasonResults = await dbContext.ScoredResults
                     .Select(result => new
                     {
                         LeagueId = result.LeagueId,
@@ -114,7 +184,7 @@ namespace DatabaseBenchmarks
                             }).ToArray(),
                     })
                     .Where(x => x.SeasonId == seasonId)
-                    .ToList();
+                    .ToListAsync();
             }
         }
     }

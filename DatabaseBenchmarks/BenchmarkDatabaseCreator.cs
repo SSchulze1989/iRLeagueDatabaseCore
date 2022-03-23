@@ -13,6 +13,7 @@ namespace DatabaseBenchmarks
     {
         private static IConfiguration Configuration { get; }
         private static readonly int Seed = 12345;
+        private static readonly int leagueCount = 1;
 
         static BenchmarkDatabaseCreator()
         {
@@ -69,7 +70,6 @@ namespace DatabaseBenchmarks
 
             // generate leagues, seasons, schedules and scorings
             var leaguesList = new List<LeagueEntity>();
-            var leagueCount = 20;
             for(int i=0; i<leagueCount; i++)
             {
                 leaguesList.Add(CreateRandomLeague(random));
