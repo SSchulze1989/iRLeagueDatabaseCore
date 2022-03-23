@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestConsole", "TestConsole\TestConsole.csproj", "{A78AE22D-F98E-4546-AD06-235F9DF0615C}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iRLeagueDatabaseCore", "iRLeagueDatabaseCore\iRLeagueDatabaseCore.csproj", "{45B97384-487F-4AA8-992B-12BE9A2C7B1C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DbIntegrationTests", "DbIntegrationTests\DbIntegrationTests.csproj", "{3DD78A18-35C1-4796-9A1B-A764B5ABDE33}"
@@ -13,16 +11,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTests", "UnitTests\Unit
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseBenchmarks", "DatabaseBenchmarks\DatabaseBenchmarks.csproj", "{B2B2333A-F497-4C1F-8B61-637269F617DD}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5861A3FE-C887-46BD-AF57-7B52268D877D}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\dotnet_develop.yml = .github\workflows\dotnet_develop.yml
+		.github\workflows\dotnet_master_pr.yml = .github\workflows\dotnet_master_pr.yml
+		.github\workflows\dotnet_master_push.yml = .github\workflows\dotnet_master_push.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A78AE22D-F98E-4546-AD06-235F9DF0615C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A78AE22D-F98E-4546-AD06-235F9DF0615C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A78AE22D-F98E-4546-AD06-235F9DF0615C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A78AE22D-F98E-4546-AD06-235F9DF0615C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{45B97384-487F-4AA8-992B-12BE9A2C7B1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{45B97384-487F-4AA8-992B-12BE9A2C7B1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{45B97384-487F-4AA8-992B-12BE9A2C7B1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
