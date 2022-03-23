@@ -14,8 +14,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5861A3FE-C887-46BD-AF57-7B52268D877D}"
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\dotnet_develop.yml = .github\workflows\dotnet_develop.yml
-		.github\workflows\dotnet_master_pr.yml = .github\workflows\dotnet_master_pr.yml
-		.github\workflows\dotnet_master_push.yml = .github\workflows\dotnet_master_push.yml
+		.github\workflows\dotnet_main_pr.yml = .github\workflows\dotnet_main_pr.yml
+		.github\workflows\dotnet_main_push.yml = .github\workflows\dotnet_main_push.yml
 	EndProjectSection
 EndProject
 Global
