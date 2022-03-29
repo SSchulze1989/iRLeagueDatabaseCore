@@ -11,12 +11,11 @@ namespace iRLeagueDatabaseCore.Models
         public long CommentId { get; set; }
         public long LeagueId { get; set; }
         public long? MemberAtFaultId { get; set; }
-        public int Vote { get; set; }
-        public long? CustomVoteCatId { get; set; }
+        public long? VoteCategoryId { get; set; }
         public string Description { get; set; }
 
         public virtual CommentBaseEntity Comment { get; set; }
-        public virtual VoteCategoryEntity CustomVoteCat { get; set; }
+        public virtual VoteCategoryEntity VoteCategory { get; set; }
         public virtual MemberEntity MemberAtFault { get; set; }
     }
 }

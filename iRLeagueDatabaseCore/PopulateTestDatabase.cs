@@ -112,7 +112,7 @@ namespace DbIntegrationTests
                         .Skip(i)
                         .FirstOrDefault(),
                     SessionTitle = $"S1 Session {i}",
-                    SessionType = (SessionTypeEnum)i + 1
+                    SessionType = (SessionType)i + 1
                 };
                 schedule1.Sessions.Add(session);
             }
@@ -166,10 +166,10 @@ namespace DbIntegrationTests
                 scoredResult.ScoredResultRows.Add(scoredResultRow);
                 resultRow.ScoredResultRows.Add(scoredResultRow);
             }
-            schedule1.Sessions
-                .First()
-                .Result = result;
-            result.Session = schedule1.Sessions.First();
+            var scoringSession = schedule1.Sessions.First();
+            scoringSession.Result = result;
+            scoringSession.Scorings.Add(scoring);
+            result.Session = scoringSession;
         }
 
         private static void GenerateMembers(LeagueDbContext context, Random random)

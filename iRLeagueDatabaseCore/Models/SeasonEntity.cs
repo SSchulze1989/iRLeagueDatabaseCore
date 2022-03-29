@@ -14,7 +14,7 @@ namespace iRLeagueDatabaseCore.Models
             Results = new HashSet<ResultEntity>();
             Schedules = new HashSet<ScheduleEntity>();
             Scorings = new HashSet<ScoringEntity>();
-            ScoringTables = new HashSet<ScoringTableEntity>();
+            Standings = new HashSet<StandingEntity>();
             StatisticSets = new HashSet<StatisticSetEntity>();
         }
 
@@ -32,7 +32,7 @@ namespace iRLeagueDatabaseCore.Models
         public virtual ICollection<ResultEntity> Results { get; set; }
         public virtual ICollection<ScheduleEntity> Schedules { get; set; }
         public virtual ICollection<ScoringEntity> Scorings { get; set; }
-        public virtual ICollection<ScoringTableEntity> ScoringTables { get; set; }
+        public virtual ICollection<StandingEntity> Standings { get; set; }
         public virtual ICollection<StatisticSetEntity> StatisticSets { get; set; }
     }
 }

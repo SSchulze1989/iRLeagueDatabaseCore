@@ -1,5 +1,7 @@
 ﻿using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
+using iRLeagueApiCore.Communication.Models;
+using iRLeagueDatabaseCore.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Diagnostics;
@@ -25,9 +27,9 @@ namespace DatabaseBenchmarks
             }
 
 #if DEBUG
-            var qb = new QueryBenchmarks();
+            var qb = new QuerySeasonResultsBenchmarks();
             var stopWatch = new Stopwatch();
-            int loops = 50;
+            int loops = 10;
 
             stopWatch.Start();
             Console.WriteLine("Test normal for loop...");
@@ -57,18 +59,18 @@ namespace DatabaseBenchmarks
             stopWatch.Stop();
             Console.WriteLine("Elapsed: {0} s", stopWatch.ElapsedMilliseconds/1000);
 #else
-            var summary = BenchmarkRunner.Run<QueryBenchmarks>();
+            var summary = BenchmarkRunner.Run<QuerySeasonResultsBenchmarks>();
 #endif
         }
     }
 
     [MemoryDiagnoser]
-    public class QueryBenchmarks
+    public class QuerySeasonResultsBenchmarks
     {
         private readonly long[] seasonIds;
         private readonly long seasonId = 10;
 
-        public QueryBenchmarks()
+        public QuerySeasonResultsBenchmarks()
         {
             using (var dbContext = BenchmarkDatabaseCreator.CreateStaticDbContext())
             {
@@ -77,36 +79,7 @@ namespace DatabaseBenchmarks
         }
 
         [Benchmark]
-        public async Task TestIncludeQueryWithoutRows()
-        {
-            using (var dbContext = BenchmarkDatabaseCreator.CreateStaticDbContext())
-            {
-                var seasonResults = await dbContext.ScoredResults
-                    .Include(x => x.Result)
-                        .ThenInclude(x => x.Session)
-                            .ThenInclude(x => x.Schedule)
-                    .Where(x => x.Result.Session.Schedule.SeasonId == seasonId)
-                    .ToListAsync();
-            }
-        }
-
-        [Benchmark]
         public async Task TestIncludeQuery()
-        { 
-            using (var dbContext = BenchmarkDatabaseCreator.CreateStaticDbContext())
-            {
-                var seasonResults = await dbContext.ScoredResults
-                    .Include(x => x.Result)
-                        .ThenInclude(x => x.Session)
-                            .ThenInclude(x => x.Schedule)
-                    .Include(x => x.ScoredResultRows)
-                    .Where(x => x.Result.Session.Schedule.SeasonId == seasonId)
-                    .ToListAsync();
-            }
-        }
-
-        [Benchmark]
-        public async Task TestIncludeQueryFullResult()
         {
             using (var dbContext = BenchmarkDatabaseCreator.CreateStaticDbContext())
             {
@@ -133,7 +106,6 @@ namespace DatabaseBenchmarks
                     .Include(x => x.Result)
                         .ThenInclude(x => x.Session)
                             .ThenInclude(x => x.Schedule)
-                    .Include(x => x.ScoredResultRows)
                     .Where(x => x.Result.Session.Schedule.SeasonId == seasonId)
                     .ToListAsync();
 
@@ -141,10 +113,12 @@ namespace DatabaseBenchmarks
                 var seasonScoringIds = seasonResults.Select(x => x.ScoringId).Distinct();
 
                 await dbContext.ScoredResultRows
+                    .Include(x => x.ResultRow)
                     .Where(x => seasonResultsIds.Contains(x.ResultId) && seasonScoringIds.Contains(x.ScoringId))
                     .LoadAsync();
 
-                Debug.Assert(seasonResults.SelectMany(x => x.ScoredResultRows).Count() > 0);
+                Debug.Assert(seasonResults.SelectMany(x => x.ScoredResultRows).Where(x => x != null).Count() > 0);
+                Debug.Assert(seasonResults.SelectMany(x => x.ScoredResultRows.Select(x => x.ResultRow)).Where(x => x != null).Count() > 0);
             }
         }
 
@@ -155,22 +129,18 @@ namespace DatabaseBenchmarks
             using (var dbContext = BenchmarkDatabaseCreator.CreateStaticDbContext())
             {
                 var seasonResults = await dbContext.ScoredResults
-                    .Select(result => new
+                    .Select(result => new GetResultModel
                     {
                         LeagueId = result.LeagueId,
                         SeasonId = result.Result.Session.Schedule.SeasonId,
                         SessionId = result.ResultId,
-                        SessionDetails = new 
-                        {
-                            TrackName = result.Result.IRSimSessionDetails.TrackName
-                        },
                         ResultRows = result.ScoredResultRows
-                            .Select(row => new
+                            .Select(row => new GetResultRowModel
                             {
                                 MemberId = row.ResultRow.MemberId,
-                                Interval = row.ResultRow.Interval,
-                                FastestLap = row.ResultRow.FastestLapTime,
-                                AverageLap = row.ResultRow.AvgLapTime,
+                                Interval = new TimeSpan(row.ResultRow.Interval),
+                                FastestLapTime = new TimeSpan(row.ResultRow.FastestLapTime),
+                                AvgLapTime = new TimeSpan(row.ResultRow.AvgLapTime),
                                 Firstname = row.ResultRow.Member.Firstname,
                                 Lastname = row.ResultRow.Member.Lastname,
                                 TeamName = row.Team.Name,
@@ -180,7 +150,30 @@ namespace DatabaseBenchmarks
                                 RacePoints = row.RacePoints,
                                 PenaltyPoints = row.PenaltyPoints,
                                 BonusPoints = row.BonusPoints,
-                                TotalPoints = row.TotalPoints
+                                TotalPoints = row.TotalPoints,
+                                Car = row.ResultRow.Car,
+                                CarClass = row.ResultRow.CarClass,
+                                CarId = row.ResultRow.CarId,
+                                CarNumber = row.ResultRow.CarNumber,
+                                ClassId = row.ResultRow.ClassId,
+                                CompletedLaps = row.ResultRow.CompletedLaps,
+                                CompletedPct = row.ResultRow.CompletedPct,
+                                Division = row.ResultRow.Division,
+                                FastLapNr = row.ResultRow.FastLapNr,
+                                FinalPositionChange = row.FinalPositionChange,
+                                Incidents = row.ResultRow.Incidents,
+                                LeadLaps = row.ResultRow.LeadLaps,
+                                License = row.ResultRow.License,
+                                NewIrating = row.ResultRow.NewIrating,
+                                NewLicenseLevel = row.ResultRow.NewLicenseLevel,
+                                NewSafetyRating = row.ResultRow.NewSafetyRating,
+                                OldIrating = row.ResultRow.OldIrating,
+                                OldLicenseLevel = row.ResultRow.OldLicenseLevel,
+                                OldSafetyRating = row.ResultRow.OldSafetyRating,
+                                PositionChange = row.ResultRow.PositionChange,
+                                SeasonStartIrating = row.ResultRow.SeasonStartIrating,
+                                Status = row.ResultRow.Status,
+                                TeamId = row.TeamId
                             }).ToArray(),
                     })
                     .Where(x => x.SeasonId == seasonId)

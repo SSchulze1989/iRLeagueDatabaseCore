@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-
-#nullable disable
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace iRLeagueDatabaseCore.Models
 {
-    public partial class ScoringTableMap
+    public partial class ScoringsSessions
     {
         public long LeagueId { get; set; }
-        public long ScoringTableRefId { get; set; }
+        public long SessionRefId { get; set; }
         public long ScoringRefId { get; set; }
 
+        public virtual SessionEntity SessionRef { get; set; }
         public virtual ScoringEntity ScoringRef { get; set; }
-        public virtual ScoringTableEntity ScoringTableRef { get; set; }
     }
 }

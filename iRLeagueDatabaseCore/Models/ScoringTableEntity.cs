@@ -1,25 +1,26 @@
-﻿using System;
+﻿using iRLeagueApiCore.Communication.Enums;
+using System;
 using System.Collections.Generic;
 
 #nullable disable
 
 namespace iRLeagueDatabaseCore.Models
 {
-    public partial class ScoringTableEntity
+    public partial class StandingEntity
     {
-        public ScoringTableEntity()
+        public StandingEntity()
         {
-            ScoringTableMaps = new HashSet<ScoringTableMap>();
+            Scorings = new HashSet<ScoringEntity>();
             StatisticSets = new HashSet<StatisticSetEntity>();
         }
 
-        public long ScoringTableId { get; set; }
+        public long StandingId { get; set; }
         public int ScoringKind { get; set; }
         public string Name { get; set; }
         public int DropWeeks { get; set; }
         public int AverageRaceNr { get; set; }
         public string ScoringFactors { get; set; }
-        public int DropRacesOption { get; set; }
+        public DropRacesOption DropRacesOption { get; set; }
         public int ResultsPerRaceCount { get; set; }
         public DateTime? CreatedOn { get; set; }
         public DateTime? LastModifiedOn { get; set; }
@@ -32,7 +33,7 @@ namespace iRLeagueDatabaseCore.Models
         public long LeagueId { get; set; }
 
         public virtual SeasonEntity Season { get; set; }
-        public virtual ICollection<ScoringTableMap> ScoringTableMaps { get; set; }
+        public virtual ICollection<ScoringEntity> Scorings { get; set; }
         public virtual ICollection<StatisticSetEntity> StatisticSets { get; set; }
     }
 }
