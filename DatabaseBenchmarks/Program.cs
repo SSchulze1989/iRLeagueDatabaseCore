@@ -29,7 +29,7 @@ namespace DatabaseBenchmarks
 #if DEBUG
             var qb = new QuerySeasonResultsBenchmarks();
             var stopWatch = new Stopwatch();
-            int loops = 1;
+            int loops = 10;
 
             stopWatch.Start();
             Console.WriteLine("Test normal for loop...");
@@ -119,7 +119,6 @@ namespace DatabaseBenchmarks
 
                 Debug.Assert(seasonResults.SelectMany(x => x.ScoredResultRows).Where(x => x != null).Count() > 0);
                 Debug.Assert(seasonResults.SelectMany(x => x.ScoredResultRows.Select(x => x.ResultRow)).Where(x => x != null).Count() > 0);
-                Debug.Assert(seasonResults.Select(x => x.Result.IRSimSessionDetails).Where(x => x != null).Count() > 0);
             }
         }
 
@@ -136,7 +135,7 @@ namespace DatabaseBenchmarks
                         SeasonId = result.Result.Session.Schedule.SeasonId,
                         SessionId = result.ResultId,
                         ResultRows = result.ScoredResultRows
-                            .Select(row => new GetResultRow
+                            .Select(row => new GetResultRowModel
                             {
                                 MemberId = row.ResultRow.MemberId,
                                 Interval = new TimeSpan(row.ResultRow.Interval),
@@ -152,14 +151,11 @@ namespace DatabaseBenchmarks
                                 PenaltyPoints = row.PenaltyPoints,
                                 BonusPoints = row.BonusPoints,
                                 TotalPoints = row.TotalPoints,
-                                QualifyingTimeAt = row.ResultRow.QualifyingTimeAt,
                                 Car = row.ResultRow.Car,
                                 CarClass = row.ResultRow.CarClass,
                                 CarId = row.ResultRow.CarId,
                                 CarNumber = row.ResultRow.CarNumber,
                                 ClassId = row.ResultRow.ClassId,
-                                ClubId = row.ResultRow.ClubId,
-                                ClubName = row.ResultRow.ClubName,
                                 CompletedLaps = row.ResultRow.CompletedLaps,
                                 CompletedPct = row.ResultRow.CompletedPct,
                                 Division = row.ResultRow.Division,
@@ -168,16 +164,13 @@ namespace DatabaseBenchmarks
                                 Incidents = row.ResultRow.Incidents,
                                 LeadLaps = row.ResultRow.LeadLaps,
                                 License = row.ResultRow.License,
-                                NewCpi = row.ResultRow.NewCpi,
                                 NewIrating = row.ResultRow.NewIrating,
                                 NewLicenseLevel = row.ResultRow.NewLicenseLevel,
                                 NewSafetyRating = row.ResultRow.NewSafetyRating,
-                                OldCpi = row.ResultRow.OldCpi,
                                 OldIrating = row.ResultRow.OldIrating,
                                 OldLicenseLevel = row.ResultRow.OldLicenseLevel,
                                 OldSafetyRating = row.ResultRow.OldSafetyRating,
                                 PositionChange = row.ResultRow.PositionChange,
-                                QualifyingTime = row.ResultRow.QualifyingTime,
                                 SeasonStartIrating = row.ResultRow.SeasonStartIrating,
                                 Status = row.ResultRow.Status,
                                 TeamId = row.TeamId

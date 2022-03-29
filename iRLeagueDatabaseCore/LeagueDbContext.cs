@@ -45,6 +45,8 @@ namespace iRLeagueDatabaseCore.Models
         public virtual DbSet<TeamEntity> Teams { get; set; }
         public virtual DbSet<VoteCategoryEntity> VoteCategorys { get; set; }
         public virtual DbSet<TrackGroupEntity> TrackGroups { get; set; }
+        public virtual DbSet<IRSimSessionDetailsEntity> IRSimSessionDetails { get; set; }
+        public virtual DbSet<TrackConfigEntity> TrackConfigs { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -256,7 +258,8 @@ namespace iRLeagueDatabaseCore.Models
                     .HasConstraintName("FK_dbo.IncidentReviews_dbo.Sessions_SessionId");
 
                 entity.HasMany(d => d.InvolvedMembers)
-                    .WithMany(p => p.InvolvedReviews);
+                    .WithMany(p => p.InvolvedReviews)
+                    .UsingEntity(e => e.ToTable("IncidentReviewsInvolvedMembers"));
             });
 
             modelBuilder.Entity<MemberEntity>(entity =>
@@ -317,7 +320,7 @@ namespace iRLeagueDatabaseCore.Models
                     .WithOne(p => p.IRSimSessionDetails)
                     .HasForeignKey<IRSimSessionDetailsEntity>(d => new { d.LeagueId, d.ResultId })
                     .IsRequired()
-                    .HasConstraintName("FK_dbo.IRSimSessionDetailss_dbo.Results_ResultId");
+                    .HasConstraintName("FK_dbo.IRSimSessionDetails_dbo.Results_ResultId");
             });
 
             modelBuilder.Entity<ResultRowEntity>(entity =>
@@ -487,10 +490,12 @@ namespace iRLeagueDatabaseCore.Models
                     .HasConstraintName("FK_dbo.ScoredResults_dbo.Scorings_ScoringId");
 
                 entity.HasMany(d => d.CleanestDrivers)
-                    .WithMany(p => p.CleanestDriverResults);
+                    .WithMany(p => p.CleanestDriverResults)
+                    .UsingEntity(e => e.ToTable("ScoredResultsCleanestDrivers"));
 
                 entity.HasMany(d => d.HardChargers)
-                    .WithMany(p => p.HardChargerResults);
+                    .WithMany(p => p.HardChargerResults)
+                    .UsingEntity(e => e.ToTable("ScoredResultsHardChargers"));
             });
             
             modelBuilder.Entity<ScoredResultRowEntity>(entity =>
@@ -549,7 +554,8 @@ namespace iRLeagueDatabaseCore.Models
                     .HasConstraintName("FK_dbo.ScrTeamResultRows_dbo.ScrResults_ScrResultId_ScoringId");
 
                 entity.HasMany(d => d.ScoredResultRows)
-                    .WithMany(p => p.ScoredTeamResultRows);
+                    .WithMany(p => p.ScoredTeamResultRows)
+                    .UsingEntity(e => e.ToTable("ScoredTeamResultRowsResultRows"));
             });
 
             modelBuilder.Entity<ScoringEntity>(entity =>
@@ -643,6 +649,11 @@ namespace iRLeagueDatabaseCore.Models
             {
                 entity.HasKey(e => e.LeagueId)
                     .HasName("PK_dbo.Leagues");
+
+                entity.Property(e => e.Name)
+                    .IsRequired();
+
+                entity.HasIndex(e => e.Name, "IX_Name");
             });
 
             modelBuilder.Entity<SeasonEntity>(entity =>
@@ -721,7 +732,8 @@ namespace iRLeagueDatabaseCore.Models
                     .IsRequired(false);
 
                 entity.HasMany(d => d.Scorings)
-                    .WithMany(p => p.Sessions);
+                    .WithMany(p => p.Sessions)
+                    .UsingEntity(e => e.ToTable("ScoringsSessions"));
             });
 
             modelBuilder.Entity<StatisticSetEntity>(entity =>
@@ -758,8 +770,9 @@ namespace iRLeagueDatabaseCore.Models
                     .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_dbo.StatisticSets_dbo.Seasons_SeasonId");
 
-                entity.HasMany(d => d.LeagueStatisticSets)
-                    .WithMany(p => p.DependendStatisticSets);
+                entity.HasMany(d => d.DependendStatisticSets)
+                    .WithMany(p => p.LeagueStatisticSets)
+                    .UsingEntity(e => e.ToTable("LeagueStatisticSetsStatisticSets"));
             });
 
             modelBuilder.Entity<TeamEntity>(entity =>

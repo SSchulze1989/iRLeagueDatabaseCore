@@ -22,7 +22,7 @@ namespace iRLeagueDatabaseCore.Models
         public long SessionId { get; set; }
         public long LeagueId { get; set; }
         public string SessionTitle { get; set; }
-        public SessionTypeEnum SessionType { get; set; }
+        public SessionType SessionType { get; set; }
         public DateTime? Date { get; set; }
         public long? TrackId { get; set; }
         public TimeSpan Duration { get; set; }
