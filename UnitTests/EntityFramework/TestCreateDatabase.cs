@@ -65,14 +65,14 @@ namespace UnitTests.EntityFramework
                 foreach(var season in league.Seasons)
                 {
                     Assert.Equal(league, season.League);
-                    Assert.Equal(league.LeagueId, season.LeagueId);
+                    Assert.Equal(league.Id, season.LeagueId);
                 }
 
                 var seasonSchedules = league.Seasons.SelectMany(x => x.Schedules.Select(y => (x, y)));
                 foreach((var season, var schedule) in seasonSchedules)
                 {
                     Assert.Equal(season, schedule.Season);
-                    Assert.Equal(league.LeagueId, schedule.LeagueId);
+                    Assert.Equal(league.Id, schedule.LeagueId);
                 }
             }
         }
@@ -103,7 +103,7 @@ namespace UnitTests.EntityFramework
             using (var dbContext = GetTestDatabaseContext())
             {
                 Assert.Equal(2, dbContext.Leagues.Count());
-                var league = dbContext.Leagues.OrderBy(x => x.LeagueId).Last();
+                var league = dbContext.Leagues.OrderBy(x => x.Id).Last();
                 Assert.Equal("TestLeague2", league.Name);
                 Assert.Equal(1, league.Seasons.Count);
                 Assert.Equal(league, league.Seasons.First().League);
@@ -113,7 +113,7 @@ namespace UnitTests.EntityFramework
 
             using (var dbContext = GetTestDatabaseContext())
             {
-                var league = dbContext.Leagues.OrderBy(x => x.LeagueId).Last();
+                var league = dbContext.Leagues.OrderBy(x => x.Id).Last();
                 dbContext.Leagues.Remove(league);
                 dbContext.SaveChanges();
             }

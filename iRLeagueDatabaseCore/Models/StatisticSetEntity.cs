@@ -29,7 +29,7 @@ namespace iRLeagueDatabaseCore.Models
         public long? CurrentChampId { get; set; }
         public long? SeasonId { get; set; }
         public long LeagueId { get; set; }
-        public long? ScoringTableId { get; set; }
+        public long? StandingId { get; set; }
         public int? FinishedRaces { get; set; }
         public bool? IsSeasonFinished { get; set; }
         public string ImportSource { get; set; }
@@ -38,7 +38,7 @@ namespace iRLeagueDatabaseCore.Models
         public DateTime? LastDate { get; set; }
 
         public virtual MemberEntity CurrentChamp { get; set; }
-        public virtual ScoringTableEntity ScoringTable { get; set; }
+        public virtual StandingEntity Standing { get; set; }
         public virtual SeasonEntity Season { get; set; }
         public virtual ICollection<DriverStatisticRowEntity> DriverStatisticRows { get; set; }
         public virtual ICollection<StatisticSetEntity> LeagueStatisticSets { get; set; }

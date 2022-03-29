@@ -6,6 +6,7 @@ using Xunit.Abstractions;
 using iRLeagueDatabaseCore.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using System.Threading.Tasks;
 
 namespace DbIntegrationTests
 {
@@ -49,7 +50,7 @@ namespace DbIntegrationTests
         }
 
         [Fact]
-        public async void TestPopulate()
+        public async Task TestPopulate()
         {
             using (var dbContext = GetTestDatabaseContext())
             {
@@ -62,14 +63,14 @@ namespace DbIntegrationTests
                 foreach(var season in league.Seasons)
                 {
                     Assert.Equal(league, season.League);
-                    Assert.Equal(league.LeagueId, season.LeagueId);
+                    Assert.Equal(league.Id, season.LeagueId);
                 }
 
                 var seasonSchedules = league.Seasons.SelectMany(x => x.Schedules.Select(y => (x, y)));
                 foreach((var season, var schedule) in seasonSchedules)
                 {
                     Assert.Equal(season, schedule.Season);
-                    Assert.Equal(league.LeagueId, schedule.LeagueId);
+                    Assert.Equal(league.Id, schedule.LeagueId);
                 }
 
                 // check for result rows
@@ -86,6 +87,16 @@ namespace DbIntegrationTests
                 Assert.NotNull(scoredResultRow.ResultRow.Member);
                 Assert.NotNull(scoredResultRow.ResultRow.Result);
                 Assert.NotNull(scoredResultRow.ResultRow.Result.Session);
+
+                // check for scoring sessions
+                var scoring = await dbContext.Scorings
+                    .Include(x => x.Sessions)
+                    .FirstAsync();
+                var scoringSession = await dbContext.Sessions
+                    .Include(x => x.Scorings)
+                    .FirstAsync();
+                Assert.Contains(scoring.Sessions, x => x == scoringSession);
+                Assert.Contains(scoringSession.Scorings, x => x == scoring);
             }
         }
 
@@ -117,7 +128,7 @@ namespace DbIntegrationTests
                 using (var dbContext = GetTestDatabaseContext())
                 {
                     Assert.Equal(2, dbContext.Leagues.Count());
-                    var league = dbContext.Leagues.OrderBy(x => x.LeagueId).Last();
+                    var league = dbContext.Leagues.OrderBy(x => x.Id).Last();
                     Assert.Equal("TestLeague2", league.Name);
                     Assert.Equal(1, league.Seasons.Count);
                     Assert.Equal(league, league.Seasons.First().League);
@@ -193,10 +204,12 @@ namespace DbIntegrationTests
 
                 var season = await dbContext.Seasons.FirstAsync();
                 season.Scorings.Add(scoring);
+                var session = await dbContext.Sessions.FirstAsync();
+                scoring.Sessions.Add(session);
 
                 await dbContext.SaveChangesAsync();
 
-                Assert.Equal(2, dbContext.Scorings.Count());
+                Assert.Equal(2, await dbContext.Scorings.CountAsync());
                 Assert.Contains(dbContext.Scorings, x => x.Name == "TestScoring");
             }
         }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using iRLeagueApiCore.Communication.Enums;
+using System;
 using System.Collections.Generic;
 
 #nullable disable
@@ -13,7 +14,7 @@ namespace iRLeagueDatabaseCore.Models
             ResultsFilterOptions = new HashSet<ResultsFilterOptionEntity>();
             ScoredResults = new HashSet<ScoredResultEntity>();
             Sessions = new HashSet<SessionEntity>();
-            ScoringTableMaps = new HashSet<ScoringTableMap>();
+            Standings = new HashSet<StandingEntity>();
             Seasons = new HashSet<SeasonEntity>();
         }
 
@@ -42,11 +43,11 @@ namespace iRLeagueDatabaseCore.Models
         public bool UseResultSetTeam { get; set; }
         public bool UpdateTeamOnRecalculation { get; set; }
         public long? ParentScoringId { get; set; }
-        public int ScoringSessionType { get; set; }
-        public int SessionSelectType { get; set; }
+        public SessionType ScoringSessionType { get; set; }
+        public ScoringSessionSelectionType SessionSelectType { get; set; }
         public string ScoringWeightValues { get; set; }
-        public int AccumulateBy { get; set; }
-        public int AccumulateResultsOption { get; set; }
+        public AccumulateByOption AccumulateBy { get; set; }
+        public AccumulateResultsOption AccumulateResultsOption { get; set; }
         public string PointsSortOptions { get; set; }
         public string FinalSortOptions { get; set; }
         public bool ShowResults { get; set; }
@@ -60,7 +61,7 @@ namespace iRLeagueDatabaseCore.Models
         public virtual ICollection<ResultsFilterOptionEntity> ResultsFilterOptions { get; set; }
         public virtual ICollection<ScoredResultEntity> ScoredResults { get; set; }
         public virtual ICollection<SessionEntity> Sessions { get; set; }
-        public virtual ICollection<ScoringTableMap> ScoringTableMaps { get; set; }
+        public virtual ICollection<StandingEntity> Standings { get; set; }
         public virtual ICollection<SeasonEntity> Seasons { get; set; }
     }
 }

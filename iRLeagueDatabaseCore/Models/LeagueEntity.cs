@@ -8,7 +8,7 @@ namespace iRLeagueDatabaseCore.Models
 {
     public class LeagueEntity : Revision
     {
-        public long LeagueId { get; set; }
+        public long Id { get; set; }
         public string Name { get; set; }
         public string NameFull { get; set; }
 

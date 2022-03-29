@@ -166,10 +166,10 @@ namespace DbIntegrationTests
                 scoredResult.ScoredResultRows.Add(scoredResultRow);
                 resultRow.ScoredResultRows.Add(scoredResultRow);
             }
-            schedule1.Sessions
-                .First()
-                .Result = result;
-            result.Session = schedule1.Sessions.First();
+            var scoringSession = schedule1.Sessions.First();
+            scoringSession.Result = result;
+            scoringSession.Scorings.Add(scoring);
+            result.Session = scoringSession;
         }
 
         private static void GenerateMembers(LeagueDbContext context, Random random)

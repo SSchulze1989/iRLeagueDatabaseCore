@@ -1,4 +1,5 @@
-﻿using System;
+﻿using iRLeagueApiCore.Communication.Enums;
+using System;
 using System.Collections.Generic;
 
 #nullable disable
@@ -16,11 +17,10 @@ namespace iRLeagueDatabaseCore.Models
         public long LeagueId { get; set; }
         public long ReviewId { get; set; }
         public long? MemberAtFaultId { get; set; }
-        public int Vote { get; set; }
-        public long? CustomVoteCatId { get; set; }
+        public long? VoteCategoryId { get; set; }
         public string Description { get; set; }
 
-        public virtual VoteCategoryEntity CustomVoteCat { get; set; }
+        public virtual VoteCategoryEntity VoteCategory { get; set; }
         public virtual MemberEntity MemberAtFault { get; set; }
         public virtual IncidentReviewEntity Review { get; set; }
         public virtual ICollection<ReviewPenaltyEntity> ReviewPenaltys { get; set; }

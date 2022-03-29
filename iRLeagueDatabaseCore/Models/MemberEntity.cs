@@ -22,7 +22,7 @@ namespace iRLeagueDatabaseCore.Models
             StatisticSets = new HashSet<StatisticSetEntity>();
         }
 
-        public long MemberId { get; set; }
+        public long Id { get; set; }
         public string Firstname { get; set; }
         public string Lastname { get; set; }
         public string IRacingId { get; set; }
