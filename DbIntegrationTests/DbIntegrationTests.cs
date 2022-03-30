@@ -50,7 +50,7 @@ namespace DbIntegrationTests
         }
 
         [Fact]
-        public async Task TestPopulate()
+        public async Task Populate()
         {
             using (var dbContext = GetTestDatabaseContext())
             {
@@ -101,15 +101,16 @@ namespace DbIntegrationTests
         }
 
         [Fact]
-        public void TestCreateLeague()
+        public void CreateLeague()
         {
-            //    using (var tx = new TransactionScope())
-            //    {
-            using (var dbContext = GetTestDatabaseContext())
+            using (var tx = new TransactionScope())
+            {
+                const string leagueName = "TestCreateLeague";
+                using (var dbContext = GetTestDatabaseContext())
                 {
                     var league = new LeagueEntity()
                     {
-                        Name = "TestLeague2",
+                        Name = leagueName,
                         NameFull = "2nd League for unit testing"
                     };
                     dbContext.Leagues.Add(league);
@@ -127,24 +128,16 @@ namespace DbIntegrationTests
 
                 using (var dbContext = GetTestDatabaseContext())
                 {
-                    Assert.Equal(2, dbContext.Leagues.Count());
                     var league = dbContext.Leagues.OrderBy(x => x.Id).Last();
-                    Assert.Equal("TestLeague2", league.Name);
+                    Assert.Equal(leagueName, league.Name);
                     Assert.Equal(1, league.Seasons.Count);
                     Assert.Equal(league, league.Seasons.First().League);
                 }
-            //}
-
-            //// clean up after testing
-
-            //using (var dbContext = GetTestDatabaseContext())
-            //{
-            //    Assert.Equal(1, dbContext.Leagues.Count());
-            //}
+            }
         }
 
         [Fact]
-        public void TestLazyLoading()
+        public void LazyLoading()
         {
             using (var dbContext = GetTestDatabaseContext())
             {
@@ -155,7 +148,7 @@ namespace DbIntegrationTests
         }
 
         [Fact]
-        public void TestLazyLoadingDisabled()
+        public void LazyLoadingDisabled()
         {
             using (var dbContext = GetTestDatabaseContext())
             {
@@ -167,7 +160,7 @@ namespace DbIntegrationTests
         }
 
         [Fact]
-        public void TestEagerLoading()
+        public void EagerLoading()
         {
             using (var dbContext = GetTestDatabaseContext())
             {
@@ -191,7 +184,7 @@ namespace DbIntegrationTests
         }
 
         [Fact]
-        public async void TestAddScoring()
+        public async void AddScoring()
         {
             using (var tx = new TransactionScope())
             using (var dbContext = GetTestDatabaseContext())
@@ -215,7 +208,7 @@ namespace DbIntegrationTests
         }
 
         [Fact]
-        public async void TestAddResult()
+        public async void AddResult()
         {
             using (var tx = new TransactionScope())
             using (var context = GetTestDatabaseContext())
@@ -238,6 +231,21 @@ namespace DbIntegrationTests
                 Assert.NotNull(dbResult);
                 Assert.Equal(testSession, dbResult.Session);
             }
+        }
+
+        [Fact]
+        public async Task DeleteScoring()
+        {
+            const long scoringId = 1;
+            
+            using var tx = new TransactionScope();
+            using var context = GetTestDatabaseContext();
+
+            var scoring = await context.Scorings.SingleAsync(x => x.ScoringId == scoringId);
+            context.Scorings.Remove(scoring);
+            await context.SaveChangesAsync();
+
+            Assert.DoesNotContain(context.Scorings, x => x.ScoringId == scoringId);
         }
     }
 }
