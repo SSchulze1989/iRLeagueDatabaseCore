@@ -38,7 +38,7 @@ namespace DbIntegrationTests
             }
 
             // create models
-            var league = new LeagueEntity()
+            var league1 = new LeagueEntity()
             {
                 Name = "TestLeague",
                 NameFull = "League for unit testing"
@@ -52,7 +52,7 @@ namespace DbIntegrationTests
                 LastModifiedOn = DateTime.Now,
                 LastModifiedByUserName = ClientUserName,
                 LastModifiedByUserId = ClientGuid,
-                League = league
+                League = league1
             };
             var season2 = new SeasonEntity()
             {
@@ -63,7 +63,7 @@ namespace DbIntegrationTests
                 LastModifiedOn = DateTime.Now,
                 LastModifiedByUserName = ClientUserName,
                 LastModifiedByUserId = ClientGuid,
-                League = league
+                League = league1
             };
             var schedule1 = new ScheduleEntity()
             {
@@ -100,7 +100,7 @@ namespace DbIntegrationTests
             {
                 var session = new SessionEntity()
                 {
-                    Name = $"S1 Session {i}",
+                    Name = $"S1 Session {i + 1}",
                     CreatedOn = DateTime.Now,
                     CreatedByUserName = ClientUserName,
                     CreatedByUserId = ClientGuid,
@@ -111,65 +111,131 @@ namespace DbIntegrationTests
                         .SelectMany(x => x.TrackConfigs)
                         .Skip(i)
                         .FirstOrDefault(),
-                    SessionTitle = $"S1 Session {i}",
-                    SessionType = (SessionType)i + 1
+                    SessionTitle = $"S1 Session {i + 1}",
+                    //SessionType = (SessionType)i + 1
                 };
                 schedule1.Sessions.Add(session);
             }
-            context.Leagues.Add(league);
-            league.Seasons.Add(season1);
-            league.Seasons.Add(season2);
+            for (int i = 0; i < 2; i++)
+            {
+                var session = new SessionEntity()
+                {
+                    Name = $"S2 Session {i + 1}",
+                    CreatedOn = DateTime.Now,
+                    CreatedByUserName = ClientUserName,
+                    CreatedByUserId = ClientGuid,
+                    LastModifiedOn = DateTime.Now,
+                    LastModifiedByUserName = ClientUserName,
+                    LastModifiedByUserId = ClientGuid,
+                    Track = context.TrackGroups
+                        .SelectMany(x => x.TrackConfigs)
+                        .Skip(i)
+                        .FirstOrDefault(),
+                    SessionTitle = $"S2 Session {i + 1}",
+                    //SessionType = (SessionType)i + 1
+                };
+                schedule2.Sessions.Add(session);
+            }
+            context.Leagues.Add(league1);
+            league1.Seasons.Add(season1);
+            league1.Seasons.Add(season2);
             season1.Schedules.Add(schedule1);
             season2.Schedules.Add(schedule2);
             season2.Schedules.Add(schedule3);
 
+            // create league2
+            var league2 = new LeagueEntity()
+            {
+                Name = "TestLeague2",
+                NameFull = "Second League for unit testing"
+            };
+            var l2season1 = new SeasonEntity()
+            {
+                SeasonName = "L2 Season One",
+                CreatedOn = DateTime.Now,
+                CreatedByUserName = ClientUserName,
+                CreatedByUserId = ClientGuid,
+                LastModifiedOn = DateTime.Now,
+                LastModifiedByUserName = ClientUserName,
+                LastModifiedByUserId = ClientGuid,
+                League = league1
+            };
+            var l2schedule1 = new ScheduleEntity()
+            {
+                Name = "L2S1 Schedule 1",
+                CreatedOn = DateTime.Now,
+                CreatedByUserName = ClientUserName,
+                CreatedByUserId = ClientGuid,
+                LastModifiedOn = DateTime.Now,
+                LastModifiedByUserName = ClientUserName,
+                LastModifiedByUserId = ClientGuid
+            };
+
+            context.Leagues.Add(league2);
+            league2.Seasons.Add(l2season1);
+            l2season1.Schedules.Add(l2schedule1);
+
             GenerateMembers(context, random);
 
             // assign members to league
-            //foreach (var member in context.Members.Local)
-            //{
-            //    var leagueMember = new LeagueMemberEntity()
-            //    {
-            //        Member = member,
-            //        League = league
-            //    };
-            //    context.Set<LeagueMemberEntity>().Add(leagueMember);
-            //}
+            foreach (var member in context.Members)
+            {
+                var leagueMember = new LeagueMemberEntity()
+                {
+                    Member = member,
+                    League = league1
+                };
+                context.Set<LeagueMemberEntity>().Add(leagueMember);
+            }
 
-            // create result
-            var scoredResult = new ScoredResultEntity();
+            var members = context.Members
+                .Local
+                .ToList();
+
+            // create results
             var scoring = new ScoringEntity()
             {
                 Name = "Testscoring",
                 ShowResults = true
             };
             season1.Scorings.Add(scoring);
-            scoring.ScoredResults.Add(scoredResult);
-            scoredResult.Scoring = scoring;
-            var result = new ResultEntity();
-            result.ScoredResults.Add(scoredResult);
-            for (int i = 0; i < 10; i++)
+
+            foreach (var session in league1.Seasons.SelectMany(x => x.Schedules).SelectMany(x => x.Sessions))
             {
-                var resultRow = new ResultRowEntity()
+                var scoredResult = new ScoredResultEntity();
+                scoring.ScoredResults.Add(scoredResult);
+                var result = new ResultEntity();
+                result.ScoredResults.Add(scoredResult);
+                for (int i = 0; i < 10; i++)
                 {
-                    StartPosition = i + 1,
-                    FinishPosition = i + 1,
-                    Member = context.Members.Local.ElementAt(i),
-                };
-                result.ResultRows.Add(resultRow);
-                var scoredResultRow = new ScoredResultRowEntity()
-                {
-                    FinalPosition = i + 1,
-                    RacePoints = 10 - i,
-                    TotalPoints = 10 - i
-                };
-                scoredResult.ScoredResultRows.Add(scoredResultRow);
-                resultRow.ScoredResultRows.Add(scoredResultRow);
+                    var resultRow = new ResultRowEntity()
+                    {
+                        StartPosition = i + 1,
+                        FinishPosition = i + 1,
+                        Member = members.ElementAt(i),
+                        QualifyingTime = GetTimeSpan(random).Ticks,
+                        FastestLapTime = GetTimeSpan(random).Ticks,
+                        AvgLapTime = GetTimeSpan(random).Ticks,
+                        Interval = GetTimeSpan(random).Ticks
+                    };
+                    var scoredResultRow = new ScoredResultRowEntity()
+                    {
+                        ResultRow = resultRow,
+                        FinalPosition = i + 1,
+                        RacePoints = 10 - i,
+                        TotalPoints = 10 - i
+                    };
+                    result.ResultRows.Add(resultRow);
+                    scoredResult.ScoredResultRows.Add(scoredResultRow);
+                }
+                scoring.Sessions.Add(session);
+                session.Result = result;
             }
-            var scoringSession = schedule1.Sessions.First();
-            scoringSession.Result = result;
-            scoringSession.Scorings.Add(scoring);
-            result.Session = scoringSession;
+        }
+
+        private static TimeSpan GetTimeSpan(Random random)
+        {
+            return new TimeSpan(0, 1, 2, 34, 567);
         }
 
         private static void GenerateMembers(LeagueDbContext context, Random random)

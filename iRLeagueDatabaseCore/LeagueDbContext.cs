@@ -485,7 +485,6 @@ namespace iRLeagueDatabaseCore.Models
                 entity.HasOne(d => d.Scoring)
                     .WithMany(p => p.ScoredResults)
                     .HasForeignKey(d => new { d.LeagueId, d.ScoringId })
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_dbo.ScoredResults_dbo.Scorings_ScoringId");
 
                 entity.HasMany(d => d.CleanestDrivers)
@@ -524,7 +523,6 @@ namespace iRLeagueDatabaseCore.Models
                 entity.HasOne(d => d.Scoring)
                     .WithMany(p => p.ScoredResultRows)
                     .HasForeignKey(d => new {d.LeagueId, d.ResultId, d.ScoringId })
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_dbo.ScrResultRows_dbo.ScrResults_ScrResultId_ScoringId");
             });
 
@@ -644,10 +642,10 @@ namespace iRLeagueDatabaseCore.Models
                 entity.HasKey(e => e.Id)
                     .HasName("PK_dbo.Leagues");
 
-                entity.Property(e => e.Name)
-                    .IsRequired();
+                entity.HasAlternateKey(e => e.Name);
 
-                entity.HasIndex(e => e.Name, "IX_Name");
+                entity.Property(e => e.Name)
+                    .HasMaxLength(85);
             });
 
             modelBuilder.Entity<SeasonEntity>(entity =>
