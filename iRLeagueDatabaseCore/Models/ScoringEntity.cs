@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace iRLeagueDatabaseCore.Models
 {
-    public partial class ScoringEntity
+    public partial class ScoringEntity : IVersionEntity
     {
         public ScoringEntity()
         {

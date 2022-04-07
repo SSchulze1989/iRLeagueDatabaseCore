@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace iRLeagueDatabaseCore.Models
 {
-    public partial class StandingEntity
+    public partial class StandingEntity : IVersionEntity
     {
         public StandingEntity()
         {

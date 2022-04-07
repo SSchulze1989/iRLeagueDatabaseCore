@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace iRLeagueDatabaseCore.Models
 {
-    public partial class SeasonEntity : Revision
+    public partial class SeasonEntity : Revision, IVersionEntity
     {
         public SeasonEntity()
         {

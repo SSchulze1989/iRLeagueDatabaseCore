@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace iRLeagueDatabaseCore.Models
 {
-    public partial class ResultEntity
+    public partial class ResultEntity : IVersionEntity
     {
         public ResultEntity()
         {
