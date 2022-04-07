@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace iRLeagueDatabaseCore.Models
 {
-    public class LeagueEntity : Revision
+    public class LeagueEntity : Revision, IVersionEntity
     {
         public long Id { get; set; }
         public string Name { get; set; }
