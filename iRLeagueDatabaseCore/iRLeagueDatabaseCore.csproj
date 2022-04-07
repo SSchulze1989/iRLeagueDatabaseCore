@@ -19,7 +19,7 @@
     <OutputType>Library</OutputType>
 	<TargetFramework>net5.0</TargetFramework>
     <PackageId>iRLeagueDatabaseCore</PackageId>
-    <Version>0.0.9</Version>
+    <Version>0.0.10</Version>
     <Authors>Simon Schulze</Authors>
     <Company>Simon Schulze</Company>
     <PackageDescription>This package contains the Entityframework configuration for a Code first project</PackageDescription>
