@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace iRLeagueDatabaseCore.Models
 {
-    public partial class CommentBaseEntity
+    public partial class CommentBaseEntity : IVersionEntity
     {
         public CommentBaseEntity()
         {

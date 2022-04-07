@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace iRLeagueDatabaseCore.Models
 {
-    public partial class ResultsFilterOptionEntity
+    public partial class ResultsFilterOptionEntity : IVersionEntity
     {
         public long ResultsFilterId { get; set; }
         public long LeagueId { get; set; }
