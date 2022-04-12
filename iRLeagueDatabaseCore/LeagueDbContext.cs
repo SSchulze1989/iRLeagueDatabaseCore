@@ -252,6 +252,8 @@ namespace iRLeagueDatabaseCore.Models
 
                 entity.Property(e => e.LastModifiedOn).HasColumnType("datetime");
 
+                entity.Property(e => e.TimeStamp).HasConversion(new TimeSpanToTicksConverter());
+
                 entity.HasOne(d => d.Session)
                     .WithMany(p => p.IncidentReviews)
                     .HasForeignKey(d => new { d.LeagueId, d.SessionId })
