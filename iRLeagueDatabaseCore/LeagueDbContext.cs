@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using iRLeagueApiCore.Communication.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
@@ -701,6 +702,14 @@ namespace iRLeagueDatabaseCore.Models
                 entity.Property(e => e.Date).HasColumnType("datetime");
 
                 entity.Property(e => e.LastModifiedOn).HasColumnType("datetime");
+
+                entity.Property(e => e.Duration).HasConversion(new TimeSpanToTicksConverter());
+
+                entity.Property(e => e.PracticeLength).HasConversion(new TimeSpanToTicksConverter());
+
+                entity.Property(e => e.QualyLength).HasConversion(new TimeSpanToTicksConverter());
+
+                entity.Property(e => e.RaceLength).HasConversion(new TimeSpanToTicksConverter());
 
                 entity.Property(e => e.SessionType)
                     .HasConversion<string>();

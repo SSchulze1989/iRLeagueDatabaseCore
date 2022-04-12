@@ -247,5 +247,26 @@ namespace DbIntegrationTests
 
             Assert.DoesNotContain(context.Scorings, x => x.ScoringId == scoringId);
         }
+
+        [Fact]
+        public async Task TimeSpanPrecision()
+        {
+            TimeSpan testTimeSpan = TimeSpan.FromMinutes(1.23);
+
+            using var tx = new TransactionScope();
+
+            using (var context = GetTestDatabaseContext())
+            {
+                var session = await context.Sessions.FirstAsync();
+                session.Duration = testTimeSpan;
+                context.SaveChanges();
+            }
+
+            using (var context = GetTestDatabaseContext())
+            {
+                var session = await context.Sessions.FirstAsync();
+                Assert.Equal(testTimeSpan, session.Duration);
+            }
+        }
     }
 }
