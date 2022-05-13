@@ -20,14 +20,14 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 5.0.x
+        dotnet-version: 6.0.x
     - name: Setup MySQL
       uses: mirromutth/mysql-action@v1.1
       with:        
         # Required if "mysql user" is empty, default is empty. The root superuser password
         mysql root password: $TEST_PASSWORD
         # MYSQL_DATABASE - name for the default database that is created
-        mysql database: 'TestDatabase'
+        mysql database: $TEST_DATABASE
     - name: Set secrets
       run: dotnet user-secrets set "ConnectionStrings:ModelDb" "server=localhost;database=$TEST_DATABASE;user=$TEST_USER;password=$TEST_PASSWORD" --project DbIntegrationTests
     - name: Add Nuget Source

@@ -103,7 +103,7 @@ namespace DbIntegrationTests
         [Fact]
         public void CreateLeague()
         {
-            using (var tx = new TransactionScope())
+            using (var tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
                 const string leagueName = "TestCreateLeague";
                 using (var dbContext = GetTestDatabaseContext())
@@ -184,9 +184,9 @@ namespace DbIntegrationTests
         }
 
         [Fact]
-        public async void AddScoring()
+        public async Task AddScoring()
         {
-            using (var tx = new TransactionScope())
+            using (var tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             using (var dbContext = GetTestDatabaseContext())
             {
                 var scoring = new ScoringEntity()
@@ -208,9 +208,9 @@ namespace DbIntegrationTests
         }
 
         [Fact]
-        public async void AddResult()
+        public async Task AddResult()
         {
-            using (var tx = new TransactionScope())
+            using (var tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             using (var context = GetTestDatabaseContext())
             {
                 const int testSessionId = 2;
@@ -238,7 +238,7 @@ namespace DbIntegrationTests
         {
             const long scoringId = 1;
             
-            using var tx = new TransactionScope();
+            using var tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
             using var context = GetTestDatabaseContext();
 
             var scoring = await context.Scorings.SingleAsync(x => x.ScoringId == scoringId);
@@ -253,7 +253,7 @@ namespace DbIntegrationTests
         {
             TimeSpan testTimeSpan = TimeSpan.FromMinutes(1.23);
 
-            using var tx = new TransactionScope();
+            using var tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 
             using (var context = GetTestDatabaseContext())
             {
