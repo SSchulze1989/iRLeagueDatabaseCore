@@ -8,8 +8,8 @@ namespace iRLeagueDatabaseCore.Models
 {
     public partial class IRSimSessionDetailsEntity
     {
-        public long ResultId { get; set; }
         public long LeagueId { get; set; }
+        public long SessionDetailsId { get; set; }
         public long IRSubsessionId { get; set; }
         public long IRSeasonId { get; set; }
         public string IRSeasonName { get; set; }
@@ -58,7 +58,5 @@ namespace iRLeagueDatabaseCore.Models
         public int QualifyGripCompund { get; set; }
         public int WarmupGripCompound { get; set; }
         public int RaceGripCompound { get; set; }
-
-        public virtual ResultEntity Result { get; set; }
     }
 }

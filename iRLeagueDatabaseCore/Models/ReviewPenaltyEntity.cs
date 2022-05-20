@@ -7,6 +7,7 @@ namespace iRLeagueDatabaseCore.Models
 {
     public partial class ReviewPenaltyEntity
     {
+        public long LeagueId { get; set; }
         public long ResultRowId { get; set; }
         public long ReviewId { get; set; }
         public int PenaltyPoints { get; set; }

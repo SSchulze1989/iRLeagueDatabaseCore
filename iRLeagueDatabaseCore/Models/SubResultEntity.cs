@@ -1,20 +1,22 @@
-﻿using System;
+﻿using iRLeagueApiCore.Communication.Enums;
+using System;
 using System.Collections.Generic;
-
-#nullable disable
 
 namespace iRLeagueDatabaseCore.Models
 {
-    public partial class ResultEntity : IVersionEntity
+    public partial class SubResultEntity : IVersionEntity
     {
-        public ResultEntity()
+        public SubResultEntity()
         {
-            ScoredResults = new HashSet<ScoredResultEntity>();
+            ResultRows = new HashSet<ResultRowEntity>();
         }
 
         public long LeagueId { get; set; }
         public long SessionId { get; set; }
-        public long? IRSimSessionDetailsId { get; set; }
+        public int SubSessionNr { get; set; }
+        public SimSessionType SimSessionType { get; set; }
+
+        #region version
         public DateTime? CreatedOn { get; set; }
         public DateTime? LastModifiedOn { get; set; }
         public int Version { get; set; }
@@ -22,10 +24,10 @@ namespace iRLeagueDatabaseCore.Models
         public string CreatedByUserName { get; set; }
         public string LastModifiedByUserId { get; set; }
         public string LastModifiedByUserName { get; set; }
-        public bool RequiresRecalculation { get; set; }
+        #endregion
 
-        public virtual SessionEntity Session { get; set; }
-        public virtual IRSimSessionDetailsEntity IRSimSessionDetails { get; set; }
-        public virtual ICollection<ScoredResultEntity> ScoredResults { get; set; }
+        public virtual ResultEntity Result { get; set; }
+        public virtual SubSessionEntity SubSession { get; set; }
+        public virtual ICollection<ResultRowEntity> ResultRows { get; set; }
     }
 }

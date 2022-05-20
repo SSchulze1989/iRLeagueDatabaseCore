@@ -111,7 +111,6 @@ namespace DbIntegrationTests
                         .SelectMany(x => x.TrackConfigs)
                         .Skip(i)
                         .FirstOrDefault(),
-                    SessionTitle = $"S1 Session {i + 1}",
                     //SessionType = (SessionType)i + 1
                 };
                 schedule1.Sessions.Add(session);
@@ -131,7 +130,6 @@ namespace DbIntegrationTests
                         .SelectMany(x => x.TrackConfigs)
                         .Skip(i)
                         .FirstOrDefault(),
-                    SessionTitle = $"S2 Session {i + 1}",
                     //SessionType = (SessionType)i + 1
                 };
                 schedule2.Sessions.Add(session);
@@ -218,14 +216,12 @@ namespace DbIntegrationTests
                         AvgLapTime = GetTimeSpan(random).Ticks,
                         Interval = GetTimeSpan(random).Ticks
                     };
-                    var scoredResultRow = new ScoredResultRowEntity()
+                    var scoredResultRow = new ScoredResultRowEntity(resultRow)
                     {
-                        ResultRow = resultRow,
                         FinalPosition = i + 1,
                         RacePoints = 10 - i,
                         TotalPoints = 10 - i
                     };
-                    result.ResultRows.Add(resultRow);
                     scoredResult.ScoredResultRows.Add(scoredResultRow);
                 }
                 scoring.Sessions.Add(session);

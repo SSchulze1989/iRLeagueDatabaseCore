@@ -10,18 +10,13 @@ namespace iRLeagueDatabaseCore.Models
     {
         public SessionEntity()
         {
-            DriverStatisticRowFirstRaces = new HashSet<DriverStatisticRowEntity>();
-            DriverStatisticRowFirstSessions = new HashSet<DriverStatisticRowEntity>();
-            DriverStatisticRowLastRaces = new HashSet<DriverStatisticRowEntity>();
-            DriverStatisticRowLastSessions = new HashSet<DriverStatisticRowEntity>();
             IncidentReviews = new HashSet<IncidentReviewEntity>();
-            SubSessions = new HashSet<SessionEntity>();
             Scorings = new HashSet<ScoringEntity>();
         }
 
         public long SessionId { get; set; }
         public long LeagueId { get; set; }
-        public string SessionTitle { get; set; }
+        public string Name { get; set; }
         public SessionType SessionType { get; set; }
         public DateTime? Date { get; set; }
         public long? TrackId { get; set; }
@@ -33,30 +28,22 @@ namespace iRLeagueDatabaseCore.Models
         public string CreatedByUserName { get; set; }
         public string LastModifiedByUserId { get; set; }
         public string LastModifiedByUserName { get; set; }
-        public long? RaceId { get; set; }
-        public int? Laps { get; set; }
-        public TimeSpan? PracticeLength { get; set; }
-        public TimeSpan? QualyLength { get; set; }
-        public TimeSpan? RaceLength { get; set; }
+        
+        public long? PracticeSubSessionNr { get; set; }
+        public long? QualfiyingSubSessionNr { get; set; }
+        public long? RaceSubSessionNr { get; set; }
         public string IrSessionId { get; set; }
         public string IrResultLink { get; set; }
-        public bool? QualyAttached { get; set; }
-        public bool? PracticeAttached { get; set; }
-        public long? ScheduleId { get; set; }
-        public string Name { get; set; }
-        public long? ParentSessionId { get; set; }
-        public int SubSessionNr { get; set; }
+        public long ScheduleId { get; set; }
 
-        public virtual SessionEntity ParentSession { get; set; }
         public virtual ScheduleEntity Schedule { get; set; }
         public virtual ResultEntity Result { get; set; }
         public virtual TrackConfigEntity Track { get; set; }
-        public virtual ICollection<DriverStatisticRowEntity> DriverStatisticRowFirstRaces { get; set; }
-        public virtual ICollection<DriverStatisticRowEntity> DriverStatisticRowFirstSessions { get; set; }
-        public virtual ICollection<DriverStatisticRowEntity> DriverStatisticRowLastRaces { get; set; }
-        public virtual ICollection<DriverStatisticRowEntity> DriverStatisticRowLastSessions { get; set; }
+        public virtual SubSessionEntity Practice { get; set; }
+        public virtual SubSessionEntity Qualfiying { get; set; }
+        public virtual SubSessionEntity Race { get; set; }
         public virtual ICollection<IncidentReviewEntity> IncidentReviews { get; set; }
-        public virtual ICollection<SessionEntity> SubSessions { get; set; }
+        public virtual ICollection<SubSessionEntity> SubSessions { get; set; }
         public virtual ICollection<ScoringEntity> Scorings { get; set; }
     }
 }

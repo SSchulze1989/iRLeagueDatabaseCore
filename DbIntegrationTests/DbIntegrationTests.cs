@@ -75,18 +75,15 @@ namespace DbIntegrationTests
 
                 // check for result rows
                 var scoredResultRow = await dbContext.ScoredResultRows
-                    .Include(x => x.ResultRow)
-                        .ThenInclude(x => x.Member)
-                    .Include(x => x.ResultRow)
-                        .ThenInclude(x => x.Result)
-                            .ThenInclude(x => x.Session)
+                    .Include(x => x.Member)
+                    .Include(x => x.ScoredResult)
+                        .ThenInclude(x => x.Result.Session)
                     .FirstOrDefaultAsync();
 
                 Assert.NotNull(scoredResultRow);
-                Assert.NotNull(scoredResultRow.ResultRow);
-                Assert.NotNull(scoredResultRow.ResultRow.Member);
-                Assert.NotNull(scoredResultRow.ResultRow.Result);
-                Assert.NotNull(scoredResultRow.ResultRow.Result.Session);
+                Assert.NotNull(scoredResultRow);
+                Assert.NotNull(scoredResultRow.Member);
+                Assert.NotNull(scoredResultRow.ScoredResult.Result.Session);
 
                 // check for scoring sessions
                 var scoring = await dbContext.Scorings
@@ -226,7 +223,7 @@ namespace DbIntegrationTests
 
                 var dbResult = await context.Results
                     .Include(x => x.Session)
-                    .SingleOrDefaultAsync(x => x.ResultId == testSessionId);
+                    .SingleOrDefaultAsync(x => x.SessionId == testSessionId);
 
                 Assert.NotNull(dbResult);
                 Assert.Equal(testSession, dbResult.Session);
