@@ -15,7 +15,7 @@ namespace iRLeagueDatabaseCore.Models
 
         public long LeagueId { get; set; }
         public long SessionId { get; set; }
-        public int SubSessionNr { get; set; }
+        public long SubSessionId { get; set; }
         public SimSessionType SimSessionType { get; set; }
 
         #region version
@@ -37,9 +37,9 @@ namespace iRLeagueDatabaseCore.Models
     {
         public void Configure(EntityTypeBuilder<SubResultEntity> entity)
         {
-            entity.HasKey(e => new { e.LeagueId, e.SessionId, e.SubSessionNr });
+            entity.HasKey(e => new { e.LeagueId, e.SessionId, e.SubSessionId });
 
-            entity.HasIndex(e => new { e.SessionId, e.SubSessionNr });
+            entity.HasIndex(e => new { e.SessionId, e.SubSessionId });
 
             entity.HasOne(d => d.Result)
                 .WithMany(p => p.SubResults)
@@ -47,7 +47,8 @@ namespace iRLeagueDatabaseCore.Models
 
             entity.HasOne(d => d.SubSession)
                 .WithOne(p => p.SubResult)
-                .HasForeignKey<SubResultEntity>(d => new { d.LeagueId, d.SessionId, d.SubSessionNr })
+                .HasForeignKey<SubResultEntity>(d => new { d.LeagueId, d.SessionId, d.SubSessionId })
+                .IsRequired(true)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }

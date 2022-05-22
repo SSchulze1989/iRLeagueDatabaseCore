@@ -266,5 +266,37 @@ namespace DbIntegrationTests
                 Assert.Equal(testTimeSpan, session.Duration);
             }
         }
+
+        [Fact]
+        public async Task ShouldAddSubSessionWithoutSubResult()
+        {
+            using var tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+            using var context = GetTestDatabaseContext();
+
+            var session = await context.Sessions.FirstAsync();
+            var subSession = new SubSessionEntity()
+            {
+                Name = "TestSubSession",
+                SubSessionNr = 2,
+            };
+            session.SubSessions.Add(subSession);
+
+            await context.SaveChangesAsync();
+        }
+
+        [Fact]
+        public async Task ShouldNotAddSubResultWithoutSubSession()
+        {
+            using var tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+            using var context = GetTestDatabaseContext();
+
+            var result = await context.Results.FirstAsync();
+            var subResult = new SubResultEntity()
+            {
+            };
+            result.SubResults.Add(subResult);
+
+            await Assert.ThrowsAnyAsync<InvalidOperationException>(async () => await context.SaveChangesAsync());
+        }
     }
 }

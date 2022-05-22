@@ -117,7 +117,6 @@ namespace DbIntegrationTests
                 var subSession = new SubSessionEntity()
                 {
                     Name = "Race",
-                    SubSessionNr = 1,
                 };
                 session.SubSessions.Add(subSession);
                 schedule1.Sessions.Add(session);
@@ -142,7 +141,6 @@ namespace DbIntegrationTests
                 var subSession = new SubSessionEntity()
                 {
                     Name = "Race",
-                    SubSessionNr = 1,
                 };
                 session.SubSessions.Add(subSession);
                 schedule2.Sessions.Add(session);

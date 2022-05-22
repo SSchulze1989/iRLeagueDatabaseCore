@@ -10,6 +10,10 @@ namespace iRLeagueDatabaseCore.Models
     {
         public long LeagueId { get; set; }
         public long SessionId { get; set; }
+        public long SubSessionId { get; set; }
+        /// <summary>
+        /// Number that decides order of subsessions
+        /// </summary>
         public int SubSessionNr { get; set; }
         public string Name { get; set; }
         public SessionType SessionType { get; set; }
@@ -29,15 +33,21 @@ namespace iRLeagueDatabaseCore.Models
 
         public virtual SessionEntity ParentSession { get; set; }
         public virtual SubResultEntity SubResult { get; set; }
+        public virtual SessionEntity ParentOfPracticeSession { get; set; }
     }
 
     public class SubSessionEntityConfiguration : IEntityTypeConfiguration<SubSessionEntity>
     {
         public void Configure(EntityTypeBuilder<SubSessionEntity> entity)
         {
-            entity.HasKey(e => new { e.LeagueId, e.SessionId, e.SubSessionNr });
+            entity.HasKey(e => new { e.LeagueId, e.SessionId, e.SubSessionId });
 
-            entity.HasIndex(e => new { e.SessionId, e.SubSessionNr });
+            entity.HasAlternateKey(e => e.SubSessionId);
+
+            entity.Property(e => e.SubSessionId)
+                .ValueGeneratedOnAdd();
+
+            entity.HasIndex(e => new { e.SessionId, e.SubSessionId });
 
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
 
@@ -54,7 +64,6 @@ namespace iRLeagueDatabaseCore.Models
                 .WithMany(p => p.SubSessions)
                 .HasForeignKey(d => new { d.LeagueId, d.SessionId })
                 .OnDelete(DeleteBehavior.Cascade);
-
         }
     }
 }

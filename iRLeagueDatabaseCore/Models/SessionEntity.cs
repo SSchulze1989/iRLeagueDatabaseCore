@@ -33,9 +33,9 @@ namespace iRLeagueDatabaseCore.Models
         public string LastModifiedByUserId { get; set; }
         public string LastModifiedByUserName { get; set; }
         
-        public long? PracticeSubSessionNr { get; set; }
-        public long? QualfiyingSubSessionNr { get; set; }
-        public long? RaceSubSessionNr { get; set; }
+        public long? PracticeSubSessionId { get; set; }
+        public long? QualifyingSubSessionId { get; set; }
+        public long? RaceSubSessionId { get; set; }
         public string IrSessionId { get; set; }
         public string IrResultLink { get; set; }
         public long ScheduleId { get; set; }
@@ -43,9 +43,6 @@ namespace iRLeagueDatabaseCore.Models
         public virtual ScheduleEntity Schedule { get; set; }
         public virtual ResultEntity Result { get; set; }
         public virtual TrackConfigEntity Track { get; set; }
-        public virtual SubSessionEntity Practice { get; set; }
-        public virtual SubSessionEntity Qualfiying { get; set; }
-        public virtual SubSessionEntity Race { get; set; }
         public virtual ICollection<IncidentReviewEntity> IncidentReviews { get; set; }
         public virtual ICollection<SubSessionEntity> SubSessions { get; set; }
         public virtual ICollection<ScoringEntity> Scorings { get; set; }

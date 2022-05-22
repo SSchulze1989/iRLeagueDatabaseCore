@@ -16,7 +16,7 @@ namespace iRLeagueDatabaseCore.Models
         public long ResultRowId { get; set; }
         public long LeagueId { get; set; }
         public long SessionId { get; set; }
-        public int SubSessionNr { get; set; }
+        public long SubSessionId { get; set; }
         public long MemberId { get; set; }
         public long? TeamId { get; set; }
         public bool PointsEligible { get; set; }
@@ -39,7 +39,7 @@ namespace iRLeagueDatabaseCore.Models
 
             entity.HasIndex(e => e.MemberId);
 
-            entity.HasIndex(e => new { e.LeagueId, e.SessionId, e.SubSessionNr });
+            entity.HasIndex(e => new { e.LeagueId, e.SessionId, e.SubSessionId });
 
             entity.HasIndex(e => e.TeamId);
 
@@ -52,7 +52,7 @@ namespace iRLeagueDatabaseCore.Models
 
             entity.HasOne(d => d.SubResult)
                 .WithMany(p => p.ResultRows)
-                .HasForeignKey(d => new { d.LeagueId, d.SessionId, d.SubSessionNr });
+                .HasForeignKey(d => new { d.LeagueId, d.SessionId, d.SubSessionId });
 
             entity.HasOne(d => d.Team)
                 .WithMany(p => p.ResultRows)
