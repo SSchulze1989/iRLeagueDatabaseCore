@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,5 +20,18 @@ namespace iRLeagueDatabaseCore.Models
         public string Location { get; set; }
 
         public virtual ICollection<TrackConfigEntity> TrackConfigs { get; set; }
+    }
+
+    public class TrackGroupEntityConfiguration : IEntityTypeConfiguration<TrackGroupEntity>
+    {
+        public void Configure(EntityTypeBuilder<TrackGroupEntity> entity)
+        {
+            entity.HasKey(e => e.TrackGroupId);
+
+            entity.HasMany(d => d.TrackConfigs)
+                .WithOne(p => p.TrackGroup)
+                .HasForeignKey(d => d.TrackGroupId)
+                .OnDelete(DeleteBehavior.Cascade);
+        }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -34,5 +36,36 @@ namespace iRLeagueDatabaseCore.Models
         public virtual ICollection<ScoringEntity> Scorings { get; set; }
         public virtual ICollection<StandingEntity> Standings { get; set; }
         public virtual ICollection<StatisticSetEntity> StatisticSets { get; set; }
+    }
+
+    public class SeasonEntityConfiguration : IEntityTypeConfiguration<SeasonEntity>
+    {
+        public void Configure(EntityTypeBuilder<SeasonEntity> entity)
+        {
+            entity.HasKey(e => new { e.LeagueId, e.SeasonId });
+
+            entity.HasAlternateKey(e => e.SeasonId);
+
+            entity.Property(e => e.SeasonId)
+                .ValueGeneratedOnAdd();
+
+            entity.HasIndex(e => new { e.LeagueId, e.MainScoringScoringId });
+
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+
+            entity.Property(e => e.LastModifiedOn).HasColumnType("datetime");
+
+            entity.Property(e => e.SeasonEnd).HasColumnType("datetime");
+
+            entity.Property(e => e.SeasonStart).HasColumnType("datetime");
+
+            entity.HasOne(e => e.League)
+                .WithMany(p => p.Seasons)
+                .HasForeignKey(e => e.LeagueId);
+
+            entity.HasOne(d => d.MainScoring)
+                .WithMany(p => p.Seasons)
+                .HasForeignKey(d => new { d.LeagueId, d.MainScoringScoringId });
+        }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using iRLeagueApiCore.Communication.Enums;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
 
@@ -63,5 +65,57 @@ namespace iRLeagueDatabaseCore.Models
         public virtual ICollection<SessionEntity> Sessions { get; set; }
         public virtual ICollection<StandingEntity> Standings { get; set; }
         public virtual ICollection<SeasonEntity> Seasons { get; set; }
+    }
+
+    public class ScoringEntityConfiguration : IEntityTypeConfiguration<ScoringEntity>
+    {
+        public void Configure(EntityTypeBuilder<ScoringEntity> entity)
+        {
+            entity.HasKey(e => new { e.LeagueId, e.ScoringId });
+
+            entity.HasAlternateKey(e => e.ScoringId);
+
+            entity.Property(e => e.ScoringId)
+                .ValueGeneratedOnAdd();
+
+            entity.HasIndex(e => e.ConnectedScheduleId);
+
+            entity.HasIndex(e => e.ExtScoringSourceId);
+
+            entity.HasIndex(e => e.ParentScoringId);
+
+            entity.HasIndex(e => new { e.LeagueId, e.SeasonId });
+
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+
+            entity.Property(e => e.LastModifiedOn).HasColumnType("datetime");
+
+            entity.Property(e => e.ShowResults)
+                .HasDefaultValueSql("((1))");
+
+            entity.HasOne(d => d.ConnectedSchedule)
+                .WithMany(p => p.Scorings)
+                .HasForeignKey(d => new { d.LeagueId, d.ConnectedScheduleId });
+
+            entity.HasOne(d => d.ExtScoringSource)
+                .WithMany()
+                .HasForeignKey(d => new { d.LeagueId, d.ExtScoringSourceId });
+
+            entity.HasOne(d => d.ParentScoring)
+                .WithMany(p => p.DependendScorings)
+                .HasForeignKey(d => new { d.LeagueId, d.ParentScoringId });
+
+            entity.HasOne(d => d.Season)
+                .WithMany(p => p.Scorings)
+                .HasForeignKey(d => new { d.LeagueId, d.SeasonId });
+
+            entity.HasMany(d => d.Sessions)
+                .WithMany(p => p.Scorings)
+                .UsingEntity<ScoringsSessions>(
+                    left => left.HasOne(e => e.SessionRef)
+                        .WithMany().HasForeignKey(e => new { e.LeagueId, e.SessionRefId }),
+                    right => right.HasOne(e => e.ScoringRef)
+                        .WithMany().HasForeignKey(e => new { e.LeagueId, e.ScoringRefId }));
+        }
     }
 }

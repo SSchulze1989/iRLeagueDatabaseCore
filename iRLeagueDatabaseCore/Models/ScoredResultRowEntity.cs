@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
 using System.Collections.Generic;
 
 #nullable disable
@@ -80,5 +82,39 @@ namespace iRLeagueDatabaseCore.Models
         public virtual AddPenaltyEntity AddPenalty { get; set; }
         public virtual ICollection<ReviewPenaltyEntity> ReviewPenalties { get; set; }
         public virtual ICollection<ScoredTeamResultRowEntity> ScoredTeamResultRows { get; set; }
+    }
+
+    public class ScoredResultRowEntityConfiguration : IEntityTypeConfiguration<ScoredResultRowEntity>
+    {
+        public void Configure(EntityTypeBuilder<ScoredResultRowEntity> entity)
+        {
+            entity.HasKey(e => new { e.LeagueId, e.ScoredResultRowId });
+
+            entity.HasAlternateKey(e => e.ScoredResultRowId);
+
+            entity.Property(e => e.ScoredResultRowId)
+                .ValueGeneratedOnAdd();
+
+            entity.HasIndex(e => new { e.LeagueId, e.ResultId, e.ScoringId });
+
+            entity.HasIndex(e => e.MemberId);
+
+            entity.HasIndex(e => e.TeamId);
+
+            entity.Property(e => e.QualifyingTimeAt).HasColumnType("datetime");
+
+            entity.HasOne(d => d.Team)
+                .WithMany(p => p.ScoredResultRows)
+                .HasForeignKey(d => d.TeamId);
+
+            entity.HasOne(d => d.ScoredResult)
+                .WithMany(p => p.ScoredResultRows)
+                .HasForeignKey(d => new { d.LeagueId, d.ResultId, d.ScoringId });
+
+            entity.HasOne(d => d.Member)
+                .WithMany()
+                .HasForeignKey(d => d.MemberId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+        }
     }
 }

@@ -1,4 +1,7 @@
 ﻿using iRLeagueApiCore.Communication.Enums;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
 
 namespace iRLeagueDatabaseCore.Models
@@ -26,5 +29,32 @@ namespace iRLeagueDatabaseCore.Models
 
         public virtual SessionEntity ParentSession { get; set; }
         public virtual SubResultEntity SubResult { get; set; }
+    }
+
+    public class SubSessionEntityConfiguration : IEntityTypeConfiguration<SubSessionEntity>
+    {
+        public void Configure(EntityTypeBuilder<SubSessionEntity> entity)
+        {
+            entity.HasKey(e => new { e.LeagueId, e.SessionId, e.SubSessionNr });
+
+            entity.HasIndex(e => new { e.SessionId, e.SubSessionNr });
+
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+
+            entity.Property(e => e.LastModifiedOn).HasColumnType("datetime");
+
+            entity.Property(e => e.StartOffset).HasConversion(new TimeSpanToTicksConverter());
+
+            entity.Property(e => e.Duration).HasConversion(new TimeSpanToTicksConverter());
+
+            entity.Property(e => e.SessionType)
+                .HasConversion<string>();
+
+            entity.HasOne(d => d.ParentSession)
+                .WithMany(p => p.SubSessions)
+                .HasForeignKey(d => new { d.LeagueId, d.SessionId })
+                .OnDelete(DeleteBehavior.Cascade);
+
+        }
     }
 }

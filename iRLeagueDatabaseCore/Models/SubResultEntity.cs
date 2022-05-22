@@ -1,4 +1,6 @@
 ﻿using iRLeagueApiCore.Communication.Enums;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
 
@@ -29,5 +31,24 @@ namespace iRLeagueDatabaseCore.Models
         public virtual ResultEntity Result { get; set; }
         public virtual SubSessionEntity SubSession { get; set; }
         public virtual ICollection<ResultRowEntity> ResultRows { get; set; }
+    }
+
+    public class SubResultEntityConfiguration : IEntityTypeConfiguration<SubResultEntity>
+    {
+        public void Configure(EntityTypeBuilder<SubResultEntity> entity)
+        {
+            entity.HasKey(e => new { e.LeagueId, e.SessionId, e.SubSessionNr });
+
+            entity.HasIndex(e => new { e.SessionId, e.SubSessionNr });
+
+            entity.HasOne(d => d.Result)
+                .WithMany(p => p.SubResults)
+                .HasForeignKey(d => new { d.LeagueId, d.SessionId });
+
+            entity.HasOne(d => d.SubSession)
+                .WithOne(p => p.SubResult)
+                .HasForeignKey<SubResultEntity>(d => new { d.LeagueId, d.SessionId, d.SubSessionNr })
+                .OnDelete(DeleteBehavior.Cascade);
+        }
     }
 }

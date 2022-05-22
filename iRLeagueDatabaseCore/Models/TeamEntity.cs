@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
 using System.Collections.Generic;
 
 #nullable disable
@@ -32,5 +34,17 @@ namespace iRLeagueDatabaseCore.Models
         public virtual ICollection<ResultRowEntity> ResultRows { get; set; }
         public virtual ICollection<ScoredResultRowEntity> ScoredResultRows { get; set; }
         public virtual ICollection<ScoredTeamResultRowEntity> ScoredTeamResultRows { get; set; }
+    }
+
+    public class TeamEntityConfiguration : IEntityTypeConfiguration<TeamEntity>
+    {
+        public void Configure(EntityTypeBuilder<TeamEntity> entity)
+        {
+            entity.HasKey(e => e.TeamId);
+
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+
+            entity.Property(e => e.LastModifiedOn).HasColumnType("datetime");
+        }
     }
 }

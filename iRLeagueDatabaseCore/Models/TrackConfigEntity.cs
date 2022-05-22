@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,6 +20,14 @@ namespace iRLeagueDatabaseCore.Models
         public bool HasNigtLigthing { get; set; }
         public string MapImageSrc { get; set; }
 
+    }
+
+    public class TrackConfigEntityConfiguration : IEntityTypeConfiguration<TrackConfigEntity>
+    {
+        public void Configure(EntityTypeBuilder<TrackConfigEntity> entity)
+        {
+            entity.HasKey(e => e.TrackId);
+        }
     }
 
     public enum ConfigType

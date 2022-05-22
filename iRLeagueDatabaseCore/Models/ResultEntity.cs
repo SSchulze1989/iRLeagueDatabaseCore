@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
 using System.Collections.Generic;
 
 #nullable disable
@@ -29,5 +31,33 @@ namespace iRLeagueDatabaseCore.Models
         public virtual IRSimSessionDetailsEntity IRSimSessionDetails { get; set; }
         public virtual ICollection<SubResultEntity> SubResults { get; set; }
         public virtual ICollection<ScoredResultEntity> ScoredResults { get; set; }
+    }
+
+    public class ResultEntityConfiguration : IEntityTypeConfiguration<ResultEntity>
+    {
+        public void Configure(EntityTypeBuilder<ResultEntity> entity)
+        {
+            entity.HasKey(e => new { e.LeagueId, e.SessionId });
+
+            entity.HasIndex(e => e.SessionId);
+
+            entity.HasIndex(e => new { e.LeagueId, e.IRSimSessionDetailsId });
+
+            entity.Property(e => e.SessionId)
+                .ValueGeneratedNever();
+
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+
+            entity.Property(e => e.LastModifiedOn).HasColumnType("datetime");
+
+            entity.HasOne(d => d.Session)
+                .WithOne(p => p.Result)
+                .HasForeignKey<ResultEntity>(d => new { d.LeagueId, d.SessionId });
+
+            entity.HasOne(d => d.IRSimSessionDetails)
+                .WithOne()
+                .HasForeignKey<ResultEntity>(d => new { d.LeagueId, d.IRSimSessionDetailsId })
+                .IsRequired(false);
+        }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using iRLeagueApiCore.Communication.Enums;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
 
@@ -35,5 +37,31 @@ namespace iRLeagueDatabaseCore.Models
         public virtual SeasonEntity Season { get; set; }
         public virtual ICollection<ScoringEntity> Scorings { get; set; }
         public virtual ICollection<StatisticSetEntity> StatisticSets { get; set; }
+    }
+
+    public class StandingEntityConfiguration : IEntityTypeConfiguration<StandingEntity>
+    {
+        public void Configure(EntityTypeBuilder<StandingEntity> entity)
+        {
+            entity.HasKey(e => new { e.LeagueId, e.StandingId });
+
+            entity.HasIndex(e => new { e.LeagueId, e.SeasonId });
+
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+
+            entity.Property(e => e.LastModifiedOn).HasColumnType("datetime");
+
+            entity.HasOne(d => d.Season)
+                .WithMany(p => p.Standings)
+                .HasForeignKey(d => new { d.LeagueId, d.SeasonId });
+
+            entity.HasMany(d => d.Scorings)
+                .WithMany(p => p.Standings)
+                .UsingEntity<StandingsScorings>(
+                    left => left.HasOne(d => d.ScoringRef)
+                        .WithMany().HasForeignKey(e => new { e.LeagueId, e.ScoringRefId }),
+                    right => right.HasOne(d => d.StandingRef)
+                        .WithMany().HasForeignKey(e => new { e.LeagueId, e.StandingRefId }));
+        }
     }
 }

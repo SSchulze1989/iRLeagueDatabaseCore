@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
 using System.Collections.Generic;
 
 #nullable disable
@@ -12,5 +14,13 @@ namespace iRLeagueDatabaseCore.Models
         public virtual LeagueEntity League { get; set; }
         public string Text { get; set; }
         public int Index { get; set; }
+    }
+
+    public class CustomIncidentEntityConfiguration : IEntityTypeConfiguration<CustomIncidentEntity>
+    {
+        public void Configure(EntityTypeBuilder<CustomIncidentEntity> entity)
+        {
+            entity.HasKey(e => e.IncidentId);
+        }
     }
 }

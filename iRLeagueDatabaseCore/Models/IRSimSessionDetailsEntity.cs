@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
 
@@ -58,5 +59,29 @@ namespace iRLeagueDatabaseCore.Models
         public int QualifyGripCompund { get; set; }
         public int WarmupGripCompound { get; set; }
         public int RaceGripCompound { get; set; }
+    }
+
+    public class IRSimSessionDetailsEntityConfiguration : IEntityTypeConfiguration<IRSimSessionDetailsEntity>
+    {
+        public void Configure(EntityTypeBuilder<IRSimSessionDetailsEntity> entity)
+        {
+            entity.HasKey(e => new { e.LeagueId, e.SessionDetailsId });
+
+            entity.HasAlternateKey(e => e.SessionDetailsId);
+
+            entity.Property(e => e.SessionDetailsId)
+                .ValueGeneratedOnAdd();
+
+            entity.Property(e => e.EndTime)
+                .HasColumnType("datetime");
+
+            entity.Property(e => e.SimStartUtcOffset);
+
+            entity.Property(e => e.SimStartUtcTime)
+                .HasColumnType("datetime");
+
+            entity.Property(e => e.StartTime)
+                .HasColumnType("datetime");
+        }
     }
 }

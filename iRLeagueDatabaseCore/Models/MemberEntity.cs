@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
 using System.Collections.Generic;
 
 #nullable disable
@@ -40,5 +42,13 @@ namespace iRLeagueDatabaseCore.Models
         public virtual ICollection<ScoredResultEntity> FastestQualyLapResults { get; set; }
         public virtual ICollection<ScoredResultEntity> HardChargerResults { get; set; }
         public virtual ICollection<StatisticSetEntity> StatisticSets { get; set; }
+    }
+
+    public class MemberEntityConfiguration : IEntityTypeConfiguration<MemberEntity>
+    {
+        public void Configure(EntityTypeBuilder<MemberEntity> entity)
+        {
+            entity.HasKey(e => e.Id);
+        }
     }
 }

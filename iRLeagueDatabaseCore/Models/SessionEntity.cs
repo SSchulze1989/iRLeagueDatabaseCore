@@ -1,4 +1,7 @@
 ﻿using iRLeagueApiCore.Communication.Enums;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
 using System.Collections.Generic;
 
@@ -46,5 +49,42 @@ namespace iRLeagueDatabaseCore.Models
         public virtual ICollection<IncidentReviewEntity> IncidentReviews { get; set; }
         public virtual ICollection<SubSessionEntity> SubSessions { get; set; }
         public virtual ICollection<ScoringEntity> Scorings { get; set; }
+    }
+
+    public class SessionEntityConfiguration : IEntityTypeConfiguration<SessionEntity>
+    {
+        public void Configure(EntityTypeBuilder<SessionEntity> entity)
+        {
+            entity.HasKey(e => new { e.LeagueId, e.SessionId });
+
+            entity.HasAlternateKey(e => e.SessionId);
+
+            entity.Property(e => e.SessionId)
+                .ValueGeneratedOnAdd();
+
+            entity.HasIndex(e => new { e.LeagueId, e.ScheduleId });
+
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+
+            entity.Property(e => e.Date).HasColumnType("datetime");
+
+            entity.Property(e => e.LastModifiedOn).HasColumnType("datetime");
+
+            entity.Property(e => e.Duration).HasConversion(new TimeSpanToTicksConverter());
+
+            entity.Property(e => e.SessionType)
+                .HasConversion<string>();
+
+            entity.HasOne(d => d.Schedule)
+                .WithMany(p => p.Sessions)
+                .HasForeignKey(d => new { d.LeagueId, d.ScheduleId })
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(d => d.Track)
+                .WithMany()
+                .HasForeignKey(d => d.TrackId)
+                .OnDelete(DeleteBehavior.SetNull)
+                .IsRequired(false);
+        }
     }
 }
