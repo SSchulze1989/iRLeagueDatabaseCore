@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace DbIntegrationTests
 {
+    [Collection("DbIntegration")]
     public class DbIntegrationTests
     {
         static IConfiguration _config;

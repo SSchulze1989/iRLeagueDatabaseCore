@@ -9,6 +9,7 @@ namespace iRLeagueDatabaseCore.Models
     {
         public ResultEntity()
         {
+            SubResults = new HashSet<SubResultEntity>();
             ScoredResults = new HashSet<ScoredResultEntity>();
         }
 
@@ -26,6 +27,7 @@ namespace iRLeagueDatabaseCore.Models
 
         public virtual SessionEntity Session { get; set; }
         public virtual IRSimSessionDetailsEntity IRSimSessionDetails { get; set; }
+        public virtual ICollection<SubResultEntity> SubResults { get; set; }
         public virtual ICollection<ScoredResultEntity> ScoredResults { get; set; }
     }
 }

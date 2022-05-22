@@ -12,6 +12,7 @@ namespace iRLeagueDatabaseCore.Models
         {
             IncidentReviews = new HashSet<IncidentReviewEntity>();
             Scorings = new HashSet<ScoringEntity>();
+            SubSessions = new HashSet<SubSessionEntity>();
         }
 
         public long SessionId { get; set; }

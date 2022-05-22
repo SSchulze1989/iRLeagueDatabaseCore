@@ -303,6 +303,10 @@ namespace iRLeagueDatabaseCore.Models
 
                 entity.HasIndex(e => new { e.SessionId, e.SubSessionNr });
 
+                entity.HasOne(d => d.Result)
+                    .WithMany(p => p.SubResults)
+                    .HasForeignKey(d => new { d.LeagueId, d.SessionId });
+
                 entity.HasOne(d => d.SubSession)
                     .WithOne(p => p.SubResult)
                     .HasForeignKey<SubResultEntity>(d => new { d.LeagueId, d.SessionId, d.SubSessionNr })
