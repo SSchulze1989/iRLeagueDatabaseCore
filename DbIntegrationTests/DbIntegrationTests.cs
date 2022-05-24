@@ -298,5 +298,47 @@ namespace DbIntegrationTests
 
             await Assert.ThrowsAnyAsync<InvalidOperationException>(async () => await context.SaveChangesAsync());
         }
+
+        [Fact]
+        public async Task ShouldAddSubResultWithSubSession()
+        {
+            using var tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+            using (var context = GetTestDatabaseContext())
+            {
+                var session = new SessionEntity()
+                {
+                    Name = "Test",
+                };
+                var subSession = new SubSessionEntity()
+                {
+                    Name = "Race",
+                };
+                session.SubSessions.Add(subSession);
+                context.Schedules.First().Sessions.Add(session);
+                await context.SaveChangesAsync();
+            }
+
+            using (var context = GetTestDatabaseContext())
+            {
+                var result = new ResultEntity()
+                {
+                };
+                var subResult = new SubResultEntity();
+                var session = await context.Sessions.OrderBy(x => x.SessionId).LastAsync();
+                session.Result = result;
+                //session.SubSessions.First().SubResult = subResult;
+                await context.SaveChangesAsync();
+            }
+
+            using (var context = GetTestDatabaseContext())
+            {
+                var session = await context.Sessions.OrderBy(x => x.SessionId).LastAsync();
+                var result = session.Result;
+                var subResult = session.SubSessions.First().SubResult;
+                Assert.NotNull(result);
+                //Assert.NotNull(subResult);
+                //Assert.Contains(result.SubResults, x => x == subResult);
+            }
+        }
     }
 }

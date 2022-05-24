@@ -16,7 +16,7 @@ namespace DatabaseBenchmarks
         {
             //Console.WriteLine("Hello World!");
 
-            if (args.Contains("--build-db"))
+            if (args.Contains("--build-db") || true)
             {
                 Console.WriteLine("Creating benchmark database...");
                 using (var context = BenchmarkDatabaseCreator.CreateStaticDbContext())
@@ -88,7 +88,6 @@ namespace DatabaseBenchmarks
                         .ThenInclude(x => x.Session)
                             .ThenInclude(x => x.Schedule)
                     .Include(x => x.ScoredResultRows)
-                        .ThenInclude(x => x.ResultRow)
                             .ThenInclude(x => x.Member)
                     .Include(x => x.ScoredResultRows)
                         .ThenInclude(x => x.Team)
@@ -113,12 +112,10 @@ namespace DatabaseBenchmarks
                 var seasonScoringIds = seasonResults.Select(x => x.ScoringId).Distinct();
 
                 await dbContext.ScoredResultRows
-                    .Include(x => x.ResultRow)
                     .Where(x => seasonResultsIds.Contains(x.ResultId) && seasonScoringIds.Contains(x.ScoringId))
                     .LoadAsync();
 
                 Debug.Assert(seasonResults.SelectMany(x => x.ScoredResultRows).Where(x => x != null).Count() > 0);
-                Debug.Assert(seasonResults.SelectMany(x => x.ScoredResultRows.Select(x => x.ResultRow)).Where(x => x != null).Count() > 0);
             }
         }
 
@@ -137,42 +134,42 @@ namespace DatabaseBenchmarks
                         ResultRows = result.ScoredResultRows
                             .Select(row => new GetResultRowModel
                             {
-                                MemberId = row.ResultRow.MemberId,
-                                Interval = new TimeSpan(row.ResultRow.Interval),
-                                FastestLapTime = new TimeSpan(row.ResultRow.FastestLapTime),
-                                AvgLapTime = new TimeSpan(row.ResultRow.AvgLapTime),
-                                Firstname = row.ResultRow.Member.Firstname,
-                                Lastname = row.ResultRow.Member.Lastname,
+                                MemberId = row.MemberId,
+                                Interval = new TimeSpan(row.Interval),
+                                FastestLapTime = new TimeSpan(row.FastestLapTime),
+                                AvgLapTime = new TimeSpan(row.AvgLapTime),
+                                Firstname = row.Member.Firstname,
+                                Lastname = row.Member.Lastname,
                                 TeamName = row.Team.Name,
-                                StartPosition = row.ResultRow.StartPosition,
-                                FinishPosition = row.ResultRow.FinishPosition,
+                                StartPosition = row.StartPosition,
+                                FinishPosition = row.FinishPosition,
                                 FinalPosition = row.FinalPosition,
                                 RacePoints = row.RacePoints,
                                 PenaltyPoints = row.PenaltyPoints,
                                 BonusPoints = row.BonusPoints,
                                 TotalPoints = row.TotalPoints,
-                                Car = row.ResultRow.Car,
-                                CarClass = row.ResultRow.CarClass,
-                                CarId = row.ResultRow.CarId,
-                                CarNumber = row.ResultRow.CarNumber,
-                                ClassId = row.ResultRow.ClassId,
-                                CompletedLaps = row.ResultRow.CompletedLaps,
-                                CompletedPct = row.ResultRow.CompletedPct,
-                                Division = row.ResultRow.Division,
-                                FastLapNr = row.ResultRow.FastLapNr,
+                                Car = row.Car,
+                                CarClass = row.CarClass,
+                                CarId = row.CarId,
+                                CarNumber = row.CarNumber,
+                                ClassId = row.ClassId,
+                                CompletedLaps = row.CompletedLaps,
+                                CompletedPct = row.CompletedPct,
+                                Division = row.Division,
+                                FastLapNr = row.FastLapNr,
                                 FinalPositionChange = row.FinalPositionChange,
-                                Incidents = row.ResultRow.Incidents,
-                                LeadLaps = row.ResultRow.LeadLaps,
-                                License = row.ResultRow.License,
-                                NewIrating = row.ResultRow.NewIrating,
-                                NewLicenseLevel = row.ResultRow.NewLicenseLevel,
-                                NewSafetyRating = row.ResultRow.NewSafetyRating,
-                                OldIrating = row.ResultRow.OldIrating,
-                                OldLicenseLevel = row.ResultRow.OldLicenseLevel,
-                                OldSafetyRating = row.ResultRow.OldSafetyRating,
-                                PositionChange = row.ResultRow.PositionChange,
-                                SeasonStartIrating = row.ResultRow.SeasonStartIrating,
-                                Status = row.ResultRow.Status,
+                                Incidents = row.Incidents,
+                                LeadLaps = row.LeadLaps,
+                                License = row.License,
+                                NewIrating = row.NewIRating,
+                                NewLicenseLevel = row.NewLicenseLevel,
+                                NewSafetyRating = row.NewSafetyRating,
+                                OldIrating = row.OldIRating,
+                                OldLicenseLevel = row.OldLicenseLevel,
+                                OldSafetyRating = row.OldSafetyRating,
+                                PositionChange = row.PositionChange,
+                                SeasonStartIrating = row.SeasonStartIRating,
+                                Status = row.Status,
                                 TeamId = row.TeamId
                             }).ToArray(),
                     })
