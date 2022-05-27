@@ -17,7 +17,6 @@ namespace iRLeagueDatabaseCore.Models
 
         public long LeagueId { get; set; }
         public long SessionId { get; set; }
-        public long? IRSimSessionDetailsId { get; set; }
         public DateTime? CreatedOn { get; set; }
         public DateTime? LastModifiedOn { get; set; }
         public int Version { get; set; }
@@ -28,7 +27,6 @@ namespace iRLeagueDatabaseCore.Models
         public bool RequiresRecalculation { get; set; }
 
         public virtual SessionEntity Session { get; set; }
-        public virtual IRSimSessionDetailsEntity IRSimSessionDetails { get; set; }
         public virtual ICollection<SubResultEntity> SubResults { get; set; }
         public virtual ICollection<ScoredResultEntity> ScoredResults { get; set; }
     }
@@ -41,11 +39,6 @@ namespace iRLeagueDatabaseCore.Models
 
             entity.HasIndex(e => e.SessionId);
 
-            entity.HasIndex(e => new { e.LeagueId, e.IRSimSessionDetailsId });
-
-            entity.Property(e => e.SessionId)
-                .ValueGeneratedNever();
-
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
 
             entity.Property(e => e.LastModifiedOn).HasColumnType("datetime");
@@ -53,11 +46,6 @@ namespace iRLeagueDatabaseCore.Models
             entity.HasOne(d => d.Session)
                 .WithOne(p => p.Result)
                 .HasForeignKey<ResultEntity>(d => new { d.LeagueId, d.SessionId });
-
-            entity.HasOne(d => d.IRSimSessionDetails)
-                .WithOne()
-                .HasForeignKey<ResultEntity>(d => new { d.LeagueId, d.IRSimSessionDetailsId })
-                .IsRequired(false);
         }
     }
 }

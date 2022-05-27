@@ -13,12 +13,13 @@ namespace DatabaseBenchmarks
     {
         private static IConfiguration Configuration { get; }
         private static readonly int Seed = 12345;
-        private static readonly int leagueCount = 1;
+        private static readonly int leagueCount = 10;
+        private static readonly int seasonCount = 1;
         private static readonly int memberCount = 1000;
         private static readonly int trackCount = 100;
-        private static readonly int scheduleCount = 2;
-        private static readonly int scoringCount = 2;
-        private static readonly int sessionCount = 10;
+        private static readonly int scheduleCount = 1;
+        private static readonly int scoringCount = 1;
+        private static readonly int sessionCount = 2;
 
         static BenchmarkDatabaseCreator()
         {
@@ -47,26 +48,30 @@ namespace DatabaseBenchmarks
             {
                 random = new Random(Seed);
             }
+
+            List<TrackConfigEntity> trackConfigs;
+            List<MemberEntity> members;
             using (var context = CreateStaticDbContext())
             {
+                Console.Write("Creating database ... ");
                 await context.Database.EnsureDeletedAsync();
                 await context.Database.EnsureCreatedAsync();
-            }
+                Console.Write("Finished\n");
 
-            using (var context = CreateStaticDbContext())
-            {
+                Console.Write("Creating Tracks ... ");
                 // generate members and tracks first
                 var tracks = new List<TrackGroupEntity>();
                 for (int i = 0; i < trackCount; i++)
                 {
                     tracks.Add(CreateRandomTrackGroup(random));
                 }
-                var trackConfigs = tracks.SelectMany(x => x.TrackConfigs);
+                trackConfigs = tracks.SelectMany(x => x.TrackConfigs)
+                    .ToList();
 
                 context.TrackGroups.AddRange(tracks);
                 await context.SaveChangesAsync();
 
-                var members = new List<MemberEntity>();
+                members = new List<MemberEntity>();
                 for (int i = 0; i < memberCount; i++)
                 {
                     members.Add(CreateRandomMember(random));
@@ -74,36 +79,32 @@ namespace DatabaseBenchmarks
 
                 context.Members.AddRange(members);
                 await context.SaveChangesAsync();
+                Console.Write("Finished!\n");
             }
 
+            for (int k=0; k<leagueCount; k++)
             using (var context = CreateStaticDbContext())
             {
-                // generate leagues, seasons, schedules and scorings
-                var leaguesList = new List<LeagueEntity>();
-                for (int i = 0; i < leagueCount; i++)
-                {
-                    leaguesList.Add(CreateRandomLeague(random));
-                }
-                context.Leagues.AddRange(leaguesList);
+                Console.Write($"Creating League #{k}\n");
+                var league = CreateRandomLeague(random);
+                
+                List<SeasonEntity> seasons;
+                context.Leagues.Add(league);
                 await context.SaveChangesAsync();
-                var leagues = context.Leagues;
 
-                foreach (var league in leagues)
+                Console.Write("- Creating seasons ... ");
+                var leagueId = league.Id;
+                for (int i = 0; i < seasonCount; i++)
                 {
-                    //var seasonsCount = random.Next(9) + 1;
-                    var seasonsCount = 10;
-                    for (int i = 0; i < seasonsCount; i++)
-                    {
-                        league.Seasons.Add(CreateRandomSeason(random));
-                    }
+                    league.Seasons.Add(CreateRandomSeason(random));
                 }
                 await context.SaveChangesAsync();
-            }
+                seasons = context.Seasons.Where(x => x.LeagueId == leagueId).ToList();
+                Console.Write("Finished!\n");
 
-            using (var context = CreateStaticDbContext())
-            {
-                var seasons = context.Seasons.Local;
-
+                Console.Write("- Creating Schedules&Scorings ... ");
+                List<ScheduleEntity> schedules;
+                List<ScoringEntity> scorings;
                 foreach (var season in seasons)
                 {
                     //var scheduleCount = random.Next(3) + 1;
@@ -130,14 +131,12 @@ namespace DatabaseBenchmarks
                     }
                 }
                 await context.SaveChangesAsync();
-            }
+                schedules = context.Schedules.Where(x => x.LeagueId == leagueId).ToList();
+                scorings = context.Scorings.Where(x => x.LeagueId == leagueId).ToList();
+                Console.Write("Finished!\n");
 
-            using (var context = CreateStaticDbContext())
-            {
-                var schedules = context.Schedules;
-                var scorings = context.Scorings;
-                var trackConfigs = context.TrackConfigs;
-
+                Console.Write("- Creating Sessions ... ");
+                List<SessionEntity> sessions;
                 foreach (var schedule in schedules)
                 {
                     //var sessionCount = random.Next(10) + 5;
@@ -149,29 +148,23 @@ namespace DatabaseBenchmarks
                     }
                 }
                 await context.SaveChangesAsync();
-            }
+                sessions = context.Sessions.Where(x => x.LeagueId == leagueId).ToList();
+                Console.Write("Finished!\n");
 
-            using (var context = CreateStaticDbContext())
-            {
-                var sessions = context.Sessions;
-                var members = context.Members;
-
+                Console.Write("- Creating Results ... ");
+                List<ResultEntity> results;
                 // create raw results for each session
                 foreach (var session in sessions)
                 {
-                    var result = CreateRandomResult(random, members);
-                    result.Session = session;
+                    var result = CreateRandomResult(random, members, session);
                     session.Result = result;
-                    //result.SubResults.First().SubSession = result.Session.SubSessions.First();
                 }
                 await context.SaveChangesAsync();
-            }
+                results = context.Results.Where(x => x.LeagueId == leagueId).ToList();
+                Console.Write("Finished!\n");
 
-            using (var context = CreateStaticDbContext())
-            {
-                var results = context.Results;
-                var scorings = context.Scorings;
-
+                Console.Write("- Creating ScoredResults ... ");
+                List<ScoredResultEntity> scoredResults;
                 // create scored result for each scoring + attached schedule session
                 foreach (var scoring in scorings.Where(x => x.ConnectedSchedule != null))
                 {
@@ -193,6 +186,9 @@ namespace DatabaseBenchmarks
 
                 // save that motherfucker
                 await context.SaveChangesAsync();
+                scoredResults = context.ScoredResults.Where(x => x.LeagueId == leagueId).ToList();
+                Console.Write("Finished!\n");
+                Console.WriteLine("");
             }
 
             using (var context = CreateStaticDbContext())
@@ -205,9 +201,9 @@ namespace DatabaseBenchmarks
                     $"- {context.Schedules.Count()} schedules\n" +
                     $"- {context.Scorings.Count()} scorings\n" +
                     $"- {context.Sessions.Count()} sessions with\n" +
-                    $"-   {context.SubSessions.Count()}" +
+                    $"-   {context.SubSessions.Count()} subsessions\n" +
                     $"- {context.Results.Count()} results with\n" +
-                    $"-   {context.SubResults.Count()}\n" +
+                    $"-   {context.SubResults.Count()} subresults\n" +
                     $"-   {context.ResultRows.Count()} result rows\n" +
                     $"- {context.ScoredResults.Count()} scored results with\n" +
                     $"-   {context.ScoredResultRows.Count()} scored result rows\n");
@@ -300,19 +296,24 @@ namespace DatabaseBenchmarks
             };
         }
 
-        private static ResultEntity CreateRandomResult(Random random, IEnumerable<MemberEntity> members)
+        private static ResultEntity CreateRandomResult(Random random, IEnumerable<MemberEntity> members, SessionEntity session)
         {
             var result = new ResultEntity();
-            result.IRSimSessionDetails = CreateRandomSessionDetails(random);
-            //var subResult = new SubResultEntity();
-            //result.SubResults.Add(subResult);
-            var rowsCount = random.Next(40) + 10;
-            var membersArray = members.ToArray();
-            random.Shuffle(membersArray);
-            //for(int i=0; i<rowsCount; i++)
-            //{
-            //    subResult.ResultRows.Add(CreateRandomResultRow(random, membersArray.ElementAt(i)));
-            //}
+            var details = CreateRandomSessionDetails(random, session);
+            foreach (var subSession in session.SubSessions)
+            {
+                var subResult = new SubResultEntity();
+                result.SubResults.Add(subResult);
+                var rowsCount = random.Next(40) + 10;
+                var membersArray = members.ToArray();
+                random.Shuffle(membersArray);
+                for (int i = 0; i < rowsCount; i++)
+                {
+                    subResult.ResultRows.Add(CreateRandomResultRow(random, membersArray.ElementAt(i)));
+                }
+                //subResult.IRSimSessionDetails = details;
+                subResult.SubSession = subSession;
+            }
             return result;
         }
 
@@ -330,7 +331,11 @@ namespace DatabaseBenchmarks
         private static ScoredResultEntity CreateRandomScoredResult(Random random, ResultEntity result, ScoringEntity scoring)
         {
             var scoredResult = new ScoredResultEntity();
-            var subResult = result.SubResults.First();
+            var subResult = result.SubResults.FirstOrDefault();
+            if (subResult == null)
+            {
+                return scoredResult;
+            }
             var rowsCount = subResult.ResultRows.Count();
             for (int i=0; i<rowsCount; i++)
             {
@@ -352,9 +357,12 @@ namespace DatabaseBenchmarks
             };
         }
 
-        private static IRSimSessionDetailsEntity CreateRandomSessionDetails(Random random)
+        private static IRSimSessionDetailsEntity CreateRandomSessionDetails(Random random, SessionEntity session)
         {
-            return new IRSimSessionDetailsEntity();
+            return new IRSimSessionDetailsEntity()
+            {
+                Session = session
+            };
         }
 
         private static string GetRandomName(Random random)

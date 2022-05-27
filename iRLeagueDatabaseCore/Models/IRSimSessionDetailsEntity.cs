@@ -10,6 +10,7 @@ namespace iRLeagueDatabaseCore.Models
     public partial class IRSimSessionDetailsEntity
     {
         public long LeagueId { get; set; }
+        public long SessionId { get; set; }
         public long SessionDetailsId { get; set; }
         public long IRSubsessionId { get; set; }
         public long IRSeasonId { get; set; }
@@ -59,6 +60,8 @@ namespace iRLeagueDatabaseCore.Models
         public int QualifyGripCompund { get; set; }
         public int WarmupGripCompound { get; set; }
         public int RaceGripCompound { get; set; }
+
+        public virtual SessionEntity Session { get; set; }
     }
 
     public class IRSimSessionDetailsEntityConfiguration : IEntityTypeConfiguration<IRSimSessionDetailsEntity>
@@ -82,6 +85,10 @@ namespace iRLeagueDatabaseCore.Models
 
             entity.Property(e => e.StartTime)
                 .HasColumnType("datetime");
+
+            entity.HasOne(d => d.Session)
+                .WithMany()
+                .HasForeignKey(d => new { d.LeagueId, d.SessionId });
         }
     }
 }

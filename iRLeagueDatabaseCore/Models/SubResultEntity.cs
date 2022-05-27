@@ -16,6 +16,7 @@ namespace iRLeagueDatabaseCore.Models
         public long LeagueId { get; set; }
         public long SessionId { get; set; }
         public long SubSessionId { get; set; }
+        public long? IRSimSessionDetailsId { get; set; }
         public SimSessionType SimSessionType { get; set; }
 
         #region version
@@ -31,6 +32,7 @@ namespace iRLeagueDatabaseCore.Models
         public virtual ResultEntity Result { get; set; }
         public virtual SubSessionEntity SubSession { get; set; }
         public virtual ICollection<ResultRowEntity> ResultRows { get; set; }
+        public virtual IRSimSessionDetailsEntity IRSimSessionDetails { get; set; }
     }
 
     public class SubResultEntityConfiguration : IEntityTypeConfiguration<SubResultEntity>
@@ -50,6 +52,10 @@ namespace iRLeagueDatabaseCore.Models
                 .HasForeignKey<SubResultEntity>(d => new { d.LeagueId, d.SessionId, d.SubSessionId })
                 .IsRequired(true)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(d => d.IRSimSessionDetails)
+                .WithMany()
+                .HasForeignKey(d => new { d.LeagueId, d.IRSimSessionDetailsId });
         }
     }
 }

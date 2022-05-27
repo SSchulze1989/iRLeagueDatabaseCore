@@ -21,7 +21,7 @@ namespace DatabaseBenchmarks
                 Console.WriteLine("Creating benchmark database...");
                 using (var context = BenchmarkDatabaseCreator.CreateStaticDbContext())
                 {
-                    BenchmarkDatabaseCreator.PopulateBenchmarkDatabase(context).Wait();
+                    BenchmarkDatabaseCreator.PopulateBenchmarkDatabase().Wait();
                 }
                 Console.Write("Finished creating");
             }
