@@ -14,12 +14,12 @@ namespace DatabaseBenchmarks
         private static IConfiguration Configuration { get; }
         private static readonly int Seed = 12345;
         private static readonly int leagueCount = 10;
-        private static readonly int seasonCount = 1;
+        private static readonly int seasonCount = 5;
         private static readonly int memberCount = 1000;
         private static readonly int trackCount = 100;
-        private static readonly int scheduleCount = 1;
-        private static readonly int scoringCount = 1;
-        private static readonly int sessionCount = 2;
+        private static readonly int scheduleCount = 2;
+        private static readonly int scoringCount = 2;
+        private static readonly int sessionCount = 12;
 
         static BenchmarkDatabaseCreator()
         {
@@ -49,8 +49,6 @@ namespace DatabaseBenchmarks
                 random = new Random(Seed);
             }
 
-            List<TrackConfigEntity> trackConfigs;
-            List<MemberEntity> members;
             using (var context = CreateStaticDbContext())
             {
                 Console.Write("Creating database ... ");
@@ -60,6 +58,8 @@ namespace DatabaseBenchmarks
 
                 Console.Write("Creating Tracks ... ");
                 // generate members and tracks first
+                List<TrackConfigEntity> trackConfigs;
+                List<MemberEntity> members;
                 var tracks = new List<TrackGroupEntity>();
                 for (int i = 0; i < trackCount; i++)
                 {
@@ -83,8 +83,11 @@ namespace DatabaseBenchmarks
             }
 
             for (int k=0; k<leagueCount; k++)
-            using (var context = CreateStaticDbContext())
             {
+                using var context = CreateStaticDbContext();
+                var trackConfigs = context.TrackConfigs.ToList();
+                var members = context.Members.ToList();
+
                 Console.Write($"Creating League #{k}\n");
                 var league = CreateRandomLeague(random);
                 
@@ -156,11 +159,24 @@ namespace DatabaseBenchmarks
                 // create raw results for each session
                 foreach (var session in sessions)
                 {
-                    var result = CreateRandomResult(random, members, session);
+                    var result = CreateRandomResult(random);
                     session.Result = result;
                 }
                 await context.SaveChangesAsync();
                 results = context.Results.Where(x => x.LeagueId == leagueId).ToList();
+
+                foreach (var result in results)
+                {
+                    var details = CreateRandomSessionDetails(random);
+                    details.Session = result.Session;
+                    foreach (var subSession in result.Session.SubSessions)
+                    {
+                        var subResult = CreateRandomSubResult(random, members, details);
+                        result.SubResults.Add(subResult);
+                        subSession.SubResult = subResult;
+                    }
+                }
+                await context.SaveChangesAsync();
                 Console.Write("Finished!\n");
 
                 Console.Write("- Creating ScoredResults ... ");
@@ -296,25 +312,24 @@ namespace DatabaseBenchmarks
             };
         }
 
-        private static ResultEntity CreateRandomResult(Random random, IEnumerable<MemberEntity> members, SessionEntity session)
+        private static ResultEntity CreateRandomResult(Random random)
         {
             var result = new ResultEntity();
-            var details = CreateRandomSessionDetails(random, session);
-            foreach (var subSession in session.SubSessions)
-            {
-                var subResult = new SubResultEntity();
-                result.SubResults.Add(subResult);
-                var rowsCount = random.Next(40) + 10;
-                var membersArray = members.ToArray();
-                random.Shuffle(membersArray);
-                for (int i = 0; i < rowsCount; i++)
-                {
-                    subResult.ResultRows.Add(CreateRandomResultRow(random, membersArray.ElementAt(i)));
-                }
-                //subResult.IRSimSessionDetails = details;
-                subResult.SubSession = subSession;
-            }
             return result;
+        }
+
+        private static SubResultEntity CreateRandomSubResult(Random random, IEnumerable<MemberEntity> members, IRSimSessionDetailsEntity details)
+        {
+            var subResult = new SubResultEntity();
+            var rowsCount = random.Next(40) + 10;
+            var membersArray = members.ToArray();
+            random.Shuffle(membersArray);
+            for (int i = 0; i < rowsCount; i++)
+            {
+                subResult.ResultRows.Add(CreateRandomResultRow(random, membersArray.ElementAt(i)));
+            }
+            subResult.IRSimSessionDetails = details;
+            return subResult;
         }
 
         private static ResultRowEntity CreateRandomResultRow(Random random, MemberEntity member)
@@ -357,12 +372,9 @@ namespace DatabaseBenchmarks
             };
         }
 
-        private static IRSimSessionDetailsEntity CreateRandomSessionDetails(Random random, SessionEntity session)
+        private static IRSimSessionDetailsEntity CreateRandomSessionDetails(Random random)
         {
-            return new IRSimSessionDetailsEntity()
-            {
-                Session = session
-            };
+            return new IRSimSessionDetailsEntity();
         }
 
         private static string GetRandomName(Random random)

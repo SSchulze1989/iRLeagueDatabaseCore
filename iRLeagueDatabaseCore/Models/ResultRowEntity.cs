@@ -13,9 +13,8 @@ namespace iRLeagueDatabaseCore.Models
         {
         }
 
-        public long ResultRowId { get; set; }
         public long LeagueId { get; set; }
-        public long SessionId { get; set; }
+        public long ResultRowId { get; set; }
         public long SubSessionId { get; set; }
         public long MemberId { get; set; }
         public long? TeamId { get; set; }
@@ -37,12 +36,6 @@ namespace iRLeagueDatabaseCore.Models
             entity.Property(e => e.ResultRowId)
                 .ValueGeneratedOnAdd();
 
-            entity.HasIndex(e => e.MemberId);
-
-            entity.HasIndex(e => new { e.LeagueId, e.SessionId, e.SubSessionId });
-
-            entity.HasIndex(e => e.TeamId);
-
             entity.Property(e => e.QualifyingTimeAt).HasColumnType("datetime");
 
             entity.HasOne(d => d.Member)
@@ -52,11 +45,13 @@ namespace iRLeagueDatabaseCore.Models
 
             entity.HasOne(d => d.SubResult)
                 .WithMany(p => p.ResultRows)
-                .HasForeignKey(d => new { d.LeagueId, d.SessionId, d.SubSessionId });
+                .HasForeignKey(d => new { d.LeagueId, d.SubSessionId })
+                .OnDelete(DeleteBehavior.Cascade);
 
             entity.HasOne(d => d.Team)
                 .WithMany(p => p.ResultRows)
-                .HasForeignKey(d => d.TeamId);
+                .HasForeignKey(d => d.TeamId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
         }
     }
 }

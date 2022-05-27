@@ -19,10 +19,7 @@ namespace DatabaseBenchmarks
             if (args.Contains("--build-db") || true)
             {
                 Console.WriteLine("Creating benchmark database...");
-                using (var context = BenchmarkDatabaseCreator.CreateStaticDbContext())
-                {
-                    BenchmarkDatabaseCreator.PopulateBenchmarkDatabase().Wait();
-                }
+                CreateDatabase().GetAwaiter().GetResult();
                 Console.Write("Finished creating");
             }
 
@@ -61,6 +58,12 @@ namespace DatabaseBenchmarks
 #else
             var summary = BenchmarkRunner.Run<QuerySeasonResultsBenchmarks>();
 #endif
+        }
+
+        static async Task CreateDatabase()
+        {
+            using var context = BenchmarkDatabaseCreator.CreateStaticDbContext();
+            await BenchmarkDatabaseCreator.PopulateBenchmarkDatabase();
         }
     }
 

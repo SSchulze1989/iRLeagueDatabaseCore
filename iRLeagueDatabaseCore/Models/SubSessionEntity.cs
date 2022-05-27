@@ -40,7 +40,7 @@ namespace iRLeagueDatabaseCore.Models
     {
         public void Configure(EntityTypeBuilder<SubSessionEntity> entity)
         {
-            entity.HasKey(e => new { e.LeagueId, e.SessionId, e.SubSessionId });
+            entity.HasKey(e => new { e.LeagueId, e.SubSessionId });
 
             entity.HasAlternateKey(e => e.SubSessionId);
 
