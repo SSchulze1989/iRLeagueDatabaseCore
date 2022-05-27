@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using System;
 using System.Collections.Generic;
 
 #nullable disable
@@ -40,5 +43,29 @@ namespace iRLeagueDatabaseCore.Models
         public virtual ICollection<CommentBaseEntity> Comments { get; set; }
         public virtual ICollection<MemberEntity> InvolvedMembers { get; set; }
         public virtual ICollection<ReviewPenaltyEntity> ReviewPenaltys { get; set; }
+    }
+
+    public class IncidentReviewEntityConfiguration : IEntityTypeConfiguration<IncidentReviewEntity>
+    {
+        public void Configure(EntityTypeBuilder<IncidentReviewEntity> entity)
+        {
+            entity.HasKey(e => e.ReviewId);
+
+            entity.HasIndex(e => e.SessionId);
+
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+
+            entity.Property(e => e.LastModifiedOn).HasColumnType("datetime");
+
+            entity.Property(e => e.TimeStamp).HasConversion(new TimeSpanToTicksConverter());
+
+            entity.HasOne(d => d.Session)
+                .WithMany(p => p.IncidentReviews)
+                .HasForeignKey(d => new { d.LeagueId, d.SessionId });
+
+            entity.HasMany(d => d.InvolvedMembers)
+                .WithMany(p => p.InvolvedReviews)
+                .UsingEntity(e => e.ToTable("IncidentReviewsInvolvedMembers"));
+        }
     }
 }

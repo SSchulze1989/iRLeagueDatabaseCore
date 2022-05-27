@@ -264,7 +264,6 @@ namespace UnitTests.EntityFramework
                         .SelectMany(x => x.TrackConfigs)
                         .Skip(i)
                         .FirstOrDefault(),
-                    SessionTitle = $"S1 Session {i}",
                 };
                 schedule1.Sessions.Add(session);
             }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
 using System.Collections.Generic;
 
 #nullable disable
@@ -12,10 +14,10 @@ namespace iRLeagueDatabaseCore.Models
         public long MemberId { get; set; }
         public long? FirstResultRowId { get; set; }
         public long? LastResultRowId { get; set; }
-        public int StartIrating { get; set; }
-        public int EndIrating { get; set; }
-        public double StartSrating { get; set; }
-        public double EndSrating { get; set; }
+        public int StartIRating { get; set; }
+        public int EndIRating { get; set; }
+        public double StartSRating { get; set; }
+        public double EndSRating { get; set; }
         public long? FirstSessionId { get; set; }
         public DateTime? FirstSessionDate { get; set; }
         public long? FirstRaceId { get; set; }
@@ -58,8 +60,8 @@ namespace iRLeagueDatabaseCore.Models
         public double AvgPenaltyPointsPerRace { get; set; }
         public double AvgPenaltyPointsPerLap { get; set; }
         public double AvgPenaltyPointsPerKm { get; set; }
-        public double AvgIrating { get; set; }
-        public double AvgSrating { get; set; }
+        public double AvgIRating { get; set; }
+        public double AvgSRating { get; set; }
         public double BestFinishPosition { get; set; }
         public double WorstFinishPosition { get; set; }
         public double FirstRaceFinishPosition { get; set; }
@@ -84,5 +86,73 @@ namespace iRLeagueDatabaseCore.Models
         public virtual SessionEntity LastSession { get; set; }
         public virtual MemberEntity Member { get; set; }
         public virtual StatisticSetEntity StatisticSet { get; set; }
+    }
+
+    public class DriverStatisticRowEntityConfiguration : IEntityTypeConfiguration<DriverStatisticRowEntity>
+    {
+        public void Configure(EntityTypeBuilder<DriverStatisticRowEntity> entity)
+        {
+            entity.HasKey(e => new { e.StatisticSetId, e.MemberId });
+
+            entity.HasIndex(e => new { e.LeagueId, e.FirstRaceId });
+
+            entity.HasIndex(e => new { e.LeagueId, e.FirstResultRowId });
+
+            entity.HasIndex(e => new { e.LeagueId, e.FirstSessionId });
+
+            entity.HasIndex(e => new { e.LeagueId, e.LastRaceId });
+
+            entity.HasIndex(e => new { e.LeagueId, e.LastResultRowId });
+
+            entity.HasIndex(e => new { e.LeagueId, e.LastSessionId });
+
+            entity.HasIndex(e => e.MemberId);
+
+            entity.HasIndex(e => e.StatisticSetId);
+
+            entity.Property(e => e.FirstRaceDate)
+                .HasColumnType("datetime");
+
+            entity.Property(e => e.FirstSessionDate)
+                .HasColumnType("datetime");
+
+            entity.Property(e => e.LastRaceDate)
+                .HasColumnType("datetime");
+
+            entity.Property(e => e.LastSessionDate)
+                .HasColumnType("datetime");
+
+            entity.HasOne(d => d.FirstRace)
+                .WithMany()
+                .HasForeignKey(d => new { d.LeagueId, d.FirstRaceId });
+
+            entity.HasOne(d => d.FirstResultRow)
+                .WithMany()
+                .HasForeignKey(d => new { d.LeagueId, d.FirstResultRowId });
+
+            entity.HasOne(d => d.FirstSession)
+                .WithMany()
+                .HasForeignKey(d => new { d.LeagueId, d.FirstSessionId });
+
+            entity.HasOne(d => d.LastRace)
+                .WithMany()
+                .HasForeignKey(d => new { d.LeagueId, d.LastRaceId });
+
+            entity.HasOne(d => d.LastResultRow)
+                .WithMany()
+                .HasForeignKey(d => new { d.LeagueId, d.LastResultRowId });
+
+            entity.HasOne(d => d.LastSession)
+                .WithMany()
+                .HasForeignKey(d => new { d.LeagueId, d.LastSessionId });
+
+            entity.HasOne(d => d.Member)
+                .WithMany(p => p.DriverStatisticRows)
+                .HasForeignKey(d => d.MemberId);
+
+            entity.HasOne(d => d.StatisticSet)
+                .WithMany(p => p.DriverStatisticRows)
+                .HasForeignKey(d => d.StatisticSetId);
+        }
     }
 }

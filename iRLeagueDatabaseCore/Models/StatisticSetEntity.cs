@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
 using System.Collections.Generic;
 
 #nullable disable
@@ -43,5 +45,44 @@ namespace iRLeagueDatabaseCore.Models
         public virtual ICollection<DriverStatisticRowEntity> DriverStatisticRows { get; set; }
         public virtual ICollection<StatisticSetEntity> LeagueStatisticSets { get; set; }
         public virtual ICollection<StatisticSetEntity> DependendStatisticSets { get; set; }
+    }
+
+    public class StatisticSetEntityConfiguration : IEntityTypeConfiguration<StatisticSetEntity>
+    {
+        public void Configure(EntityTypeBuilder<StatisticSetEntity> entity)
+        {
+            entity.HasIndex(e => e.CurrentChampId);
+
+            entity.HasIndex(e => new { e.LeagueId, e.StandingId });
+
+            entity.HasIndex(e => new { e.LeagueId, e.SeasonId });
+
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+
+            entity.Property(e => e.FirstDate).HasColumnType("datetime");
+
+            entity.Property(e => e.LastDate).HasColumnType("datetime");
+
+            entity.Property(e => e.LastModifiedOn).HasColumnType("datetime");
+
+            entity.Property(e => e.UpdateTime).HasColumnType("datetime");
+
+            entity.HasOne(d => d.CurrentChamp)
+                .WithMany(p => p.StatisticSets)
+                .HasForeignKey(d => d.CurrentChampId);
+
+            entity.HasOne(d => d.Standing)
+                .WithMany(p => p.StatisticSets)
+                .HasForeignKey(d => new { d.LeagueId, d.StandingId });
+
+            entity.HasOne(d => d.Season)
+                .WithMany(p => p.StatisticSets)
+                .HasForeignKey(d => new { d.LeagueId, d.SeasonId })
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasMany(d => d.DependendStatisticSets)
+                .WithMany(p => p.LeagueStatisticSets)
+                .UsingEntity(e => e.ToTable("LeagueStatisticSetsStatisticSets"));
+        }
     }
 }

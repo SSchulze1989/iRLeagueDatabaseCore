@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
 
@@ -8,8 +9,9 @@ namespace iRLeagueDatabaseCore.Models
 {
     public partial class IRSimSessionDetailsEntity
     {
-        public long ResultId { get; set; }
         public long LeagueId { get; set; }
+        public long SessionId { get; set; }
+        public long SessionDetailsId { get; set; }
         public long IRSubsessionId { get; set; }
         public long IRSeasonId { get; set; }
         public string IRSeasonName { get; set; }
@@ -59,6 +61,34 @@ namespace iRLeagueDatabaseCore.Models
         public int WarmupGripCompound { get; set; }
         public int RaceGripCompound { get; set; }
 
-        public virtual ResultEntity Result { get; set; }
+        public virtual SessionEntity Session { get; set; }
+    }
+
+    public class IRSimSessionDetailsEntityConfiguration : IEntityTypeConfiguration<IRSimSessionDetailsEntity>
+    {
+        public void Configure(EntityTypeBuilder<IRSimSessionDetailsEntity> entity)
+        {
+            entity.HasKey(e => new { e.LeagueId, e.SessionDetailsId });
+
+            entity.HasAlternateKey(e => e.SessionDetailsId);
+
+            entity.Property(e => e.SessionDetailsId)
+                .ValueGeneratedOnAdd();
+
+            entity.Property(e => e.EndTime)
+                .HasColumnType("datetime");
+
+            entity.Property(e => e.SimStartUtcOffset);
+
+            entity.Property(e => e.SimStartUtcTime)
+                .HasColumnType("datetime");
+
+            entity.Property(e => e.StartTime)
+                .HasColumnType("datetime");
+
+            entity.HasOne(d => d.Session)
+                .WithMany()
+                .HasForeignKey(d => new { d.LeagueId, d.SessionId });
+        }
     }
 }
