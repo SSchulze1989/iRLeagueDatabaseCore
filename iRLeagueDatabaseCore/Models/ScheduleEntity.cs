@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
 using System.Collections.Generic;
 
 #nullable disable
@@ -27,5 +29,28 @@ namespace iRLeagueDatabaseCore.Models
         public virtual SeasonEntity Season { get; set; }
         public virtual ICollection<ScoringEntity> Scorings { get; set; }
         public virtual ICollection<SessionEntity> Sessions { get; set; }
+    }
+
+    public class ScheduleEntityConfiguration : IEntityTypeConfiguration<ScheduleEntity>
+    {
+        public void Configure(EntityTypeBuilder<ScheduleEntity> entity)
+        {
+            entity.HasKey(e => new { e.LeagueId, e.ScheduleId });
+
+            entity.HasAlternateKey(e => e.ScheduleId);
+
+            entity.Property(e => e.ScheduleId)
+                .ValueGeneratedOnAdd();
+
+            entity.HasIndex(e => new { e.LeagueId, e.SeasonId });
+
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+
+            entity.Property(e => e.LastModifiedOn).HasColumnType("datetime");
+
+            entity.HasOne(d => d.Season)
+                .WithMany(p => p.Schedules)
+                .HasForeignKey(d => new { d.LeagueId, d.SeasonId });
+        }
     }
 }

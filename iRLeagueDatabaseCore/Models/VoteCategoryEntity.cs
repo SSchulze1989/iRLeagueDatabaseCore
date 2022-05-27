@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
 using System.Collections.Generic;
 
 #nullable disable
@@ -20,5 +22,13 @@ namespace iRLeagueDatabaseCore.Models
 
         public virtual ICollection<AcceptedReviewVoteEntity> AcceptedReviewVotes { get; set; }
         public virtual ICollection<CommentReviewVoteEntity> CommentReviewVotes { get; set; }
+    }
+
+    public class VoteCategoryEntityConfiguration : IEntityTypeConfiguration<VoteCategoryEntity>
+    {
+        public void Configure(EntityTypeBuilder<VoteCategoryEntity> entity)
+        {
+            entity.HasKey(e => e.CatId);
+        }
     }
 }

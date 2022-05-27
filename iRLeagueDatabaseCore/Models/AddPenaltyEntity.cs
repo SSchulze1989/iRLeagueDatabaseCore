@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
 using System.Collections.Generic;
 
 #nullable disable
@@ -12,5 +14,22 @@ namespace iRLeagueDatabaseCore.Models
         public int PenaltyPoints { get; set; }
 
         public virtual ScoredResultRowEntity ScoredResultRow { get; set; }
+    }
+
+    public class AddPenaltyEntityConfiguration : IEntityTypeConfiguration<AddPenaltyEntity>
+    {
+        public void Configure(EntityTypeBuilder<AddPenaltyEntity> entity)
+        {
+            entity.HasKey(e => e.ScoredResultRowId);
+
+            entity.HasIndex(e => new { e.LeagueId, e.ScoredResultRowId });
+
+            entity.Property(e => e.ScoredResultRowId).ValueGeneratedNever();
+
+            entity.HasOne(d => d.ScoredResultRow)
+                .WithOne(p => p.AddPenalty)
+                .HasForeignKey<AddPenaltyEntity>(d => new { d.LeagueId, d.ScoredResultRowId })
+                .OnDelete(DeleteBehavior.ClientSetNull);
+        }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
 using System.Collections.Generic;
 
 #nullable disable
@@ -33,5 +35,32 @@ namespace iRLeagueDatabaseCore.Models
         public virtual IncidentReviewEntity Review { get; set; }
         public virtual ICollection<CommentReviewVoteEntity> CommentReviewVotes { get; set; }
         public virtual ICollection<CommentBaseEntity> InverseReplyToComment { get; set; }
+    }
+
+    public class CommentBaseEntityConfiguation : IEntityTypeConfiguration<CommentBaseEntity>
+    {
+        public void Configure(EntityTypeBuilder<CommentBaseEntity> entity)
+        {
+            entity.HasKey(e => e.CommentId);
+
+            entity.HasIndex(e => e.ReplyToCommentId);
+
+            entity.HasIndex(e => e.ReviewId);
+
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+
+            entity.Property(e => e.Date).HasColumnType("datetime");
+
+            entity.Property(e => e.LastModifiedOn).HasColumnType("datetime");
+
+            entity.HasOne(d => d.ReplyToComment)
+                .WithMany(p => p.InverseReplyToComment)
+                .HasForeignKey(d => d.ReplyToCommentId);
+
+            entity.HasOne(d => d.Review)
+                .WithMany(p => p.Comments)
+                .HasForeignKey(d => d.ReviewId)
+                .OnDelete(DeleteBehavior.Cascade);
+        }
     }
 }

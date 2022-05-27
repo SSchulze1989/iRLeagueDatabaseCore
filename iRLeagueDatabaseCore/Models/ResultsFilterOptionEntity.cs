@@ -1,4 +1,6 @@
 ﻿using iRLeagueApiCore.Communication.Enums;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
 
@@ -26,5 +28,23 @@ namespace iRLeagueDatabaseCore.Models
         public bool FilterPointsOnly { get; set; }
 
         public virtual ScoringEntity Scoring { get; set; }
+    }
+
+    public class ResultsFilterOptionEntityConfiguration : IEntityTypeConfiguration<ResultsFilterOptionEntity>
+    {
+        public void Configure(EntityTypeBuilder<ResultsFilterOptionEntity> entity)
+        {
+            entity.HasKey(e => e.ResultsFilterId);
+
+            entity.HasIndex(e => new { e.LeagueId, e.ScoringId });
+
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+
+            entity.Property(e => e.LastModifiedOn).HasColumnType("datetime");
+
+            entity.HasOne(d => d.Scoring)
+                .WithMany(p => p.ResultsFilterOptions)
+                .HasForeignKey(d => new { d.LeagueId, d.ScoringId });
+        }
     }
 }

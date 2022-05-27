@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using iRLeagueApiCore.Communication.Enums;
 using iRLeagueDatabaseCore.Models;
@@ -111,9 +112,13 @@ namespace DbIntegrationTests
                         .SelectMany(x => x.TrackConfigs)
                         .Skip(i)
                         .FirstOrDefault(),
-                    SessionTitle = $"S1 Session {i + 1}",
                     //SessionType = (SessionType)i + 1
                 };
+                var subSession = new SubSessionEntity()
+                {
+                    Name = "Race",
+                };
+                session.SubSessions.Add(subSession);
                 schedule1.Sessions.Add(session);
             }
             for (int i = 0; i < 2; i++)
@@ -131,9 +136,13 @@ namespace DbIntegrationTests
                         .SelectMany(x => x.TrackConfigs)
                         .Skip(i)
                         .FirstOrDefault(),
-                    SessionTitle = $"S2 Session {i + 1}",
                     //SessionType = (SessionType)i + 1
                 };
+                var subSession = new SubSessionEntity()
+                {
+                    Name = "Race",
+                };
+                session.SubSessions.Add(subSession);
                 schedule2.Sessions.Add(session);
             }
             context.Leagues.Add(league1);
@@ -205,27 +214,30 @@ namespace DbIntegrationTests
                 var scoredResult = new ScoredResultEntity();
                 scoring.ScoredResults.Add(scoredResult);
                 var result = new ResultEntity();
+                var subResult = new SubResultEntity();
+                result.SubResults.Add(subResult);
                 result.ScoredResults.Add(scoredResult);
+                var resultMembers = members.ToList();
                 for (int i = 0; i < 10; i++)
                 {
                     var resultRow = new ResultRowEntity()
                     {
                         StartPosition = i + 1,
                         FinishPosition = i + 1,
-                        Member = members.ElementAt(i),
+                        Member = resultMembers.PopRandom(random),
                         QualifyingTime = GetTimeSpan(random).Ticks,
                         FastestLapTime = GetTimeSpan(random).Ticks,
                         AvgLapTime = GetTimeSpan(random).Ticks,
                         Interval = GetTimeSpan(random).Ticks
                     };
-                    var scoredResultRow = new ScoredResultRowEntity()
+                    subResult.ResultRows.Add(resultRow);
+                    subResult.SubSession = session.SubSessions.First();
+                    var scoredResultRow = new ScoredResultRowEntity(resultRow)
                     {
-                        ResultRow = resultRow,
                         FinalPosition = i + 1,
                         RacePoints = 10 - i,
                         TotalPoints = 10 - i
                     };
-                    result.ResultRows.Add(resultRow);
                     scoredResult.ScoredResultRows.Add(scoredResultRow);
                 }
                 scoring.Sessions.Add(session);
@@ -283,6 +295,25 @@ namespace DbIntegrationTests
                 id[i] = (char)('0' + random.Next(10));
             }
             return new string(id);
+        }
+    }
+
+    public static class PopulateDatabaseExtensions
+    {
+        /// <summary>
+        /// Returns a random entry from the list and removes it from the list at the same time
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="collection">List to pop item from</param>
+        /// <param name="random">Initialized random number generator</param>
+        /// <returns></returns>
+        public static T PopRandom<T>(this ICollection<T> collection, Random random = null)
+        {
+            random ??= new Random();
+            var randomIndex = random.Next(collection.Count);
+            var pop = collection.ElementAt(randomIndex);
+            collection.Remove(pop);
+            return pop;
         }
     }
 }

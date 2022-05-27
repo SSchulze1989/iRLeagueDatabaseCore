@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,5 +20,18 @@ namespace iRLeagueDatabaseCore.Models
         }
 
         public virtual ICollection<SeasonEntity> Seasons { get; set; }
+    }
+
+    public class LeagueEntityConfiguration : IEntityTypeConfiguration<LeagueEntity>
+    {
+        public void Configure(EntityTypeBuilder<LeagueEntity> entity)
+        {
+            entity.HasKey(e => e.Id);
+
+            entity.HasAlternateKey(e => e.Name);
+
+            entity.Property(e => e.Name)
+                .HasMaxLength(85);
+        }
     }
 }

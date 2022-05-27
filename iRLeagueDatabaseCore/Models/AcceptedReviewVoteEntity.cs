@@ -1,4 +1,6 @@
 ﻿using iRLeagueApiCore.Communication.Enums;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
 
@@ -25,4 +27,32 @@ namespace iRLeagueDatabaseCore.Models
         public virtual IncidentReviewEntity Review { get; set; }
         public virtual ICollection<ReviewPenaltyEntity> ReviewPenaltys { get; set; }
     }
+
+    public class AcceptedReviewVoteEntityConfiguration : IEntityTypeConfiguration<AcceptedReviewVoteEntity>
+    {
+        public void Configure(EntityTypeBuilder<AcceptedReviewVoteEntity> entity)
+        {
+            entity.HasKey(e => e.ReviewVoteId);
+
+            entity.HasIndex(e => e.VoteCategoryId);
+
+            entity.HasIndex(e => e.MemberAtFaultId);
+
+            entity.HasIndex(e => e.ReviewId);
+
+            entity.HasOne(d => d.VoteCategory)
+                .WithMany(p => p.AcceptedReviewVotes)
+                .HasForeignKey(d => d.VoteCategoryId);
+
+            entity.HasOne(d => d.MemberAtFault)
+                .WithMany(p => p.AcceptedReviewVotes)
+                .HasForeignKey(d => d.MemberAtFaultId);
+
+            entity.HasOne(d => d.Review)
+                .WithMany(p => p.AcceptedReviewVotes)
+                .HasForeignKey(d => d.ReviewId);
+        }
+    }
+
+
 }
