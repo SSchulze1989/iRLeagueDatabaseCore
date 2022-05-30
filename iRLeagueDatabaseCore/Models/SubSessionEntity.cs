@@ -16,7 +16,7 @@ namespace iRLeagueDatabaseCore.Models
         /// </summary>
         public int SubSessionNr { get; set; }
         public string Name { get; set; }
-        public SessionType SessionType { get; set; }
+        public SimSessionType SessionType { get; set; }
         public TimeSpan StartOffset { get; set; }
         public TimeSpan Duration { get; set; }
         public int Laps { get; set; }
