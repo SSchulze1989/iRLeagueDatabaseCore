@@ -1,6 +1,6 @@
 ﻿using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
-using iRLeagueApiCore.Communication.Models;
+using iRLeagueApiCore.Common.Models;
 using iRLeagueDatabaseCore.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -88,13 +88,13 @@ namespace DatabaseBenchmarks
             {
                 var seasonResults = await dbContext.ScoredResults
                     .Include(x => x.Result)
-                        .ThenInclude(x => x.Session)
+                        .ThenInclude(x => x.Event)
                             .ThenInclude(x => x.Schedule)
                     .Include(x => x.ScoredResultRows)
                             .ThenInclude(x => x.Member)
                     .Include(x => x.ScoredResultRows)
                         .ThenInclude(x => x.Team)
-                    .Where(x => x.Result.Session.Schedule.SeasonId == seasonId)
+                    .Where(x => x.Result.Event.Schedule.SeasonId == seasonId)
                     .ToListAsync();
             }
         }
@@ -106,9 +106,9 @@ namespace DatabaseBenchmarks
             {
                 var seasonResults = await dbContext.ScoredResults
                     .Include(x => x.Result)
-                        .ThenInclude(x => x.Session)
+                        .ThenInclude(x => x.Event)
                             .ThenInclude(x => x.Schedule)
-                    .Where(x => x.Result.Session.Schedule.SeasonId == seasonId)
+                    .Where(x => x.Result.Event.Schedule.SeasonId == seasonId)
                     .ToListAsync();
 
                 var seasonResultsIds = seasonResults.Select(x => x.ResultId).Distinct();
@@ -132,8 +132,8 @@ namespace DatabaseBenchmarks
                     .Select(result => new GetResultModel
                     {
                         LeagueId = result.LeagueId,
-                        SeasonId = result.Result.Session.Schedule.SeasonId,
-                        SessionId = result.ResultId,
+                        SeasonId = result.Result.Event.Schedule.SeasonId,
+                        SessionId = result.EventId,
                         ResultRows = result.ScoredResultRows
                             .Select(row => new GetResultRowModel
                             {

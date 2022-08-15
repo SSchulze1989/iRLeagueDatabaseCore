@@ -155,12 +155,12 @@ namespace DatabaseBenchmarks
                 Console.Write("Finished!\n");
 
                 Console.Write("- Creating Results ... ");
-                List<ResultEntity> results;
+                List<EventResultEntity> results;
                 // create raw results for each session
                 foreach (var session in sessions)
                 {
                     var result = CreateRandomResult(random);
-                    session.Result = result;
+                    session.SessionResult = result;
                 }
                 await context.SaveChangesAsync();
                 results = context.Results.Where(x => x.LeagueId == leagueId).ToList();
@@ -168,11 +168,11 @@ namespace DatabaseBenchmarks
                 foreach (var result in results)
                 {
                     var details = CreateRandomSessionDetails(random);
-                    details.Session = result.Session;
-                    foreach (var subSession in result.Session.SubSessions)
+                    details.Session = result.Event;
+                    foreach (var subSession in result.Event.SubSessions)
                     {
                         var subResult = CreateRandomSubResult(random, members, details);
-                        result.SubResults.Add(subResult);
+                        result.SessionResults.Add(subResult);
                         subSession.SubResult = subResult;
                     }
                 }
@@ -180,7 +180,7 @@ namespace DatabaseBenchmarks
                 Console.Write("Finished!\n");
 
                 Console.Write("- Creating ScoredResults ... ");
-                List<ScoredResultEntity> scoredResults;
+                List<ScoredSessionResultEntity> scoredResults;
                 // create scored result for each scoring + attached schedule session
                 foreach (var scoring in scorings.Where(x => x.ConnectedSchedule != null))
                 {
@@ -263,7 +263,7 @@ namespace DatabaseBenchmarks
 
         private static SessionEntity CreateRandomSession(Random random, IEnumerable<TrackConfigEntity> tracks)
         {
-            var subSession = new SubSessionEntity()
+            var subSession = new SessionEntity()
             {
                 Name = "Race",
             };
@@ -312,15 +312,15 @@ namespace DatabaseBenchmarks
             };
         }
 
-        private static ResultEntity CreateRandomResult(Random random)
+        private static EventResultEntity CreateRandomResult(Random random)
         {
-            var result = new ResultEntity();
+            var result = new EventResultEntity();
             return result;
         }
 
-        private static SubResultEntity CreateRandomSubResult(Random random, IEnumerable<MemberEntity> members, IRSimSessionDetailsEntity details)
+        private static SessionResultEntity CreateRandomSubResult(Random random, IEnumerable<MemberEntity> members, IRSimSessionDetailsEntity details)
         {
-            var subResult = new SubResultEntity();
+            var subResult = new SessionResultEntity();
             var rowsCount = random.Next(40) + 10;
             var membersArray = members.ToArray();
             random.Shuffle(membersArray);
@@ -343,10 +343,10 @@ namespace DatabaseBenchmarks
             };
         }
 
-        private static ScoredResultEntity CreateRandomScoredResult(Random random, ResultEntity result, ScoringEntity scoring)
+        private static ScoredSessionResultEntity CreateRandomScoredResult(Random random, EventResultEntity result, ScoringEntity scoring)
         {
-            var scoredResult = new ScoredResultEntity();
-            var subResult = result.SubResults.FirstOrDefault();
+            var scoredResult = new ScoredSessionResultEntity();
+            var subResult = result.SessionResults.FirstOrDefault();
             if (subResult == null)
             {
                 return scoredResult;

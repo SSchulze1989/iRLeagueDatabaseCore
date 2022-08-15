@@ -31,7 +31,7 @@ namespace iRLeagueDatabaseCore.Models
         public long AvgLapTime { get; set; }
         public long FastestLapTime { get; set; }
 
-        public virtual ScoredResultEntity ScoredResult { get; set; }
+        public virtual ScoredSessionResultEntity ScoredResult { get; set; }
         public virtual TeamEntity Team { get; set; }
         public virtual ICollection<ScoredResultRowEntity> ScoredResultRows { get; set; }
     }

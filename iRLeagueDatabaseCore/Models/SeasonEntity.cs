@@ -13,7 +13,7 @@ namespace iRLeagueDatabaseCore.Models
     {
         public SeasonEntity()
         {
-            Results = new HashSet<ResultEntity>();
+            Results = new HashSet<EventResultEntity>();
             Schedules = new HashSet<ScheduleEntity>();
             Scorings = new HashSet<ScoringEntity>();
             Standings = new HashSet<StandingEntity>();
@@ -31,7 +31,7 @@ namespace iRLeagueDatabaseCore.Models
 
         public virtual LeagueEntity League { get; set; }
         public virtual ScoringEntity MainScoring { get; set; }
-        public virtual ICollection<ResultEntity> Results { get; set; }
+        public virtual ICollection<EventResultEntity> Results { get; set; }
         public virtual ICollection<ScheduleEntity> Schedules { get; set; }
         public virtual ICollection<ScoringEntity> Scorings { get; set; }
         public virtual ICollection<StandingEntity> Standings { get; set; }
@@ -62,10 +62,6 @@ namespace iRLeagueDatabaseCore.Models
             entity.HasOne(e => e.League)
                 .WithMany(p => p.Seasons)
                 .HasForeignKey(e => e.LeagueId);
-
-            entity.HasOne(d => d.MainScoring)
-                .WithMany(p => p.Seasons)
-                .HasForeignKey(d => new { d.LeagueId, d.MainScoringScoringId });
         }
     }
 }

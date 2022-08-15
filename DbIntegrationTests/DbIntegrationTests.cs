@@ -78,13 +78,13 @@ namespace DbIntegrationTests
                 var scoredResultRow = await dbContext.ScoredResultRows
                     .Include(x => x.Member)
                     .Include(x => x.ScoredResult)
-                        .ThenInclude(x => x.Result.Session)
+                        .ThenInclude(x => x.Result.Event)
                     .FirstOrDefaultAsync();
 
                 Assert.NotNull(scoredResultRow);
                 Assert.NotNull(scoredResultRow);
                 Assert.NotNull(scoredResultRow.Member);
-                Assert.NotNull(scoredResultRow.ScoredResult.Result.Session);
+                Assert.NotNull(scoredResultRow.ScoredResult.Result.Event);
 
                 // check for scoring sessions
                 var scoring = await dbContext.Scorings
@@ -214,20 +214,20 @@ namespace DbIntegrationTests
                 const int testSessionId = 2;
 
                 var testSession = await context.Sessions
-                    .Include(x => x.Result)
+                    .Include(x => x.SessionResult)
                     .SingleAsync(x => x.SessionId == testSessionId);
 
-                var result = new ResultEntity();
-                testSession.Result = result;
+                var result = new EventResultEntity();
+                testSession.SessionResult = result;
 
                 await context.SaveChangesAsync();
 
                 var dbResult = await context.Results
-                    .Include(x => x.Session)
-                    .SingleOrDefaultAsync(x => x.SessionId == testSessionId);
+                    .Include(x => x.Event)
+                    .SingleOrDefaultAsync(x => x.EventId == testSessionId);
 
                 Assert.NotNull(dbResult);
-                Assert.Equal(testSession, dbResult.Session);
+                Assert.Equal(testSession, dbResult.Event);
             }
         }
 
@@ -274,10 +274,10 @@ namespace DbIntegrationTests
             using var context = GetTestDatabaseContext();
 
             var session = await context.Sessions.FirstAsync();
-            var subSession = new SubSessionEntity()
+            var subSession = new SessionEntity()
             {
                 Name = "TestSubSession",
-                SubSessionNr = 2,
+                SessionNr = 2,
             };
             session.SubSessions.Add(subSession);
 
@@ -291,10 +291,10 @@ namespace DbIntegrationTests
             using var context = GetTestDatabaseContext();
 
             var result = await context.Results.FirstAsync();
-            var subResult = new SubResultEntity()
+            var subResult = new SessionResultEntity()
             {
             };
-            result.SubResults.Add(subResult);
+            result.SessionResults.Add(subResult);
 
             await Assert.ThrowsAnyAsync<InvalidOperationException>(async () => await context.SaveChangesAsync());
         }
@@ -309,7 +309,7 @@ namespace DbIntegrationTests
                 {
                     Name = "Test",
                 };
-                var subSession = new SubSessionEntity()
+                var subSession = new SessionEntity()
                 {
                     Name = "Race",
                 };
@@ -320,12 +320,12 @@ namespace DbIntegrationTests
 
             using (var context = GetTestDatabaseContext())
             {
-                var result = new ResultEntity()
+                var result = new EventResultEntity()
                 {
                 };
-                var subResult = new SubResultEntity();
+                var subResult = new SessionResultEntity();
                 var session = await context.Sessions.OrderBy(x => x.SessionId).LastAsync();
-                session.Result = result;
+                session.SessionResult = result;
                 //session.SubSessions.First().SubResult = subResult;
                 await context.SaveChangesAsync();
             }
@@ -333,7 +333,7 @@ namespace DbIntegrationTests
             using (var context = GetTestDatabaseContext())
             {
                 var session = await context.Sessions.OrderBy(x => x.SessionId).LastAsync();
-                var result = session.Result;
+                var result = session.SessionResult;
                 var subResult = session.SubSessions.First().SubResult;
                 Assert.NotNull(result);
                 //Assert.NotNull(subResult);

@@ -14,14 +14,13 @@ namespace iRLeagueDatabaseCore.Models
         {
             DependendScorings = new HashSet<ScoringEntity>();
             ResultsFilterOptions = new HashSet<ResultsFilterOptionEntity>();
-            ScoredResults = new HashSet<ScoredResultEntity>();
-            Sessions = new HashSet<SessionEntity>();
             Standings = new HashSet<StandingEntity>();
-            Seasons = new HashSet<SeasonEntity>();
         }
 
-        public long ScoringId { get; set; }
         public long LeagueId { get; set; }
+        public long ScoringId { get; set; }
+        public long ResultConfigId { get; set; }
+
         public int ScoringKind { get; set; }
         public string Name { get; set; }
         public int DropWeeks { get; set; }
@@ -40,12 +39,9 @@ namespace iRLeagueDatabaseCore.Models
         public string CreatedByUserName { get; set; }
         public string LastModifiedByUserId { get; set; }
         public string LastModifiedByUserName { get; set; }
-        public long? ConnectedScheduleId { get; set; }
-        public long SeasonId { get; set; }
         public bool UseResultSetTeam { get; set; }
         public bool UpdateTeamOnRecalculation { get; set; }
         public long? ParentScoringId { get; set; }
-        public SessionType ScoringSessionType { get; set; }
         public ScoringSessionSelectionType SessionSelectType { get; set; }
         public string ScoringWeightValues { get; set; }
         public AccumulateByOption AccumulateBy { get; set; }
@@ -53,18 +49,12 @@ namespace iRLeagueDatabaseCore.Models
         public string PointsSortOptions { get; set; }
         public string FinalSortOptions { get; set; }
         public bool ShowResults { get; set; }
-        public string Description { get; set; }
 
-        public virtual ScheduleEntity ConnectedSchedule { get; set; }
         public virtual ScoringEntity ExtScoringSource { get; set; }
-        public virtual ScoringEntity ParentScoring { get; set; }
-        public virtual SeasonEntity Season { get; set; }
+        public virtual ResultConfigurationEntity ResultConfiguration { get; set; }
         public virtual ICollection<ScoringEntity> DependendScorings { get; set; }
         public virtual ICollection<ResultsFilterOptionEntity> ResultsFilterOptions { get; set; }
-        public virtual ICollection<ScoredResultEntity> ScoredResults { get; set; }
-        public virtual ICollection<SessionEntity> Sessions { get; set; }
         public virtual ICollection<StandingEntity> Standings { get; set; }
-        public virtual ICollection<SeasonEntity> Seasons { get; set; }
     }
 
     public class ScoringEntityConfiguration : IEntityTypeConfiguration<ScoringEntity>
@@ -93,29 +83,13 @@ namespace iRLeagueDatabaseCore.Models
             entity.Property(e => e.ShowResults)
                 .HasDefaultValueSql("((1))");
 
-            entity.HasOne(d => d.ConnectedSchedule)
-                .WithMany(p => p.Scorings)
-                .HasForeignKey(d => new { d.LeagueId, d.ConnectedScheduleId });
-
             entity.HasOne(d => d.ExtScoringSource)
-                .WithMany()
+                .WithMany(p => p.DependendScorings)
                 .HasForeignKey(d => new { d.LeagueId, d.ExtScoringSourceId });
 
-            entity.HasOne(d => d.ParentScoring)
-                .WithMany(p => p.DependendScorings)
-                .HasForeignKey(d => new { d.LeagueId, d.ParentScoringId });
-
-            entity.HasOne(d => d.Season)
+            entity.HasOne(d => d.ResultConfiguration)
                 .WithMany(p => p.Scorings)
-                .HasForeignKey(d => new { d.LeagueId, d.SeasonId });
-
-            entity.HasMany(d => d.Sessions)
-                .WithMany(p => p.Scorings)
-                .UsingEntity<ScoringsSessions>(
-                    left => left.HasOne(e => e.SessionRef)
-                        .WithMany().HasForeignKey(e => new { e.LeagueId, e.SessionRefId }),
-                    right => right.HasOne(e => e.ScoringRef)
-                        .WithMany().HasForeignKey(e => new { e.LeagueId, e.ScoringRefId }));
+                .HasForeignKey(d => new { d.LeagueId, d.ResultConfigId });
         }
     }
 }

@@ -78,7 +78,7 @@ namespace iRLeagueDatabaseCore.Models
 
         public virtual MemberEntity Member { get; set; }
         public virtual TeamEntity Team { get; set; }
-        public virtual ScoredResultEntity ScoredResult { get; set; }
+        public virtual ScoredSessionResultEntity ScoredResult { get; set; }
         public virtual AddPenaltyEntity AddPenalty { get; set; }
         public virtual ICollection<ReviewPenaltyEntity> ReviewPenalties { get; set; }
         public virtual ICollection<ScoredTeamResultRowEntity> ScoredTeamResultRows { get; set; }
