@@ -117,6 +117,7 @@ namespace DbIntegrationTests
                 var subSession = new SubSessionEntity()
                 {
                     Name = "Race",
+                    SessionType = SimSessionType.Race,
                 };
                 session.SubSessions.Add(subSession);
                 schedule1.Sessions.Add(session);
@@ -141,6 +142,7 @@ namespace DbIntegrationTests
                 var subSession = new SubSessionEntity()
                 {
                     Name = "Race",
+                    SessionType = SimSessionType.Race,
                 };
                 session.SubSessions.Add(subSession);
                 schedule2.Sessions.Add(session);
