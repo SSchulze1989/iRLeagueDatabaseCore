@@ -1,4 +1,4 @@
-﻿using iRLeagueApiCore.Communication.Enums;
+﻿using iRLeagueApiCore.Common.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;

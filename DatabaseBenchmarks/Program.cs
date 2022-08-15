@@ -1,6 +1,6 @@
 ﻿using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
-using iRLeagueApiCore.Communication.Models;
+using iRLeagueApiCore.Common.Models;
 using iRLeagueDatabaseCore.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -129,13 +129,13 @@ namespace DatabaseBenchmarks
             using (var dbContext = BenchmarkDatabaseCreator.CreateStaticDbContext())
             {
                 var seasonResults = await dbContext.ScoredResults
-                    .Select(result => new GetResultModel
+                    .Select(result => new ResultModel
                     {
                         LeagueId = result.LeagueId,
                         SeasonId = result.Result.Session.Schedule.SeasonId,
                         SessionId = result.ResultId,
                         ResultRows = result.ScoredResultRows
-                            .Select(row => new GetResultRowModel
+                            .Select(row => new ResultRowModel
                             {
                                 MemberId = row.MemberId,
                                 Interval = new TimeSpan(row.Interval),
