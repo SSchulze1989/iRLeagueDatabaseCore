@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using iRLeagueApiCore.Communication.Enums;
+using iRLeagueApiCore.Common.Enums;
 using iRLeagueDatabaseCore.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -117,6 +117,7 @@ namespace DbIntegrationTests
                 var subSession = new SessionEntity()
                 {
                     Name = "Race",
+                    SessionType = SimSessionType.Race,
                 };
                 @event.Sessions.Add(subSession);
                 schedule1.Events.Add(@event);
@@ -141,6 +142,7 @@ namespace DbIntegrationTests
                 var subSession = new SessionEntity()
                 {
                     Name = "Race",
+                    SessionType = SimSessionType.Race,
                 };
                 @event.Sessions.Add(subSession);
                 schedule2.Events.Add(@event);

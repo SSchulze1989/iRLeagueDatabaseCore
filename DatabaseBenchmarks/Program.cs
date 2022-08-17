@@ -129,13 +129,13 @@ namespace DatabaseBenchmarks
             using (var dbContext = BenchmarkDatabaseCreator.CreateStaticDbContext())
             {
                 var seasonResults = await dbContext.ScoredResults
-                    .Select(result => new GetResultModel
+                    .Select(result => new ResultModel
                     {
                         LeagueId = result.LeagueId,
                         SeasonId = result.Result.Event.Schedule.SeasonId,
                         SessionId = result.EventId,
                         ResultRows = result.ScoredResultRows
-                            .Select(row => new GetResultRowModel
+                            .Select(row => new ResultRowModel
                             {
                                 MemberId = row.MemberId,
                                 Interval = new TimeSpan(row.Interval),
