@@ -2,10 +2,13 @@ name: .NET
 
 on:
   push:
-    branches: [ main ]
+    tags: 
+      - "*"
+    branches: 
+      - main
 
 jobs:
-  build:
+  publish:
 
     runs-on: ubuntu-latest
 
@@ -38,3 +41,5 @@ jobs:
       run: dotnet build -c $BUILD_CONFIG --no-restore
     - name: Test
       run: dotnet test -c $BUILD_CONFIG --no-build --verbosity normal
+    - name: Publish
+      run: dotnet nuget push **\*.nupkg -s github --skip-duplicate
