@@ -251,7 +251,7 @@ namespace UnitTests.EntityFramework
             // Create sessions on schedule1
             for (int i = 0; i<5; i++)
             {
-                var session = new EventEntity()
+                var session = new SessionEntity()
                 {
                     Name = $"S1 Session {i}",
                     CreatedOn = DateTime.Now,
@@ -265,7 +265,7 @@ namespace UnitTests.EntityFramework
                         .Skip(i)
                         .FirstOrDefault(),
                 };
-                schedule1.Events.Add(session);
+                schedule1.Sessions.Add(session);
             }
             league.Seasons.Add(season1);
             league.Seasons.Add(season2);

@@ -7,9 +7,9 @@ using System.Collections.Generic;
 
 namespace iRLeagueDatabaseCore.Models
 {
-    public partial class ScoredSessionResultEntity : IVersionEntity
+    public partial class ScoredResultEntity : IVersionEntity
     {
-        public ScoredSessionResultEntity()
+        public ScoredResultEntity()
         {
             CleanestDrivers = new HashSet<MemberEntity>();
             HardChargers = new HashSet<MemberEntity>();
@@ -17,13 +17,9 @@ namespace iRLeagueDatabaseCore.Models
             ScoredTeamResultRows = new HashSet<ScoredTeamResultRowEntity>();
         }
 
+        public long ResultId { get; set; }
         public long LeagueId { get; set; }
-        public long ScoredSessionResultId { get; set; }
-        public long EventId { get; set; }
-        public long ResultTabId { get; set; }
-        public long? ScoringId { get; set; }
-
-        public string Name { get; set; }
+        public long ScoringId { get; set; }
         public long FastestLap { get; set; }
         public long FastestQualyLap { get; set; }
         public long FastestAvgLap { get; set; }
@@ -42,31 +38,29 @@ namespace iRLeagueDatabaseCore.Models
         public virtual MemberEntity FastestAvgLapDriver { get; set; }
         public virtual MemberEntity FastestLapDriver { get; set; }
         public virtual MemberEntity FastestQualyLapDriver { get; set; }
-        public virtual ScoredEventResultEntity ScoredEventResult { get; set; }
+        public virtual ResultEntity Result { get; set; }
         public virtual ScoringEntity Scoring { get; set; }
-        public virtual EventEntity Event { get; set; }
         public virtual ICollection<MemberEntity> CleanestDrivers { get; set; }
         public virtual ICollection<MemberEntity> HardChargers { get; set; }
         public virtual ICollection<ScoredResultRowEntity> ScoredResultRows { get; set; }
         public virtual ICollection<ScoredTeamResultRowEntity> ScoredTeamResultRows { get; set; }
     }
 
-    public class ScoredSessionResultEntityConfiguration : IEntityTypeConfiguration<ScoredSessionResultEntity>
+    public class ScoredResultEntityConfiguration : IEntityTypeConfiguration<ScoredResultEntity>
     {
-        public void Configure(EntityTypeBuilder<ScoredSessionResultEntity> entity)
+        public void Configure(EntityTypeBuilder<ScoredResultEntity> entity)
         {
-            entity.HasKey(e => new { e.LeagueId, e.ScoredSessionResultId });
-
-            entity.HasAlternateKey(e => e.ScoredSessionResultId);
-
-            entity.Property(e => e.ScoredSessionResultId)
-                .ValueGeneratedOnAdd();
+            entity.HasKey(e => new { e.LeagueId, e.ResultId, e.ScoringId });
 
             entity.HasIndex(e => e.FastestAvgLapDriverMemberId);
 
             entity.HasIndex(e => e.FastestLapDriverMemberId);
 
             entity.HasIndex(e => e.FastestQualyLapDriverMemberId);
+
+            entity.HasIndex(e => new { e.LeagueId, e.ResultId });
+
+            entity.HasIndex(e => new { e.LeagueId, e.ScoringId });
 
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
 
@@ -84,9 +78,13 @@ namespace iRLeagueDatabaseCore.Models
                 .WithMany(p => p.FastestQualyLapResults)
                 .HasForeignKey(d => d.FastestQualyLapDriverMemberId);
 
-            entity.HasOne(d => d.ScoredEventResult)
-                .WithMany(p => p.ScoredSessionResults)
-                .HasForeignKey(d => new { d.LeagueId, d.EventId, d.ResultTabId });
+            entity.HasOne(d => d.Result)
+                .WithMany(p => p.ScoredResults)
+                .HasForeignKey(d => new { d.LeagueId, d.ResultId });
+
+            entity.HasOne(d => d.Scoring)
+                .WithMany(p => p.ScoredResults)
+                .HasForeignKey(d => new { d.LeagueId, d.ScoringId });
 
             entity.HasMany(d => d.CleanestDrivers)
                 .WithMany(p => p.CleanestDriverResults)
@@ -95,16 +93,6 @@ namespace iRLeagueDatabaseCore.Models
             entity.HasMany(d => d.HardChargers)
                 .WithMany(p => p.HardChargerResults)
                 .UsingEntity(e => e.ToTable("ScoredResultsHardChargers"));
-
-            entity.HasOne(d => d.Scoring)
-                .WithMany()
-                .HasForeignKey(d => new { d.LeagueId, d.ScoringId })
-                .IsRequired(false);
-
-            entity.HasOne(d => d.Event)
-                .WithMany()
-                .HasForeignKey(d => new { d.LeagueId, d.EventId })
-                .IsRequired(true);
         }
     }
 }

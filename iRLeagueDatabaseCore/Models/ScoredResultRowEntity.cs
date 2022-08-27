@@ -63,11 +63,11 @@ namespace iRLeagueDatabaseCore.Models
     }
 
         public long LeagueId { get; set; }
+        public long ResultId { get; set; }
         public long ScoredResultRowId { get; set; }
-        public long ScoredSessionResultId { get; set; }
+        public long ScoringId { get; set; }
         public long MemberId { get; set; }
         public long? TeamId { get; set; }
-
         public double RacePoints { get; set; }
         public double BonusPoints { get; set; }
         public double PenaltyPoints { get; set; }
@@ -78,7 +78,7 @@ namespace iRLeagueDatabaseCore.Models
 
         public virtual MemberEntity Member { get; set; }
         public virtual TeamEntity Team { get; set; }
-        public virtual ScoredSessionResultEntity ScoredSessionResult { get; set; }
+        public virtual ScoredResultEntity ScoredResult { get; set; }
         public virtual AddPenaltyEntity AddPenalty { get; set; }
         public virtual ICollection<ReviewPenaltyEntity> ReviewPenalties { get; set; }
         public virtual ICollection<ScoredTeamResultRowEntity> ScoredTeamResultRows { get; set; }
@@ -95,6 +95,8 @@ namespace iRLeagueDatabaseCore.Models
             entity.Property(e => e.ScoredResultRowId)
                 .ValueGeneratedOnAdd();
 
+            entity.HasIndex(e => new { e.LeagueId, e.ResultId, e.ScoringId });
+
             entity.HasIndex(e => e.MemberId);
 
             entity.HasIndex(e => e.TeamId);
@@ -105,9 +107,9 @@ namespace iRLeagueDatabaseCore.Models
                 .WithMany(p => p.ScoredResultRows)
                 .HasForeignKey(d => d.TeamId);
 
-            entity.HasOne(d => d.ScoredSessionResult)
+            entity.HasOne(d => d.ScoredResult)
                 .WithMany(p => p.ScoredResultRows)
-                .HasForeignKey(d => new { d.LeagueId, d.ScoredSessionResultId });
+                .HasForeignKey(d => new { d.LeagueId, d.ResultId, d.ScoringId });
 
             entity.HasOne(d => d.Member)
                 .WithMany()

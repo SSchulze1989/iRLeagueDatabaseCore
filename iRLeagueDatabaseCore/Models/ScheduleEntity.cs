@@ -12,7 +12,7 @@ namespace iRLeagueDatabaseCore.Models
         public ScheduleEntity()
         {
             Scorings = new HashSet<ScoringEntity>();
-            Events = new HashSet<EventEntity>();
+            Sessions = new HashSet<SessionEntity>();
         }
 
         public long ScheduleId { get; set; }
@@ -28,7 +28,7 @@ namespace iRLeagueDatabaseCore.Models
         public long SeasonId { get; set; }
         public virtual SeasonEntity Season { get; set; }
         public virtual ICollection<ScoringEntity> Scorings { get; set; }
-        public virtual ICollection<EventEntity> Events { get; set; }
+        public virtual ICollection<SessionEntity> Sessions { get; set; }
     }
 
     public class ScheduleEntityConfiguration : IEntityTypeConfiguration<ScheduleEntity>
