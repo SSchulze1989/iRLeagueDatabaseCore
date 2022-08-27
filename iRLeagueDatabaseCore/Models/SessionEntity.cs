@@ -68,7 +68,7 @@ namespace iRLeagueDatabaseCore.Models
 
             entity.HasOne(d => d.Event)
                 .WithMany(p => p.Sessions)
-                .HasForeignKey(d => new { d.LeagueId, d.SessionId })
+                .HasForeignKey(d => new { d.LeagueId, d.EventId })
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }

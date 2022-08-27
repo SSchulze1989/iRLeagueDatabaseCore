@@ -52,6 +52,10 @@ namespace iRLeagueDatabaseCore.Models
 
             entity.Property(e => e.ResultTabId)
                 .ValueGeneratedOnAdd();
+
+            entity.HasOne(d => d.Season)
+                .WithMany(p => p.ResultTabs)
+                .HasForeignKey(d => new { d.LeagueId, d.SeasonId });
         }
     }
 }

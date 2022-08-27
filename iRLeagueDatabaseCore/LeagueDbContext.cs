@@ -17,7 +17,7 @@ namespace iRLeagueDatabaseCore.Models
 
         public LeagueDbContext(DbContextOptions<LeagueDbContext> options)
             : base(options)
-        {
+        {   
         }
 
         public virtual DbSet<AcceptedReviewVoteEntity> AcceptedReviewVotes { get; set; }
@@ -30,14 +30,18 @@ namespace iRLeagueDatabaseCore.Models
         public virtual DbSet<IncidentReviewEntity> IncidentReviews { get; set; }
         public virtual DbSet<LeagueEntity> Leagues { get; set; }
         public virtual DbSet<MemberEntity> Members { get; set; }
-        public virtual DbSet<EventResultEntity> Results { get; set; }
+        public virtual DbSet<PointRuleEntity> PointRules { get; set; }
+        public virtual DbSet<EventResultEntity> EventResults { get; set; }
         public virtual DbSet<ResultConfigurationEntity> ResultConfigurations { get; set; }
         public virtual DbSet<ResultTabEntity> ResultTabs { get; set; }
         public virtual DbSet<ResultRowEntity> ResultRows { get; set; }
         public virtual DbSet<ResultsFilterOptionEntity> ResultsFilterOptions { get; set; }
         public virtual DbSet<ReviewPenaltyEntity> ReviewPenaltys { get; set; }
         public virtual DbSet<ScheduleEntity> Schedules { get; set; }
-        public virtual DbSet<ScoredEventResultEntity> ScoredResults { get; set; }
+        public virtual DbSet<ScoredEventResultEntity> ScoredEventResults { get; set; }
+        public virtual DbSet<ScoredResultRowEntity> ScoredResultRows { get; set; }
+        public virtual DbSet<ScoredSessionResultEntity> ScoredSessionResults { get; set; }
+        public virtual DbSet<ScoredTeamResultRowEntity> ScoredTeamResultRows { get; set;}
         public virtual DbSet<ScoringEntity> Scorings { get; set; }
         public virtual DbSet<StandingEntity> Standings { get; set; }
         public virtual DbSet<SeasonEntity> Seasons { get; set; }

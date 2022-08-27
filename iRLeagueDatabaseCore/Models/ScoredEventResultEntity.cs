@@ -12,17 +12,21 @@ namespace iRLeagueDatabaseCore.Models
     {
         public ScoredEventResultEntity()
         {
-
+            ScoredSessionResults = new HashSet<ScoredSessionResultEntity>();
         }
 
         public long LeagueId { get; set; }
         public long EventId { get; set; }
         public long ResultTabId { get; set; }
+        public long? ResultConfigId { get; set; }
+        public long? ScoringId { get; set; }
 
         public virtual EventEntity Event { get; set; }
-        public virtual EventResultEntity EventResult { get; set; }
         public virtual ResultTabEntity ResultTab { get; set; }
         public virtual ICollection<ScoredSessionResultEntity> ScoredSessionResults { get; set; }
+        public virtual ResultConfigurationEntity ResultConfig { get; set; }
+        public virtual EventResultEntity RawResult { get; set; }
+        public virtual ScoringEntity Scoring { get; set; }
 
         #region version
         public DateTime? CreatedOn { get; set; }
@@ -50,15 +54,31 @@ namespace iRLeagueDatabaseCore.Models
 
             entity.HasOne(d => d.Event)
                 .WithMany()
-                .HasForeignKey(d => new { d.LeagueId, d.EventId });
-
-            entity.HasOne(d => d.EventResult)
-                .WithMany(p => p.ScoredResults)
-                .HasForeignKey(d => new { d.LeagueId, d.EventId });
+                .HasForeignKey(d => new { d.LeagueId, d.EventId })
+                .OnDelete(DeleteBehavior.Cascade);
 
             entity.HasOne(d => d.ResultTab)
                 .WithMany(p => p.ScoredEventResults)
-                .HasForeignKey(d => new { d.LeagueId, d.ResultTabId });
+                .HasForeignKey(d => new { d.LeagueId, d.ResultTabId })
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(d => d.RawResult)
+                .WithMany()
+                .HasForeignKey(d => new { d.LeagueId, d.EventId })
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(d => d.ResultConfig)
+                .WithMany()
+                .HasForeignKey(d => new { d.LeagueId, d.ResultConfigId })
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+            entity.HasOne(d => d.Scoring)
+                .WithMany()
+                .HasForeignKey(d => new { d.LeagueId, d.ScoringId })
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.ClientSetNull);
         }
     }
 }

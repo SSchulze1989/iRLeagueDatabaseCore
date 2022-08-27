@@ -1,4 +1,4 @@
-﻿using iRLeagueApiCore.Communication.Enums;
+﻿using iRLeagueApiCore.Common.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
@@ -15,6 +15,7 @@ namespace iRLeagueDatabaseCore.Models
         public EventEntity()
         {
             Sessions = new HashSet<SessionEntity>();
+            //ScoredEventResults = new HashSet<ScoredEventResultEntity>();
         }
 
         public long EventId { get; set; }
@@ -29,10 +30,11 @@ namespace iRLeagueDatabaseCore.Models
         public string IrSessionId { get; set; }
         public string IrResultLink { get; set; }
 
-        public ScheduleEntity Schedule { get; set; }
+        public virtual ScheduleEntity Schedule { get; set; }
         public virtual TrackConfigEntity Track { get; set; }
         public virtual EventResultEntity EventResult { get; set; }
         public virtual ICollection<SessionEntity> Sessions { get; set; }
+        //public virtual ICollection<ScoredEventResultEntity> ScoredEventResults { get; set; }
 
         #region Version
         public DateTime? CreatedOn { get; set; }

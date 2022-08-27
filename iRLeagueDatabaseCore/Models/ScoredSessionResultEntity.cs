@@ -18,10 +18,12 @@ namespace iRLeagueDatabaseCore.Models
         }
 
         public long LeagueId { get; set; }
+        public long ScoredSessionResultId { get; set; }
         public long EventId { get; set; }
         public long ResultTabId { get; set; }
         public long? ScoringId { get; set; }
 
+        public string Name { get; set; }
         public long FastestLap { get; set; }
         public long FastestQualyLap { get; set; }
         public long FastestAvgLap { get; set; }
@@ -42,6 +44,7 @@ namespace iRLeagueDatabaseCore.Models
         public virtual MemberEntity FastestQualyLapDriver { get; set; }
         public virtual ScoredEventResultEntity ScoredEventResult { get; set; }
         public virtual ScoringEntity Scoring { get; set; }
+        public virtual EventEntity Event { get; set; }
         public virtual ICollection<MemberEntity> CleanestDrivers { get; set; }
         public virtual ICollection<MemberEntity> HardChargers { get; set; }
         public virtual ICollection<ScoredResultRowEntity> ScoredResultRows { get; set; }
@@ -52,7 +55,12 @@ namespace iRLeagueDatabaseCore.Models
     {
         public void Configure(EntityTypeBuilder<ScoredSessionResultEntity> entity)
         {
-            entity.HasKey(e => new { e.LeagueId, e.EventId, e.ResultTabId });
+            entity.HasKey(e => new { e.LeagueId, e.ScoredSessionResultId });
+
+            entity.HasAlternateKey(e => e.ScoredSessionResultId);
+
+            entity.Property(e => e.ScoredSessionResultId)
+                .ValueGeneratedOnAdd();
 
             entity.HasIndex(e => e.FastestAvgLapDriverMemberId);
 
@@ -92,6 +100,11 @@ namespace iRLeagueDatabaseCore.Models
                 .WithMany()
                 .HasForeignKey(d => new { d.LeagueId, d.ScoringId })
                 .IsRequired(false);
+
+            entity.HasOne(d => d.Event)
+                .WithMany()
+                .HasForeignKey(d => new { d.LeagueId, d.EventId })
+                .IsRequired(true);
         }
     }
 }

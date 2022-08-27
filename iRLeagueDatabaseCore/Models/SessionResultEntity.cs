@@ -17,6 +17,7 @@ namespace iRLeagueDatabaseCore.Models
         public long EventId { get; set; }
         public long SessionId { get; set; }
         public long? IRSimSessionDetailsId { get; set; }
+        
         public SimSessionType SimSessionType { get; set; }
 
         #region version
@@ -41,7 +42,7 @@ namespace iRLeagueDatabaseCore.Models
         {
             entity.HasKey(e => new { e.LeagueId, e.SessionId });
 
-            entity.HasIndex(e => new { e.SessionId });
+            entity.HasIndex(e => e.SessionId);
 
             entity.HasOne(d => d.Result)
                 .WithMany(p => p.SessionResults)

@@ -86,15 +86,17 @@ namespace DatabaseBenchmarks
         {
             using (var dbContext = BenchmarkDatabaseCreator.CreateStaticDbContext())
             {
-                var seasonResults = await dbContext.ScoredResults
-                    .Include(x => x.Result)
+                var seasonResults = await dbContext.ScoredEventResults
+                    .Include(x => x.RawResult)
                         .ThenInclude(x => x.Event)
                             .ThenInclude(x => x.Schedule)
-                    .Include(x => x.ScoredResultRows)
+                    .Include(x => x.ScoredSessionResults)
+                        .ThenInclude(x => x.ScoredResultRows)        
                             .ThenInclude(x => x.Member)
-                    .Include(x => x.ScoredResultRows)
-                        .ThenInclude(x => x.Team)
-                    .Where(x => x.Result.Event.Schedule.SeasonId == seasonId)
+                    .Include(x => x.ScoredSessionResults)
+                        .ThenInclude(x => x.ScoredResultRows)
+                            .ThenInclude(x => x.Team)
+                    .Where(x => x.Event.Schedule.SeasonId == seasonId)
                     .ToListAsync();
             }
         }
@@ -104,18 +106,16 @@ namespace DatabaseBenchmarks
         {
             using (var dbContext = BenchmarkDatabaseCreator.CreateStaticDbContext())
             {
-                var seasonResults = await dbContext.ScoredResults
-                    .Include(x => x.Result)
-                        .ThenInclude(x => x.Event)
-                            .ThenInclude(x => x.Schedule)
-                    .Where(x => x.Result.Event.Schedule.SeasonId == seasonId)
+                var seasonResults = await dbContext.ScoredSessionResults
+                    .Include(x => x.Event)
+                        .ThenInclude(x => x.Schedule)
+                    .Where(x => x.Event.Schedule.SeasonId == seasonId)
                     .ToListAsync();
 
-                var seasonResultsIds = seasonResults.Select(x => x.ResultId).Distinct();
-                var seasonScoringIds = seasonResults.Select(x => x.ScoringId).Distinct();
+                var seasonResultsIds = seasonResults.Select(x => x.ScoredSessionResultId).Distinct();
 
                 await dbContext.ScoredResultRows
-                    .Where(x => seasonResultsIds.Contains(x.ResultId) && seasonScoringIds.Contains(x.ScoringId))
+                    .Where(x => seasonResultsIds.Contains(x.ScoredSessionResultId))
                     .LoadAsync();
 
                 Debug.Assert(seasonResults.SelectMany(x => x.ScoredResultRows).Where(x => x != null).Count() > 0);
@@ -128,11 +128,11 @@ namespace DatabaseBenchmarks
             var seasonId = 10;
             using (var dbContext = BenchmarkDatabaseCreator.CreateStaticDbContext())
             {
-                var seasonResults = await dbContext.ScoredResults
+                var seasonResults = await dbContext.ScoredSessionResults
                     .Select(result => new ResultModel
                     {
                         LeagueId = result.LeagueId,
-                        SeasonId = result.Result.Event.Schedule.SeasonId,
+                        SeasonId = result.Event.Schedule.SeasonId,
                         SessionId = result.EventId,
                         ResultRows = result.ScoredResultRows
                             .Select(row => new ResultRowModel

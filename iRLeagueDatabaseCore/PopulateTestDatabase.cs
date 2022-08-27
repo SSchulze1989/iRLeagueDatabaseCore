@@ -96,12 +96,12 @@ namespace DbIntegrationTests
                 LastModifiedByUserName = ClientUserName,
                 LastModifiedByUserId = ClientGuid
             };
-            // Create sessions on schedule1
+            // Create events on schedule1
             for (int i = 0; i < 5; i++)
             {
                 var @event = new EventEntity()
                 {
-                    Name = $"S1 Session {i + 1}",
+                    Name = $"S1 Event {i + 1}",
                     CreatedOn = DateTime.Now,
                     CreatedByUserName = ClientUserName,
                     CreatedByUserId = ClientGuid,
@@ -112,12 +112,12 @@ namespace DbIntegrationTests
                         .SelectMany(x => x.TrackConfigs)
                         .Skip(i)
                         .FirstOrDefault(),
-                    //SessionType = (SessionType)i + 1
+                    EventType = EventType.SingleRace
                 };
                 var subSession = new SessionEntity()
                 {
                     Name = "Race",
-                    SessionType = SimSessionType.Race,
+                    SessionType = SessionType.Race,
                 };
                 @event.Sessions.Add(subSession);
                 schedule1.Events.Add(@event);
@@ -126,7 +126,7 @@ namespace DbIntegrationTests
             {
                 var @event = new EventEntity()
                 {
-                    Name = $"S2 Session {i + 1}",
+                    Name = $"S2 Event {i + 1}",
                     CreatedOn = DateTime.Now,
                     CreatedByUserName = ClientUserName,
                     CreatedByUserId = ClientGuid,
@@ -137,14 +137,14 @@ namespace DbIntegrationTests
                         .SelectMany(x => x.TrackConfigs)
                         .Skip(i)
                         .FirstOrDefault(),
-                    //SessionType = (SessionType)i + 1
+                    EventType= EventType.SingleRace
                 };
-                var subSession = new SessionEntity()
+                var session = new SessionEntity()
                 {
                     Name = "Race",
-                    SessionType = SimSessionType.Race,
+                    SessionType = SessionType.Race,
                 };
-                @event.Sessions.Add(subSession);
+                @event.Sessions.Add(session);
                 schedule2.Events.Add(@event);
             }
             context.Leagues.Add(league1);
@@ -203,47 +203,67 @@ namespace DbIntegrationTests
                 .Local
                 .ToList();
 
-            // create results
-            var scoring = new ScoringEntity()
+            var pointsRule = new PointRuleEntity()
             {
-                Name = "Testscoring",
-                ShowResults = true
-            };
-            season1.Scorings.Add(scoring);
-
-            foreach (var events in league1.Seasons.SelectMany(x => x.Schedules).SelectMany(x => x.Events))
-            {
-                var scoredResult = new ScoredEventResultEntity();
-                var scoredSessionResult = new ScoredSessionResultEntity();
-                scoredResult.ScoredSessionResults.Add(scoredSessionResult);
-                var result = new EventResultEntity();
-                var subResult = new SessionResultEntity();
-                result.SessionResults.Add(subResult);
-                result.ScoredResults.Add(scoredResult);
-                var resultMembers = members.ToList();
-                for (int i = 0; i < 10; i++)
+                Name = "Points Rule",
+                PointsPerPlace = new List<int>() { 5, 4, 3, 2, 1 },
+                BonusPoints = new Dictionary<string, int>()
                 {
-                    var resultRow = new ResultRowEntity()
+                    {"p1", 3 },
+                    {"p2", 2 },
+                    {"p3", 1 },
+                },
+            };
+            context.PointRules.Add(pointsRule);
+
+            foreach((var season, var index) in league1.Seasons.Select((x, i) => (x, i)))
+            {
+                var resultsTab = new ResultTabEntity()
+                {
+                    Name = $"Result Tab {index + 1}",
+                    Description = string.Empty
+                };
+                resultsTab.Season = season;
+                context.ResultTabs.Add(resultsTab);
+                foreach(var @event in season.Schedules.SelectMany(x => x.Events))
+                {
+                    var result = new EventResultEntity();
+                    @event.EventResult = result;
+                    var scoredResult = new ScoredEventResultEntity();
+                    scoredResult.Event = @event;
+                    resultsTab.ScoredEventResults.Add(scoredResult);
+                    foreach(var session in @event.Sessions)
                     {
-                        StartPosition = i + 1,
-                        FinishPosition = i + 1,
-                        Member = resultMembers.PopRandom(random),
-                        QualifyingTime = GetTimeSpan(random).Ticks,
-                        FastestLapTime = GetTimeSpan(random).Ticks,
-                        AvgLapTime = GetTimeSpan(random).Ticks,
-                        Interval = GetTimeSpan(random).Ticks
-                    };
-                    subResult.ResultRows.Add(resultRow);
-                    subResult.Session = events.Sessions.First();
-                    var scoredResultRow = new ScoredResultRowEntity(resultRow)
-                    {
-                        FinalPosition = i + 1,
-                        RacePoints = 10 - i,
-                        TotalPoints = 10 - i
-                    };
-                    scoredSessionResult.ScoredResultRows.Add(scoredResultRow);
+                        var sessionResult = new SessionResultEntity();
+                        sessionResult.Session = session;
+                        sessionResult.Result = result;
+                        var scoredSessionResult = new ScoredSessionResultEntity();
+                        scoredResult.ScoredSessionResults.Add(scoredSessionResult);
+                        var resultMembers = members.ToList();
+                        for(int i=0; i<10; i++)
+                        {
+                            var member = resultMembers.PopRandom();
+                            var resultRow = new ResultRowEntity()
+                            {
+                                Member = member,
+                                StartPosition = i + 1,
+                                FinishPosition = i + 1,
+                                QualifyingTime = GetTimeSpan(random).Ticks,
+                                FastestLapTime = GetTimeSpan(random).Ticks,
+                                AvgLapTime = GetTimeSpan(random).Ticks,
+                                Interval = GetTimeSpan(random).Ticks
+                            };
+                            sessionResult.ResultRows.Add(resultRow);
+                            var scoredResultRow = new ScoredResultRowEntity(resultRow)
+                            {
+                                FinalPosition = i + 1,
+                                RacePoints = 10 - i,
+                                TotalPoints = 10 - i
+                            };
+                            scoredSessionResult.ScoredResultRows.Add(scoredResultRow);
+                        }
+                    }
                 }
-                events.EventResult = result;
             }
         }
 

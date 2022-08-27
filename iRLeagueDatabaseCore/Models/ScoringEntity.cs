@@ -20,6 +20,7 @@ namespace iRLeagueDatabaseCore.Models
         public long LeagueId { get; set; }
         public long ScoringId { get; set; }
         public long ResultConfigId { get; set; }
+        public long? PointsRuleId { get; set; }
 
         public int ScoringKind { get; set; }
         public string Name { get; set; }
@@ -29,9 +30,6 @@ namespace iRLeagueDatabaseCore.Models
         public bool TakeGroupAverage { get; set; }
         public long? ExtScoringSourceId { get; set; }
         public bool TakeResultsFromExtSource { get; set; }
-        public string BasePoints { get; set; }
-        public string BonusPoints { get; set; }
-        public string IncPenaltyPoints { get; set; }
         public DateTime? CreatedOn { get; set; }
         public DateTime? LastModifiedOn { get; set; }
         public int Version { get; set; }
@@ -52,6 +50,7 @@ namespace iRLeagueDatabaseCore.Models
 
         public virtual ScoringEntity ExtScoringSource { get; set; }
         public virtual ResultConfigurationEntity ResultConfiguration { get; set; }
+        public virtual PointRuleEntity PointsRule { get; set; }
         public virtual ICollection<ScoringEntity> DependendScorings { get; set; }
         public virtual ICollection<ResultsFilterOptionEntity> ResultsFilterOptions { get; set; }
         public virtual ICollection<StandingEntity> Standings { get; set; }
@@ -68,13 +67,9 @@ namespace iRLeagueDatabaseCore.Models
             entity.Property(e => e.ScoringId)
                 .ValueGeneratedOnAdd();
 
-            entity.HasIndex(e => e.ConnectedScheduleId);
-
             entity.HasIndex(e => e.ExtScoringSourceId);
 
             entity.HasIndex(e => e.ParentScoringId);
-
-            entity.HasIndex(e => new { e.LeagueId, e.SeasonId });
 
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
 
@@ -90,6 +85,10 @@ namespace iRLeagueDatabaseCore.Models
             entity.HasOne(d => d.ResultConfiguration)
                 .WithMany(p => p.Scorings)
                 .HasForeignKey(d => new { d.LeagueId, d.ResultConfigId });
+
+            entity.HasOne(d => d.PointsRule)
+                .WithMany()
+                .HasForeignKey(d => new { d.LeagueId, d.PointsRuleId });
         }
     }
 }
