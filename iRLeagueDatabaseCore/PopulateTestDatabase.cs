@@ -332,7 +332,7 @@ namespace DbIntegrationTests
         public static T PopRandom<T>(this ICollection<T> collection, Random random = null)
         {
             random ??= new Random();
-            var randomIndex = random.Next(collection.Count);
+            var randomIndex = random.Next(collection.Count());
             var pop = collection.ElementAt(randomIndex);
             collection.Remove(pop);
             return pop;
