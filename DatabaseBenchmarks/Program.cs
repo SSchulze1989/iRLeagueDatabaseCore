@@ -16,7 +16,7 @@ namespace DatabaseBenchmarks
         {
             //Console.WriteLine("Hello World!");
 
-            if (args.Contains("--build-db") || true)
+            if (args.Contains("--build-db"))
             {
                 Console.WriteLine("Creating benchmark database...");
                 CreateDatabase().GetAwaiter().GetResult();
@@ -70,8 +70,9 @@ namespace DatabaseBenchmarks
     [MemoryDiagnoser]
     public class QuerySeasonResultsBenchmarks
     {
+        private readonly Random random = new Random();
         private readonly long[] seasonIds;
-        private readonly long seasonId = 10;
+        private long seasonId => seasonIds.ElementAt(random.Next(seasonIds.Count()));
 
         public QuerySeasonResultsBenchmarks()
         {
@@ -125,7 +126,6 @@ namespace DatabaseBenchmarks
         [Benchmark]
         public async Task TestDirectQuery()
         {
-            var seasonId = 10;
             using (var dbContext = BenchmarkDatabaseCreator.CreateStaticDbContext())
             {
                 var seasonResults = await dbContext.ScoredResults
