@@ -6,17 +6,18 @@ using System.Collections.Generic;
 
 namespace iRLeagueDatabaseCore.Models
 {
-    public partial class SubResultEntity : IVersionEntity
+    public partial class SessionResultEntity : IVersionEntity
     {
-        public SubResultEntity()
+        public SessionResultEntity()
         {
             ResultRows = new HashSet<ResultRowEntity>();
         }
 
         public long LeagueId { get; set; }
+        public long EventId { get; set; }
         public long SessionId { get; set; }
-        public long SubSessionId { get; set; }
         public long? IRSimSessionDetailsId { get; set; }
+        
         public SimSessionType SimSessionType { get; set; }
 
         #region version
@@ -29,27 +30,27 @@ namespace iRLeagueDatabaseCore.Models
         public string LastModifiedByUserName { get; set; }
         #endregion
 
-        public virtual ResultEntity Result { get; set; }
-        public virtual SubSessionEntity SubSession { get; set; }
+        public virtual EventResultEntity Result { get; set; }
+        public virtual SessionEntity Session { get; set; }
         public virtual ICollection<ResultRowEntity> ResultRows { get; set; }
         public virtual IRSimSessionDetailsEntity IRSimSessionDetails { get; set; }
     }
 
-    public class SubResultEntityConfiguration : IEntityTypeConfiguration<SubResultEntity>
+    public class SessionResultEntityConfiguration : IEntityTypeConfiguration<SessionResultEntity>
     {
-        public void Configure(EntityTypeBuilder<SubResultEntity> entity)
+        public void Configure(EntityTypeBuilder<SessionResultEntity> entity)
         {
-            entity.HasKey(e => new { e.LeagueId, e.SubSessionId });
+            entity.HasKey(e => new { e.LeagueId, e.SessionId });
 
-            entity.HasIndex(e => new { e.SubSessionId });
+            entity.HasIndex(e => e.SessionId);
 
             entity.HasOne(d => d.Result)
-                .WithMany(p => p.SubResults)
-                .HasForeignKey(d => new { d.LeagueId, d.SessionId });
+                .WithMany(p => p.SessionResults)
+                .HasForeignKey(d => new { d.LeagueId, d.EventId });
 
-            entity.HasOne(d => d.SubSession)
-                .WithOne(p => p.SubResult)
-                .HasForeignKey<SubResultEntity>(d => new { d.LeagueId, d.SubSessionId })
+            entity.HasOne(d => d.Session)
+                .WithOne(p => p.SessionResult)
+                .HasForeignKey<SessionResultEntity>(d => new { d.LeagueId, d.SessionId })
                 .IsRequired(true)
                 .OnDelete(DeleteBehavior.Cascade);
 
