@@ -22,7 +22,7 @@ namespace iRLeagueDatabaseCore.Models
 
 
         public virtual MemberEntity Member { get; set; }
-        public virtual SubResultEntity SubResult { get; set; }
+        public virtual SessionResultEntity SubResult { get; set; }
         public virtual TeamEntity Team { get; set; }
     }
 

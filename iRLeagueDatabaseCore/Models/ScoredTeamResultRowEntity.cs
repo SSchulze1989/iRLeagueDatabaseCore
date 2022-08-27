@@ -14,10 +14,9 @@ namespace iRLeagueDatabaseCore.Models
             ScoredResultRows = new HashSet<ScoredResultRowEntity>();
         }
 
-        public long ScoredResultRowId { get; set; }
+        public long ScoredTeamResultRowId { get; set; }
         public long LeagueId { get; set; }
-        public long ScoredResultId { get; set; }
-        public long ScoringId { get; set; }
+        public long ScoredSessionResultId { get; set; }
         public long TeamId { get; set; }
         public DateTime? Date { get; set; }
         public int ClassId { get; set; }
@@ -31,7 +30,7 @@ namespace iRLeagueDatabaseCore.Models
         public long AvgLapTime { get; set; }
         public long FastestLapTime { get; set; }
 
-        public virtual ScoredResultEntity ScoredResult { get; set; }
+        public virtual ScoredSessionResultEntity ScoredSessionResult { get; set; }
         public virtual TeamEntity Team { get; set; }
         public virtual ICollection<ScoredResultRowEntity> ScoredResultRows { get; set; }
     }
@@ -40,11 +39,12 @@ namespace iRLeagueDatabaseCore.Models
     {
         public void Configure(EntityTypeBuilder<ScoredTeamResultRowEntity> entity)
         {
-            entity.HasKey(e => new { e.LeagueId, e.ScoredResultRowId });
+            entity.HasKey(e => new { e.LeagueId, e.ScoredTeamResultRowId });
 
-            entity.HasIndex(e => e.ScoredResultRowId);
+            entity.HasAlternateKey(e => e.ScoredTeamResultRowId);
 
-            entity.HasIndex(e => new { e.ScoredResultId, e.ScoringId });
+            entity.Property(e => e.ScoredTeamResultRowId)
+                .ValueGeneratedOnAdd();
 
             entity.HasIndex(e => e.TeamId);
 
@@ -55,9 +55,9 @@ namespace iRLeagueDatabaseCore.Models
                 .HasForeignKey(d => d.TeamId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
-            entity.HasOne(d => d.ScoredResult)
+            entity.HasOne(d => d.ScoredSessionResult)
                 .WithMany(p => p.ScoredTeamResultRows)
-                .HasForeignKey(d => new { d.LeagueId, d.ScoredResultId, d.ScoringId });
+                .HasForeignKey(d => new { d.LeagueId, d.ScoredSessionResultId });
 
             entity.HasMany(d => d.ScoredResultRows)
                 .WithMany(p => p.ScoredTeamResultRows)

@@ -16,11 +16,11 @@ namespace iRLeagueDatabaseCore.Models
             DriverStatisticRows = new HashSet<DriverStatisticRowEntity>();
             InvolvedReviews = new HashSet<IncidentReviewEntity>();
             ResultRows = new HashSet<ResultRowEntity>();
-            CleanestDriverResults = new HashSet<ScoredResultEntity>();
-            FastestAvgLapResults = new HashSet<ScoredResultEntity>();
-            FastestLapResults = new HashSet<ScoredResultEntity>();
-            FastestQualyLapResults = new HashSet<ScoredResultEntity>();
-            HardChargerResults = new HashSet<ScoredResultEntity>();
+            CleanestDriverResults = new HashSet<ScoredSessionResultEntity>();
+            FastestAvgLapResults = new HashSet<ScoredSessionResultEntity>();
+            FastestLapResults = new HashSet<ScoredSessionResultEntity>();
+            FastestQualyLapResults = new HashSet<ScoredSessionResultEntity>();
+            HardChargerResults = new HashSet<ScoredSessionResultEntity>();
             StatisticSets = new HashSet<StatisticSetEntity>();
         }
 
@@ -36,11 +36,11 @@ namespace iRLeagueDatabaseCore.Models
         public virtual ICollection<DriverStatisticRowEntity> DriverStatisticRows { get; set; }
         public virtual ICollection<IncidentReviewEntity> InvolvedReviews { get; set; }
         public virtual ICollection<ResultRowEntity> ResultRows { get; set; }
-        public virtual ICollection<ScoredResultEntity> CleanestDriverResults { get; set; }
-        public virtual ICollection<ScoredResultEntity> FastestAvgLapResults { get; set; }
-        public virtual ICollection<ScoredResultEntity> FastestLapResults { get; set; }
-        public virtual ICollection<ScoredResultEntity> FastestQualyLapResults { get; set; }
-        public virtual ICollection<ScoredResultEntity> HardChargerResults { get; set; }
+        public virtual ICollection<ScoredSessionResultEntity> CleanestDriverResults { get; set; }
+        public virtual ICollection<ScoredSessionResultEntity> FastestAvgLapResults { get; set; }
+        public virtual ICollection<ScoredSessionResultEntity> FastestLapResults { get; set; }
+        public virtual ICollection<ScoredSessionResultEntity> FastestQualyLapResults { get; set; }
+        public virtual ICollection<ScoredSessionResultEntity> HardChargerResults { get; set; }
         public virtual ICollection<StatisticSetEntity> StatisticSets { get; set; }
     }
 
