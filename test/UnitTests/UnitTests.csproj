@@ -1,18 +1,16 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    
+
     <IsPackable>false</IsPackable>
-    <UserSecretsId>1bfa022b-b6c1-4b78-b148-9bee98acb5e8</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="6.0.5" />
-    <PackageReference Include="MySql.EntityFrameworkCore" Version="6.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
+    <PackageReference Include="MySql.EntityFrameworkCore" Version="6.0.1" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -25,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\iRLeagueDatabaseCore\iRLeagueDatabaseCore.csproj" />
+    <ProjectReference Include="..\..\src\iRLeagueDatabaseCore\iRLeagueDatabaseCore.csproj" />
   </ItemGroup>
 
 </Project>
