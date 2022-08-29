@@ -5,9 +5,9 @@ VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iRLeagueDatabaseCore", "src\iRLeagueDatabaseCore\iRLeagueDatabaseCore.csproj", "{45B97384-487F-4AA8-992B-12BE9A2C7B1C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DbIntegrationTests", "test\DbIntegrationTests\DbIntegrationTests.csproj", "{3DD78A18-35C1-4796-9A1B-A764B5ABDE33}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DbIntegrationTests", "tests\DbIntegrationTests\DbIntegrationTests.csproj", "{3DD78A18-35C1-4796-9A1B-A764B5ABDE33}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTests", "test\UnitTests\UnitTests.csproj", "{5B310B31-A4C0-46C6-8B4B-839D7173AE97}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTests", "tests\UnitTests\UnitTests.csproj", "{5B310B31-A4C0-46C6-8B4B-839D7173AE97}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseBenchmarks", "src\DatabaseBenchmarks\DatabaseBenchmarks.csproj", "{B2B2333A-F497-4C1F-8B61-637269F617DD}"
 EndProject
