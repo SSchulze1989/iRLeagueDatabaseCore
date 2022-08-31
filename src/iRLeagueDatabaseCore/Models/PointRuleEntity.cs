@@ -1,4 +1,5 @@
-﻿using iRLeagueDatabaseCore.Converters;
+﻿using iRLeagueApiCore.Common.Enums;
+using iRLeagueDatabaseCore.Converters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
