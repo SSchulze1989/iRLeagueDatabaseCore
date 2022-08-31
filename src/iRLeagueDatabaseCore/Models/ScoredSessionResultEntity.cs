@@ -18,9 +18,8 @@ namespace iRLeagueDatabaseCore.Models
         }
 
         public long LeagueId { get; set; }
-        public long ScoredSessionResultId { get; set; }
-        public long EventId { get; set; }
-        public long ResultTabId { get; set; }
+        public long ResultId { get; set; }
+        public long SessionResultId { get; set; }
         public long? ScoringId { get; set; }
 
         public string Name { get; set; }
@@ -44,7 +43,6 @@ namespace iRLeagueDatabaseCore.Models
         public virtual MemberEntity FastestQualyLapDriver { get; set; }
         public virtual ScoredEventResultEntity ScoredEventResult { get; set; }
         public virtual ScoringEntity Scoring { get; set; }
-        public virtual EventEntity Event { get; set; }
         public virtual ICollection<MemberEntity> CleanestDrivers { get; set; }
         public virtual ICollection<MemberEntity> HardChargers { get; set; }
         public virtual ICollection<ScoredResultRowEntity> ScoredResultRows { get; set; }
@@ -55,11 +53,11 @@ namespace iRLeagueDatabaseCore.Models
     {
         public void Configure(EntityTypeBuilder<ScoredSessionResultEntity> entity)
         {
-            entity.HasKey(e => new { e.LeagueId, e.ScoredSessionResultId });
+            entity.HasKey(e => new { e.LeagueId, e.SessionResultId });
 
-            entity.HasAlternateKey(e => e.ScoredSessionResultId);
+            entity.HasAlternateKey(e => e.SessionResultId);
 
-            entity.Property(e => e.ScoredSessionResultId)
+            entity.Property(e => e.SessionResultId)
                 .ValueGeneratedOnAdd();
 
             entity.HasIndex(e => e.FastestAvgLapDriverMemberId);
@@ -86,7 +84,8 @@ namespace iRLeagueDatabaseCore.Models
 
             entity.HasOne(d => d.ScoredEventResult)
                 .WithMany(p => p.ScoredSessionResults)
-                .HasForeignKey(d => new { d.LeagueId, d.EventId, d.ResultTabId });
+                .HasForeignKey(d => new { d.LeagueId, d.ResultId })
+                .OnDelete(DeleteBehavior.Cascade);
 
             entity.HasMany(d => d.CleanestDrivers)
                 .WithMany(p => p.CleanestDriverResults)
@@ -99,12 +98,8 @@ namespace iRLeagueDatabaseCore.Models
             entity.HasOne(d => d.Scoring)
                 .WithMany()
                 .HasForeignKey(d => new { d.LeagueId, d.ScoringId })
-                .IsRequired(false);
-
-            entity.HasOne(d => d.Event)
-                .WithMany()
-                .HasForeignKey(d => new { d.LeagueId, d.EventId })
-                .IsRequired(true);
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.ClientSetNull);
         }
     }
 }

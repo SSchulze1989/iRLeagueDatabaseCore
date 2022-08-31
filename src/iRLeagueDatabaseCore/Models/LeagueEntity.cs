@@ -17,9 +17,14 @@ namespace iRLeagueDatabaseCore.Models
         public LeagueEntity()
         {
             Seasons = new HashSet<SeasonEntity>();
+            ResultConfigs = new HashSet<ResultConfigurationEntity>();
+            PointRules = new HashSet<PointRuleEntity>();
         }
 
         public virtual ICollection<SeasonEntity> Seasons { get; set; }
+        public virtual ICollection<ResultConfigurationEntity> ResultConfigs { get; set; }
+        public virtual ICollection<PointRuleEntity> PointRules { get; set; }
+        public virtual IEnumerable<ScoringEntity> Scorings { get; set; }
     }
 
     public class LeagueEntityConfiguration : IEntityTypeConfiguration<LeagueEntity>
@@ -32,6 +37,10 @@ namespace iRLeagueDatabaseCore.Models
 
             entity.Property(e => e.Name)
                 .HasMaxLength(85);
+
+            entity.HasMany(d => d.Scorings)
+                .WithOne()
+                .HasForeignKey(p => p.LeagueId);
         }
     }
 }

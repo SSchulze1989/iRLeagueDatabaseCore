@@ -51,7 +51,7 @@ namespace DbIntegrationTests
         }
 
         [Fact]
-        public async Task Populate()
+        public void Populate()
         {
             using (var dbContext = GetTestDatabaseContext())
             {
@@ -178,6 +178,54 @@ namespace DbIntegrationTests
                 var session = await context.Sessions.FirstAsync();
                 Assert.Equal(testTimeSpan, session.Duration);
             }
+        }
+
+        [Fact]
+        public async Task LeagueShouldHaveScorings()
+        {
+            using var context = GetTestDatabaseContext();
+
+            var league = await context.Leagues
+                .Include(x => x.Scorings)
+                .FirstAsync();
+            Assert.NotEmpty(league.Scorings);
+        }
+
+        [Fact]
+        public async Task ShouldAddFilterToPointRule()
+        {
+            using var tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+            using (var context = GetTestDatabaseContext())
+            {
+                var filterOption = new ResultsFilterOptionEntity();
+                var pointRule = await context.PointRules.FirstAsync();
+                pointRule.ResultsFilters.Add(filterOption);
+                await context.SaveChangesAsync();
+            }
+
+            using (var context = GetTestDatabaseContext())
+            {
+                var pointRule = await context.PointRules.FirstAsync();
+                Assert.NotEmpty(pointRule.ResultsFilters);
+            }
+        }
+
+        [Fact]
+        public async Task ShouldCascadeDeleteFilter()
+        {
+            using var tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+            using var context = GetTestDatabaseContext();
+
+            var filterOption = new ResultsFilterOptionEntity();
+            var pointRule = await context.PointRules.FirstAsync();
+            pointRule.ResultsFilters.Add(filterOption);
+            await context.SaveChangesAsync();
+
+            pointRule.ResultsFilters.Remove(filterOption);
+            var filterOptionEntry = context.Entry(filterOption);
+            await context.SaveChangesAsync();
+
+            Assert.Equal(EntityState.Detached, filterOptionEntry.State);
         }
     }
 }
