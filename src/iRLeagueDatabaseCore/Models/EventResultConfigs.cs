@@ -12,7 +12,7 @@ namespace iRLeagueDatabaseCore.Models
         public long EventRefId { get; set; }
         public long ResultConfigRefId { get; set; }
 
-        public EventEntity Event { get; set; }
-        public ResultConfigurationEntity ResultConfig { get; set; }
+        public virtual EventEntity Event { get; set; }
+        public virtual ResultConfigurationEntity ResultConfig { get; set; }
     }
 }
