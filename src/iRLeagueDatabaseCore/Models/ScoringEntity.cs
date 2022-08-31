@@ -25,7 +25,6 @@ namespace iRLeagueDatabaseCore.Models
         public ScoringKind ScoringKind { get; set; }
         public string Name { get; set; }
         public int MaxResultsPerGroup { get; set; }
-        public bool TakeGroupAverage { get; set; }
         public long? ExtScoringSourceId { get; set; }
         public DateTime? CreatedOn { get; set; }
         public DateTime? LastModifiedOn { get; set; }
