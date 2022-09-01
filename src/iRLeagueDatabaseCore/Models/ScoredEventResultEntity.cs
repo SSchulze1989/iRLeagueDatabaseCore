@@ -60,7 +60,7 @@ namespace iRLeagueDatabaseCore.Models
                 .OnDelete(DeleteBehavior.Cascade);
 
             entity.HasOne(d => d.RawResult)
-                .WithMany()
+                .WithMany(p => p.ScoredResults)
                 .HasForeignKey(d => new { d.LeagueId, d.EventId })
                 .IsRequired(false)
                 .OnDelete(DeleteBehavior.ClientSetNull);
