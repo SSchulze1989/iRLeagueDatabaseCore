@@ -1,6 +1,7 @@
 ﻿using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
 using iRLeagueApiCore.Common.Models;
+using iRLeagueApiCore.Common.Models.Results;
 using iRLeagueDatabaseCore.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -73,13 +74,17 @@ namespace DatabaseBenchmarks
     {
         private readonly Random random = new Random();
         private readonly long[] seasonIds;
+        private readonly long[] resultIds;
         private long seasonId => seasonIds.ElementAt(random.Next(seasonIds.Count()));
+        private long resultId => resultIds.ElementAt(random.Next(resultIds.Count()));
+
 
         public QuerySeasonResultsBenchmarks()
         {
             using (var dbContext = BenchmarkDatabaseCreator.CreateStaticDbContext())
             {
                 seasonIds = dbContext.Seasons.Select(x => x.SeasonId).ToArray();
+                resultIds = dbContext.ScoredEventResults.Select(x => x.ResultId).ToArray();
             }
         }
 
@@ -137,60 +142,83 @@ namespace DatabaseBenchmarks
         {
             using (var dbContext = BenchmarkDatabaseCreator.CreateStaticDbContext())
             {
-                var seasonResults = await dbContext.ScoredSessionResults
-                    .Select(MapToResultModelExpression)
-                    .Where(x => x.SeasonId == seasonId)
-                    .ToListAsync();
+                var seasonResultsQuery = dbContext.ScoredEventResults
+                    .Where(x => x.Event.Schedule.SeasonId == seasonId)
+                    .Select(MapToResultModelExpression);
+                var seasonResults = await seasonResultsQuery.ToListAsync();
                 return;
             }
         }
 
-        private static Expression<Func<ScoredSessionResultEntity, ResultModel>> MapToResultModelExpression => result => new ResultModel()
+        [Benchmark]
+        public async Task<EventResultModel> SingleEventQuery()
         {
+            using var dbContext = BenchmarkDatabaseCreator.CreateStaticDbContext();
+            var eventResults = await dbContext.ScoredEventResults
+                .Select(MapToResultModelExpression)
+                .SingleOrDefaultAsync(x => x.ResultId == resultId);
+            return eventResults;
+        }
+
+        private static Expression<Func<ScoredEventResultEntity, EventResultModel>> MapToResultModelExpression => result => new EventResultModel()
+        {
+            EventId = result.EventId,
             LeagueId = result.LeagueId,
-            SeasonId = result.ScoredEventResult.Event.Schedule.SeasonId,
-            SessionId = result.ScoredEventResult.EventId,
-            ResultRows = result.ScoredResultRows
-            .Select(row => new ResultRowModel
+            EventName = result.Event.Name,
+            DisplayName = result.Name,
+            ResultId = result.ResultId,
+            Date = result.Event.Date.GetValueOrDefault(),
+            TrackId = result.Event.TrackId.GetValueOrDefault(),
+            SessionResults = result.ScoredSessionResults.Select(sessionResult => new ResultModel()
             {
-                MemberId = row.MemberId,
-                Interval = new TimeSpan(row.Interval),
-                FastestLapTime = new TimeSpan(row.FastestLapTime),
-                AvgLapTime = new TimeSpan(row.AvgLapTime),
-                Firstname = row.Member.Firstname,
-                Lastname = row.Member.Lastname,
-                TeamName = row.Team.Name,
-                StartPosition = row.StartPosition,
-                FinishPosition = row.FinishPosition,
-                FinalPosition = row.FinalPosition,
-                RacePoints = row.RacePoints,
-                PenaltyPoints = row.PenaltyPoints,
-                BonusPoints = row.BonusPoints,
-                TotalPoints = row.TotalPoints,
-                Car = row.Car,
-                CarClass = row.CarClass,
-                CarId = row.CarId,
-                CarNumber = row.CarNumber,
-                ClassId = row.ClassId,
-                CompletedLaps = row.CompletedLaps,
-                CompletedPct = row.CompletedPct,
-                Division = row.Division,
-                FastLapNr = row.FastLapNr,
-                FinalPositionChange = row.FinalPositionChange,
-                Incidents = row.Incidents,
-                LeadLaps = row.LeadLaps,
-                License = row.License,
-                NewIrating = row.NewIRating,
-                NewLicenseLevel = row.NewLicenseLevel,
-                NewSafetyRating = row.NewSafetyRating,
-                OldIrating = row.OldIRating,
-                OldLicenseLevel = row.OldLicenseLevel,
-                OldSafetyRating = row.OldSafetyRating,
-                PositionChange = row.PositionChange,
-                SeasonStartIrating = row.SeasonStartIRating,
-                Status = row.Status,
-                TeamId = row.TeamId
-            }).ToArray(),
+                LeagueId = sessionResult.LeagueId,
+                ScoringId = sessionResult.ScoringId,
+                SessionId = default,
+                SessionName = sessionResult.Name,
+                ResultRows = sessionResult.ScoredResultRows.Select(row => new ResultRowModel()
+                {
+                    MemberId = row.MemberId,
+                    Interval = new TimeSpan(row.Interval),
+                    FastestLapTime = new TimeSpan(row.FastestLapTime),
+                    AvgLapTime = new TimeSpan(row.AvgLapTime),
+                    Firstname = row.Member.Firstname,
+                    Lastname = row.Member.Lastname,
+                    TeamName = row.Team.Name,
+                    StartPosition = row.StartPosition,
+                    FinishPosition = row.FinishPosition,
+                    FinalPosition = row.FinalPosition,
+                    RacePoints = row.RacePoints,
+                    PenaltyPoints = row.PenaltyPoints,
+                    BonusPoints = row.BonusPoints,
+                    TotalPoints = row.TotalPoints,
+                    Car = row.Car,
+                    CarClass = row.CarClass,
+                    CarId = row.CarId,
+                    CarNumber = row.CarNumber,
+                    ClassId = row.ClassId,
+                    CompletedLaps = row.CompletedLaps,
+                    CompletedPct = row.CompletedPct,
+                    Division = row.Division,
+                    FastLapNr = row.FastLapNr,
+                    FinalPositionChange = row.FinalPositionChange,
+                    Incidents = row.Incidents,
+                    LeadLaps = row.LeadLaps,
+                    License = row.License,
+                    NewIrating = row.NewIRating,
+                    NewLicenseLevel = row.NewLicenseLevel,
+                    NewSafetyRating = row.NewSafetyRating,
+                    OldIrating = row.OldIRating,
+                    OldLicenseLevel = row.OldLicenseLevel,
+                    OldSafetyRating = row.OldSafetyRating,
+                    PositionChange = row.PositionChange,
+                    QualifyingTime = new TimeSpan(row.QualifyingTime),
+                    SeasonStartIrating = row.SeasonStartIRating,
+                    Status = row.Status,
+                    TeamId = row.TeamId
+                }),
+                CreatedOn = sessionResult.CreatedOn,
+                LastModifiedOn = sessionResult.LastModifiedOn,
+            }),
         };
     }
 }
