@@ -77,6 +77,17 @@ namespace DbIntegrationTests
         }
 
         [Fact]
+        public async Task DeleteLeage()
+        {
+            using var tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+            using var dbContext = GetTestDatabaseContext();
+
+            var league = await dbContext.Leagues
+                .FirstAsync();
+            dbContext.Leagues.Remove(league);
+        }
+
+        [Fact]
         public void CreateLeague()
         {
             using (var tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))

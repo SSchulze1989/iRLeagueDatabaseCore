@@ -252,8 +252,8 @@ namespace DbIntegrationTests
                     foreach(var session in @event.Sessions)
                     {
                         var sessionResult = new SessionResultEntity();
-                        sessionResult.Session = session;
-                        sessionResult.Result = result;
+                        session.SessionResult = sessionResult;
+                        result.SessionResults.Add(sessionResult);
                         var scoredSessionResult = new ScoredSessionResultEntity();
                         scoredResult.ScoredSessionResults.Add(scoredSessionResult);
                         var resultMembers = members.ToList();
