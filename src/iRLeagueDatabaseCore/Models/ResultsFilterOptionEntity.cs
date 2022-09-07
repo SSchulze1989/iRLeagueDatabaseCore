@@ -12,7 +12,8 @@ namespace iRLeagueDatabaseCore.Models
     {
         public long ResultsFilterId { get; set; }
         public long LeagueId { get; set; }
-        public long ScoringId { get; set; }
+        public long? ScoringId { get; set; }
+        public long? PointRuleId { get; set; }
         public string ResultsFilterType { get; set; }
         public string ColumnPropertyName { get; set; }
         public ComparatorType Comparator { get; set; }
@@ -28,6 +29,7 @@ namespace iRLeagueDatabaseCore.Models
         public bool FilterPointsOnly { get; set; }
 
         public virtual ScoringEntity Scoring { get; set; }
+        public virtual PointRuleEntity PointRule { get; set; }
     }
 
     public class ResultsFilterOptionEntityConfiguration : IEntityTypeConfiguration<ResultsFilterOptionEntity>
@@ -44,7 +46,15 @@ namespace iRLeagueDatabaseCore.Models
 
             entity.HasOne(d => d.Scoring)
                 .WithMany(p => p.ResultsFilterOptions)
-                .HasForeignKey(d => new { d.LeagueId, d.ScoringId });
+                .HasForeignKey(d => new { d.LeagueId, d.ScoringId })
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(d => d.PointRule)
+                .WithMany(p => p.ResultsFilters)
+                .HasForeignKey(d => new { d.LeagueId, d.PointRuleId })
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

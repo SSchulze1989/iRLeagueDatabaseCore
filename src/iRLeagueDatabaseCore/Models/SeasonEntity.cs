@@ -13,8 +13,6 @@ namespace iRLeagueDatabaseCore.Models
     {
         public SeasonEntity()
         {
-            Results = new HashSet<EventResultEntity>();
-            ResultTabs = new HashSet<ResultTabEntity>();
             Schedules = new HashSet<ScheduleEntity>();
             Standings = new HashSet<StandingEntity>();
             StatisticSets = new HashSet<StatisticSetEntity>();
@@ -31,11 +29,9 @@ namespace iRLeagueDatabaseCore.Models
 
         public virtual LeagueEntity League { get; set; }
         public virtual ScoringEntity MainScoring { get; set; }
-        public virtual ICollection<EventResultEntity> Results { get; set; }
         public virtual ICollection<ScheduleEntity> Schedules { get; set; }
         public virtual ICollection<StandingEntity> Standings { get; set; }
         public virtual ICollection<StatisticSetEntity> StatisticSets { get; set; }
-        public virtual ICollection<ResultTabEntity> ResultTabs { get; set; }
     }
 
     public class SeasonEntityConfiguration : IEntityTypeConfiguration<SeasonEntity>

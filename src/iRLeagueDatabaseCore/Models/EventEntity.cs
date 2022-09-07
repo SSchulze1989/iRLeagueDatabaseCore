@@ -15,7 +15,8 @@ namespace iRLeagueDatabaseCore.Models
         public EventEntity()
         {
             Sessions = new HashSet<SessionEntity>();
-            //ScoredEventResults = new HashSet<ScoredEventResultEntity>();
+            ScoredEventResults = new HashSet<ScoredEventResultEntity>();
+            ResultConfigs = new HashSet<ResultConfigurationEntity>();
         }
 
         public long EventId { get; set; }
@@ -34,7 +35,8 @@ namespace iRLeagueDatabaseCore.Models
         public virtual TrackConfigEntity Track { get; set; }
         public virtual EventResultEntity EventResult { get; set; }
         public virtual ICollection<SessionEntity> Sessions { get; set; }
-        //public virtual ICollection<ScoredEventResultEntity> ScoredEventResults { get; set; }
+        public virtual ICollection<ScoredEventResultEntity> ScoredEventResults { get; set; }
+        public virtual ICollection<ResultConfigurationEntity> ResultConfigs { get; set; }
 
         #region Version
         public DateTime? CreatedOn { get; set; }
@@ -78,6 +80,16 @@ namespace iRLeagueDatabaseCore.Models
                 .HasForeignKey(d => d.TrackId)
                 .OnDelete(DeleteBehavior.SetNull)
                 .IsRequired(false);
+
+            entity.HasMany(d => d.ResultConfigs)
+                .WithMany(p => p.Events)
+                .UsingEntity<EventResultConfigs>(
+                    right => right.HasOne(e => e.ResultConfig)
+                        .WithMany()
+                        .HasForeignKey(e => new { e.LeagueId, e.ResultConfigRefId }),
+                    left => left.HasOne(e => e.Event)
+                        .WithMany()
+                        .HasForeignKey(e => new { e.LeagueId, e.EventRefId }));
         }
     }
 }
