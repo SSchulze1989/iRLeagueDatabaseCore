@@ -13,7 +13,7 @@ namespace iRLeagueDatabaseCore.Models
         public IncidentReviewEntity()
         {
             AcceptedReviewVotes = new HashSet<AcceptedReviewVoteEntity>();
-            Comments = new HashSet<CommentBaseEntity>();
+            Comments = new HashSet<ReviewCommentEntity>();
             InvolvedMembers = new HashSet<MemberEntity>();
             ReviewPenaltys = new HashSet<ReviewPenaltyEntity>();
         }
@@ -21,6 +21,7 @@ namespace iRLeagueDatabaseCore.Models
         public long ReviewId { get; set; }
         public long LeagueId { get; set; }
         public long SessionId { get; set; }
+
         public string AuthorUserId { get; set; }
         public string AuthorName { get; set; }
         public string IncidentKind { get; set; }
@@ -40,7 +41,7 @@ namespace iRLeagueDatabaseCore.Models
 
         public virtual SessionEntity Session { get; set; }
         public virtual ICollection<AcceptedReviewVoteEntity> AcceptedReviewVotes { get; set; }
-        public virtual ICollection<CommentBaseEntity> Comments { get; set; }
+        public virtual ICollection<ReviewCommentEntity> Comments { get; set; }
         public virtual ICollection<MemberEntity> InvolvedMembers { get; set; }
         public virtual ICollection<ReviewPenaltyEntity> ReviewPenaltys { get; set; }
     }
@@ -49,7 +50,12 @@ namespace iRLeagueDatabaseCore.Models
     {
         public void Configure(EntityTypeBuilder<IncidentReviewEntity> entity)
         {
-            entity.HasKey(e => e.ReviewId);
+            entity.HasKey(e => new { e.LeagueId, e.ReviewId });
+
+            entity.HasAlternateKey(e => e.ReviewId);
+
+            entity.Property(e => e.ReviewId)
+                .ValueGeneratedOnAdd();
 
             entity.HasIndex(e => e.SessionId);
 
@@ -61,7 +67,9 @@ namespace iRLeagueDatabaseCore.Models
 
             entity.HasOne(d => d.Session)
                 .WithMany(p => p.IncidentReviews)
-                .HasForeignKey(d => new { d.LeagueId, d.SessionId });
+                .HasForeignKey(d => new { d.LeagueId, d.SessionId })
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
 
             entity.HasMany(d => d.InvolvedMembers)
                 .WithMany(p => p.InvolvedReviews)

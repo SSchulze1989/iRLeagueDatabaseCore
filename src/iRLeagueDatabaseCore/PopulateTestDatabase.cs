@@ -282,6 +282,53 @@ namespace DbIntegrationTests
                     }
                 }
             }
+
+            // Create reviews
+            foreach (var session in season1.Schedules
+                .SelectMany(x => x.Events)
+                .SelectMany(x => x.Sessions))
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    var review = new IncidentReviewEntity()
+                    {
+                        Corner = (i + 1).ToString(),
+                        OnLap = (i + 1).ToString(),
+                        FullDescription = $"Incident review #{i+1} Event {session.Event.Name} - {session.Name}",
+                        IncidentKind = "Contact",
+                        IncidentNr = (i + 1).ToString(),
+                    };
+                    for (int j = 0; j < 3; j++)
+                    {
+                        review.InvolvedMembers.Add(GetRandomMember(random, members));
+                    }
+                    for (int j = 0; j < 5; j++)
+                    {
+                        var comment = new ReviewCommentEntity()
+                        {
+                            Date = DateTime.Now,
+                            AuthorName = GetRandomMember(random, members).Firstname,
+                            Text = $"Comment #{j + 1} ",
+                            ReviewCommentVotes = new List<ReviewCommentVoteEntity>()
+                            {
+                                new ReviewCommentVoteEntity() { MemberAtFault = GetRandomMember(random, review.InvolvedMembers), Description = "Vote" }
+                            },
+                        };
+                        review.Comments.Add(comment);
+                    }
+                    session.IncidentReviews.Add(review);
+                }
+            }
+        }
+
+        private static MemberEntity GetRandomMember(Random random, IEnumerable<MemberEntity> memberList)
+        {
+            var memberCount = memberList.Count();
+            if (memberCount == 0)
+            {
+                return null;
+            }
+            return memberList.ElementAt(random.Next(memberCount));
         }
 
         private static TimeSpan GetTimeSpan(Random random)

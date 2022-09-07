@@ -22,8 +22,8 @@ namespace iRLeagueDatabaseCore.Models
 
         public virtual DbSet<AcceptedReviewVoteEntity> AcceptedReviewVotes { get; set; }
         public virtual DbSet<AddPenaltyEntity> AddPenaltys { get; set; }
-        public virtual DbSet<CommentBaseEntity> CommentBases { get; set; }
-        public virtual DbSet<CommentReviewVoteEntity> CommentReviewVotes { get; set; }
+        public virtual DbSet<ReviewCommentEntity> ReviewComments { get; set; }
+        public virtual DbSet<ReviewCommentVoteEntity> ReviewCommentVotes { get; set; }
         public virtual DbSet<CustomIncidentEntity> CustomIncidents { get; set; }
         public virtual DbSet<DriverStatisticRowEntity> DriverStatisticRows { get; set; }
         public virtual DbSet<EventEntity> Events { get; set; }

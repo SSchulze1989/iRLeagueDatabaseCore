@@ -12,7 +12,7 @@ namespace iRLeagueDatabaseCore.Models
         public VoteCategoryEntity()
         {
             AcceptedReviewVotes = new HashSet<AcceptedReviewVoteEntity>();
-            CommentReviewVotes = new HashSet<CommentReviewVoteEntity>();
+            CommentReviewVotes = new HashSet<ReviewCommentVoteEntity>();
         }
 
         public long CatId { get; set; }
@@ -21,7 +21,7 @@ namespace iRLeagueDatabaseCore.Models
         public int DefaultPenalty { get; set; }
 
         public virtual ICollection<AcceptedReviewVoteEntity> AcceptedReviewVotes { get; set; }
-        public virtual ICollection<CommentReviewVoteEntity> CommentReviewVotes { get; set; }
+        public virtual ICollection<ReviewCommentVoteEntity> CommentReviewVotes { get; set; }
     }
 
     public class VoteCategoryEntityConfiguration : IEntityTypeConfiguration<VoteCategoryEntity>
