@@ -19,7 +19,7 @@ namespace DatabaseBenchmarks
         private static readonly int memberCount = 1000;
         private static readonly int trackCount = 100;
         private static readonly int scheduleCount = 2;
-        private static readonly int scoringCount = 2;
+        private static readonly int resultConfigCount = 2;
         private static readonly int eventCount = 12;
         private static readonly int sessionCount = 2;
 
@@ -114,9 +114,7 @@ namespace DatabaseBenchmarks
                 seasons = context.Seasons.Where(x => x.LeagueId == leagueId).ToList();
                 Console.Write("Finished!\n");
 
-                Console.Write("- Creating Schedules & ResultTabs ... ");
-                List<ScheduleEntity> schedules;
-                List<ResultTabEntity> resultTabs;
+                Console.Write("- Creating Schedules & ResultConfigs ... ");
                 foreach (var season in seasons)
                 {
                     //var scheduleCount = random.Next(3) + 1;
@@ -124,15 +122,16 @@ namespace DatabaseBenchmarks
                     {
                         season.Schedules.Add(CreateRandomSchedule(random));
                     }
-                    //var scoringCount = random.Next(3) + 1;
-                    for (int i = 0; i < scoringCount; i++)
-                    {
-                        season.ResultTabs.Add(CreateRandomResultTab(random));
-                    }
+                }
+                for (int i = 0; i < resultConfigCount; i++)
+                {
+                    league.ResultConfigs.Add(CreateRandomResultConfig(random));
                 }
                 await context.SaveChangesAsync();
-                schedules = context.Schedules.Where(x => x.LeagueId == leagueId).ToList();
-                resultTabs = context.ResultTabs.Where(x => x.LeagueId == league.Id).ToList();
+                List<ScheduleEntity> schedules = context.Schedules.Where(x => x.LeagueId == leagueId).ToList();
+                List<ResultConfigurationEntity> resultConfigs = context.ResultConfigurations
+                    .Where(x => x.LeagueId == leagueId).ToList();
+                
                 
                 Console.Write("Finished!\n");
 
@@ -185,18 +184,22 @@ namespace DatabaseBenchmarks
                 Console.Write("- Creating ScoredResults ... ");
                 List<ScoredEventResultEntity> scoredResults;
                 // create scored result for each scoring + attached schedule session
-                foreach (var resultTab in resultTabs)
+                foreach (var resultConfig in resultConfigs)
                 {
-                    var seasonEvents = resultTab.Season.Schedules.SelectMany(x => x.Events);
-                    foreach (var @event in seasonEvents)
+                    foreach (var season in seasons)
                     {
-                        if (@event.EventResult == null)
+                        var seasonEvents = season.Schedules.SelectMany(x => x.Events);
+                        foreach (var @event in seasonEvents)
                         {
-                            continue;
-                        }
+                            if (@event.EventResult == null)
+                            {
+                                continue;
+                            }
 
-                        var scoredResult = CreateRandomScoredResult(random, @event.EventResult);
-                        resultTab.ScoredEventResults.Add(scoredResult);
+                            var scoredResult = CreateRandomScoredResult(random, @event.EventResult);
+                            scoredResult.Name = resultConfig.DisplayName;
+                            @event.ScoredEventResults.Add(scoredResult);
+                        }
                     }
                 }
 
@@ -224,6 +227,15 @@ namespace DatabaseBenchmarks
                     $"- {context.ScoredEventResults.Count()} scored results with\n" +
                     $"-   {context.ScoredResultRows.Count()} scored result rows\n");
             }
+        }
+
+        private static ResultConfigurationEntity CreateRandomResultConfig(Random random)
+        {
+            return new ResultConfigurationEntity()
+            {
+                Name = GetRandomName(random),
+                DisplayName = GetRandomName(random),
+            };
         }
 
         private static EventEntity CreateRandomEvent(Random random, List<TrackConfigEntity> tracks)
@@ -313,14 +325,6 @@ namespace DatabaseBenchmarks
             {
                 Name = GetRandomName(random),
                 ShowResults = true
-            };
-        }
-
-        private static ResultTabEntity CreateRandomResultTab(Random random)
-        {
-            return new ResultTabEntity()
-            {
-                Name = GetRandomName(random),
             };
         }
 

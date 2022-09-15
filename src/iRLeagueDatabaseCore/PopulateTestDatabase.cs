@@ -209,34 +209,51 @@ namespace DbIntegrationTests
                 PointsPerPlace = new List<int>() { 5, 4, 3, 2, 1 },
                 BonusPoints = new Dictionary<string, int>()
                 {
-                    {"p1", 3 },
-                    {"p2", 2 },
-                    {"p3", 1 },
+                    { "p1", 3 },
+                    { "p2", 2 },
+                    { "p3", 1 },
+                },
+                PointsSortOptions = new List<SortOptions>() {
+                    SortOptions.PosAsc,
+                    SortOptions.FinPosAsc,
+                },
+                FinalSortOptions = new List<SortOptions>()
+                {
+                    SortOptions.PosDesc,
+                    SortOptions.FinPosDesc,
                 },
             };
-            context.PointRules.Add(pointsRule);
+            league1.PointRules.Add(pointsRule);
+
+            var resultConfig = new ResultConfigurationEntity()
+            {
+                League = league1,
+            };
+            league1.ResultConfigs.Add(resultConfig);
+
+            for (int i=0; i < 2; i++)
+            {
+                var scoring = new ScoringEntity()
+                {
+                    Name = $"Scoring {i + 1}",
+                    PointsRule = pointsRule,
+                };
+                resultConfig.Scorings.Add(scoring);
+            }
 
             foreach((var season, var index) in league1.Seasons.Select((x, i) => (x, i)))
             {
-                var resultsTab = new ResultTabEntity()
-                {
-                    Name = $"Result Tab {index + 1}",
-                    Description = string.Empty
-                };
-                resultsTab.Season = season;
-                context.ResultTabs.Add(resultsTab);
                 foreach(var @event in season.Schedules.SelectMany(x => x.Events))
                 {
                     var result = new EventResultEntity();
                     @event.EventResult = result;
                     var scoredResult = new ScoredEventResultEntity();
-                    scoredResult.Event = @event;
-                    resultsTab.ScoredEventResults.Add(scoredResult);
+                    @event.ScoredEventResults.Add(scoredResult);
                     foreach(var session in @event.Sessions)
                     {
                         var sessionResult = new SessionResultEntity();
-                        sessionResult.Session = session;
-                        sessionResult.Result = result;
+                        session.SessionResult = sessionResult;
+                        result.SessionResults.Add(sessionResult);
                         var scoredSessionResult = new ScoredSessionResultEntity();
                         scoredResult.ScoredSessionResults.Add(scoredSessionResult);
                         var resultMembers = members.ToList();
@@ -265,6 +282,53 @@ namespace DbIntegrationTests
                     }
                 }
             }
+
+            // Create reviews
+            foreach (var session in season1.Schedules
+                .SelectMany(x => x.Events)
+                .SelectMany(x => x.Sessions))
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    var review = new IncidentReviewEntity()
+                    {
+                        Corner = (i + 1).ToString(),
+                        OnLap = (i + 1).ToString(),
+                        FullDescription = $"Incident review #{i+1} Event {session.Event.Name} - {session.Name}",
+                        IncidentKind = "Contact",
+                        IncidentNr = (i + 1).ToString(),
+                    };
+                    for (int j = 0; j < 3; j++)
+                    {
+                        review.InvolvedMembers.Add(GetRandomMember(random, members));
+                    }
+                    for (int j = 0; j < 5; j++)
+                    {
+                        var comment = new ReviewCommentEntity()
+                        {
+                            Date = DateTime.Now,
+                            AuthorName = GetRandomMember(random, members).Firstname,
+                            Text = $"Comment #{j + 1} ",
+                            ReviewCommentVotes = new List<ReviewCommentVoteEntity>()
+                            {
+                                new ReviewCommentVoteEntity() { MemberAtFault = GetRandomMember(random, review.InvolvedMembers), Description = "Vote" }
+                            },
+                        };
+                        review.Comments.Add(comment);
+                    }
+                    session.IncidentReviews.Add(review);
+                }
+            }
+        }
+
+        private static MemberEntity GetRandomMember(Random random, IEnumerable<MemberEntity> memberList)
+        {
+            var memberCount = memberList.Count();
+            if (memberCount == 0)
+            {
+                return null;
+            }
+            return memberList.ElementAt(random.Next(memberCount));
         }
 
         private static TimeSpan GetTimeSpan(Random random)

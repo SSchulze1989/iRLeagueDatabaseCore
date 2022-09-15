@@ -1,4 +1,5 @@
-﻿using iRLeagueDatabaseCore.Converters;
+﻿using iRLeagueApiCore.Common.Enums;
+using iRLeagueDatabaseCore.Converters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
@@ -12,13 +13,18 @@ namespace iRLeagueDatabaseCore.Models
     public class PointRuleEntity : IVersionEntity
     {
         public long LeagueId { get; set; }
-        public long PointsRuleId { get; set; }
+        public long PointRuleId { get; set; }
 
         public string Name { get; set; }
         public ICollection<int> PointsPerPlace { get; set; }
         public IDictionary<string, int> BonusPoints { get; set; }
         public int MaxPoints { get; set; }
         public int PointDropOff { get; set; }
+        public ICollection<SortOptions> PointsSortOptions { get; set; }
+        public ICollection<SortOptions> FinalSortOptions { get; set; }
+
+        public virtual LeagueEntity League { get; set; }
+        public virtual ICollection<ResultsFilterOptionEntity> ResultsFilters { get; set; }
 
         #region version
         public DateTime? CreatedOn { get; set; }
@@ -35,20 +41,34 @@ namespace iRLeagueDatabaseCore.Models
     {
         public void Configure(EntityTypeBuilder<PointRuleEntity> entity)
         {
-            entity.HasKey(e => new { e.LeagueId, e.PointsRuleId });
+            entity.HasKey(e => new { e.LeagueId, e.PointRuleId });
 
-            entity.HasAlternateKey(e => e.PointsRuleId);
+            entity.HasAlternateKey(e => e.PointRuleId);
 
-            entity.Property(e => e.PointsRuleId)
+            entity.Property(e => e.PointRuleId)
                 .ValueGeneratedOnAdd();
 
-            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.CreatedOn)
+                .HasColumnType("datetime");
 
-            entity.Property(e => e.LastModifiedOn).HasColumnType("datetime");
+            entity.Property(e => e.LastModifiedOn)
+                .HasColumnType("datetime");
 
-            entity.Property(e => e.PointsPerPlace).HasConversion(new CollectionToStringConverter<int>());
+            entity.Property(e => e.PointsPerPlace)
+                .HasConversion(new CollectionToStringConverter<int>());
 
-            entity.Property(e => e.BonusPoints).HasConversion(new DictionaryToStringConverter<string, int>());
+            entity.Property(e => e.BonusPoints)
+                .HasConversion(new DictionaryToStringConverter<string, int>());
+
+            entity.Property(e => e.PointsSortOptions)
+                .HasConversion(new CollectionToStringConverter<SortOptions>());
+
+            entity.Property(e => e.FinalSortOptions)
+                .HasConversion(new CollectionToStringConverter<SortOptions>());
+
+            entity.HasOne(d => d.League)
+                .WithMany(p => p.PointRules)
+                .HasForeignKey(d => d.LeagueId);
         }
     }
 }

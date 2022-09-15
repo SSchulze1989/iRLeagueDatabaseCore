@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace iRLeagueDatabaseCore.Models
 {
-    public partial class CommentReviewVoteEntity
+    public partial class ReviewCommentVoteEntity
     {
         public long ReviewVoteId { get; set; }
         public long CommentId { get; set; }
@@ -16,14 +16,14 @@ namespace iRLeagueDatabaseCore.Models
         public long? VoteCategoryId { get; set; }
         public string Description { get; set; }
 
-        public virtual CommentBaseEntity Comment { get; set; }
+        public virtual ReviewCommentEntity Comment { get; set; }
         public virtual VoteCategoryEntity VoteCategory { get; set; }
         public virtual MemberEntity MemberAtFault { get; set; }
     }
 
-    public class CommentReviewVoteEntityConfiguration : IEntityTypeConfiguration<CommentReviewVoteEntity>
+    public class CommentReviewVoteEntityConfiguration : IEntityTypeConfiguration<ReviewCommentVoteEntity>
     {
-        public void Configure(EntityTypeBuilder<CommentReviewVoteEntity> entity)
+        public void Configure(EntityTypeBuilder<ReviewCommentVoteEntity> entity)
         {
             entity.HasKey(e => e.ReviewVoteId);
 
@@ -34,7 +34,7 @@ namespace iRLeagueDatabaseCore.Models
             entity.HasIndex(e => e.MemberAtFaultId);
 
             entity.HasOne(d => d.Comment)
-                .WithMany(p => p.CommentReviewVotes)
+                .WithMany(p => p.ReviewCommentVotes)
                 .HasForeignKey(d => d.CommentId);
 
             entity.HasOne(d => d.VoteCategory)

@@ -24,7 +24,7 @@ namespace iRLeagueDatabaseCore.Models
     {
         public void Configure(EntityTypeBuilder<ReviewPenaltyEntity> entity)
         {
-            entity.HasKey(e => new { e.ResultRowId, e.ReviewId });
+            entity.HasKey(e => new { e.LeagueId, e.ResultRowId, e.ReviewId });
 
             entity.HasIndex(e => new { e.LeagueId, e.ResultRowId });
 
@@ -38,12 +38,12 @@ namespace iRLeagueDatabaseCore.Models
 
             entity.HasOne(d => d.Review)
                 .WithMany(p => p.ReviewPenaltys)
-                .HasForeignKey(d => d.ReviewId)
+                .HasForeignKey(d => new { d.LeagueId, d.ReviewId })
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
             entity.HasOne(d => d.ReviewVote)
                 .WithMany(p => p.ReviewPenaltys)
-                .HasForeignKey(d => d.ReviewVoteId);
+                .HasForeignKey(d => new { d.LeagueId, d.ReviewVoteId });
         }
     }
 }

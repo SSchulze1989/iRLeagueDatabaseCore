@@ -13,14 +13,17 @@ namespace iRLeagueDatabaseCore.Models
         public ResultConfigurationEntity()
         {
             Scorings = new HashSet<ScoringEntity>();
-            ResultTabs = new HashSet<ResultTabEntity>();
         }
 
         public long LeagueId { get; set; }
         public long ResultConfigId { get; set; }
 
+        public string Name { get; set; }
+        public string DisplayName { get; set; }
+
+        public virtual LeagueEntity League { get; set; }
         public virtual ICollection<ScoringEntity> Scorings { get; set; }
-        public virtual ICollection<ResultTabEntity> ResultTabs { get; set; }
+        public virtual IEnumerable<EventEntity> Events { get; set; }
 
         #region version
         public DateTime? CreatedOn { get; set; }
@@ -49,13 +52,9 @@ namespace iRLeagueDatabaseCore.Models
 
             entity.Property(e => e.LastModifiedOn).HasColumnType("datetime");
 
-            entity.HasMany(d => d.ResultTabs)
-                .WithMany(p => p.ResultConfigurations)
-                .UsingEntity<ResultConfigurationsResultTabs>(
-                    left => left.HasOne(e => e.ResultTabRef)
-                        .WithMany().HasForeignKey(e => new { e.LeagueId, e.ResultTabRefId }),
-                    right => right.HasOne(e => e.ResultConfigurationRef)
-                        .WithMany().HasForeignKey(e => new { e.LeagueId, e.ResultConfigurationRefId }));
+            entity.HasOne(d => d.League)
+                .WithMany(p => p.ResultConfigs)
+                .HasForeignKey(d => d.LeagueId);
         }
     }
 }

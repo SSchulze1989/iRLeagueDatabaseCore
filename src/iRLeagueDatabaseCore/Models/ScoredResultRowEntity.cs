@@ -64,7 +64,7 @@ namespace iRLeagueDatabaseCore.Models
 
         public long LeagueId { get; set; }
         public long ScoredResultRowId { get; set; }
-        public long ScoredSessionResultId { get; set; }
+        public long SessionResultId { get; set; }
         public long MemberId { get; set; }
         public long? TeamId { get; set; }
 
@@ -107,7 +107,7 @@ namespace iRLeagueDatabaseCore.Models
 
             entity.HasOne(d => d.ScoredSessionResult)
                 .WithMany(p => p.ScoredResultRows)
-                .HasForeignKey(d => new { d.LeagueId, d.ScoredSessionResultId });
+                .HasForeignKey(d => new { d.LeagueId, d.SessionResultId });
 
             entity.HasOne(d => d.Member)
                 .WithMany()

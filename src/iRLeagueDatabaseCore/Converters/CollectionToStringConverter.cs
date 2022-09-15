@@ -23,9 +23,19 @@ namespace iRLeagueDatabaseCore.Converters
         private static Expression<Func<ICollection<T>, string>> ConvertToString(char delimiter, CultureInfo culture) =>
             array => string.Join(delimiter, array.Select(x => Convert.ToString(x, culture)));
 
-        private static Expression<Func<string, ICollection<T>>> ConvertToArray(char delimiter, CultureInfo culture) => 
+        private static Expression<Func<string, ICollection<T>>> ConvertToArray(char delimiter, CultureInfo culture) =>
             str => str.Split(delimiter, StringSplitOptions.RemoveEmptyEntries)
-                .Select(x => (T)Convert.ChangeType(x, typeof(T), CultureInfo.InvariantCulture))
+                .Select(x => ChangeType(x, culture))
                 .ToList();
+
+        private static T ChangeType(string value, CultureInfo culture)
+        {
+            if (typeof(T).IsEnum)
+            {
+                return (T)Enum.Parse(typeof(T), value);
+            }
+
+            return (T)Convert.ChangeType(value, typeof(T), culture);
+        }
     }
 }

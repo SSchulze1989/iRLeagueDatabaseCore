@@ -12,7 +12,7 @@ namespace iRLeagueDatabaseCore.Models
         public MemberEntity()
         {
             AcceptedReviewVotes = new HashSet<AcceptedReviewVoteEntity>();
-            CommentReviewVotes = new HashSet<CommentReviewVoteEntity>();
+            CommentReviewVotes = new HashSet<ReviewCommentVoteEntity>();
             DriverStatisticRows = new HashSet<DriverStatisticRowEntity>();
             InvolvedReviews = new HashSet<IncidentReviewEntity>();
             ResultRows = new HashSet<ResultRowEntity>();
@@ -32,7 +32,7 @@ namespace iRLeagueDatabaseCore.Models
         public string DiscordId { get; set; }
 
         public virtual ICollection<AcceptedReviewVoteEntity> AcceptedReviewVotes { get; set; }
-        public virtual ICollection<CommentReviewVoteEntity> CommentReviewVotes { get; set; }
+        public virtual ICollection<ReviewCommentVoteEntity> CommentReviewVotes { get; set; }
         public virtual ICollection<DriverStatisticRowEntity> DriverStatisticRows { get; set; }
         public virtual ICollection<IncidentReviewEntity> InvolvedReviews { get; set; }
         public virtual ICollection<ResultRowEntity> ResultRows { get; set; }
