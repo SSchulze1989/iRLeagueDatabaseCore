@@ -32,7 +32,12 @@ namespace iRLeagueDatabaseCore.Models
     {
         public void Configure(EntityTypeBuilder<AcceptedReviewVoteEntity> entity)
         {
-            entity.HasKey(e => e.ReviewVoteId);
+            entity.HasKey(e => new { e.LeagueId, e.ReviewVoteId });
+
+            entity.HasAlternateKey(e => e.ReviewVoteId);
+
+            entity.Property(e => e.ReviewVoteId)
+                .ValueGeneratedOnAdd();
 
             entity.HasIndex(e => e.VoteCategoryId);
 
@@ -50,7 +55,7 @@ namespace iRLeagueDatabaseCore.Models
 
             entity.HasOne(d => d.Review)
                 .WithMany(p => p.AcceptedReviewVotes)
-                .HasForeignKey(d => d.ReviewId);
+                .HasForeignKey(d => new { d.LeagueId, d.ReviewId });
         }
     }
 
