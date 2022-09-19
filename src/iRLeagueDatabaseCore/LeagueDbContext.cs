@@ -51,8 +51,7 @@ namespace iRLeagueDatabaseCore.Models
         public virtual DbSet<TrackGroupEntity> TrackGroups { get; set; }
         public virtual DbSet<IRSimSessionDetailsEntity> IRSimSessionDetails { get; set; }
         public virtual DbSet<TrackConfigEntity> TrackConfigs { get; set; }
-        public virtual DbSet<SessionEntity> SubSessions { get; set; }
-        public virtual DbSet<SessionResultEntity> SubResults { get; set; }
+        public virtual DbSet<SessionResultEntity> SessionResults { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

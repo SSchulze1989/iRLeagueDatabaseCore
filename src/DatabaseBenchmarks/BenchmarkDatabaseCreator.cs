@@ -219,10 +219,10 @@ namespace DatabaseBenchmarks
                     $"- {context.Seasons.Count()} seasons\n" +
                     $"- {context.Schedules.Count()} schedules\n" +
                     $"- {context.Scorings.Count()} scorings\n" +
-                    $"- {context.Sessions.Count()} sessions with\n" +
-                    $"-   {context.SubSessions.Count()} subsessions\n" +
+                    $"- {context.Events.Count()} events with" +
+                    $"-   {context.Sessions.Count()} sessions\n" +
                     $"- {context.EventResults.Count()} results with\n" +
-                    $"-   {context.SubResults.Count()} subresults\n" +
+                    $"-   {context.SessionResults.Count()} session results\n" +
                     $"-   {context.ResultRows.Count()} result rows\n" +
                     $"- {context.ScoredEventResults.Count()} scored results with\n" +
                     $"-   {context.ScoredResultRows.Count()} scored result rows\n");
