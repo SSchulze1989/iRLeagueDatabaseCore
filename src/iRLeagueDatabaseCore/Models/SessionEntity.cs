@@ -38,7 +38,6 @@ namespace iRLeagueDatabaseCore.Models
 
         public virtual EventEntity Event { get; set; }
         public virtual SessionResultEntity SessionResult { get; set; }
-        public virtual SessionEntity ParentOfPracticeSession { get; set; }
         public virtual ICollection<IncidentReviewEntity> IncidentReviews { get; set; }
     }
 

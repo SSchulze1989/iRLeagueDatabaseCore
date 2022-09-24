@@ -18,12 +18,16 @@ namespace DatabaseBenchmarks
         {
             //Console.WriteLine("Hello World!");
 
+#if !DEBUG_CREATEDB
             if (args.Contains("--build-db"))
             {
+#endif
                 Console.WriteLine("Creating benchmark database...");
                 CreateDatabase().GetAwaiter().GetResult();
                 Console.Write("Finished creating");
-            }
+#if !DEBUG_CREATEDB
+        }
+#endif
 
 #if DEBUG
             var qb = new QuerySeasonResultsBenchmarks();

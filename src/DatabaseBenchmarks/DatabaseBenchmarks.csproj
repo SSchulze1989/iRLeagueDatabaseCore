@@ -5,6 +5,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <UserSecretsId>efb650e8-4870-41f4-ab66-4eac653c6fef</UserSecretsId>
     <StartupObject>DatabaseBenchmarks.Program</StartupObject>
+    <Configurations>Debug;Release;Debug_CreateDb</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
