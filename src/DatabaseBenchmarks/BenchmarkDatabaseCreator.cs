@@ -1,4 +1,5 @@
-﻿using iRLeagueDatabaseCore.Models;
+﻿using iRLeagueApiCore.Common.Enums;
+using iRLeagueDatabaseCore.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -147,6 +148,7 @@ namespace DatabaseBenchmarks
                         {
                             var session = CreateRandomSession(random);
                             session.Name = $"Race {j + 1}";
+                            session.SessionType = SessionType.Race;
                             @event.Sessions.Add(session);
                         }
                         schedule.Events.Add(@event);
@@ -226,8 +228,12 @@ namespace DatabaseBenchmarks
                 List<IncidentReviewEntity> reviews;
                 foreach(var session in events.SelectMany(x => x.Sessions))
                 {
-                    var review = CreateRandomReview(random, members, categories);
-                    session.IncidentReviews.Add(review);
+                    var nReviews = random.Next(1, 10);
+                    for (int i = 0; i < nReviews; i++)
+                    {
+                        var review = CreateRandomReview(random, members, categories);
+                        session.IncidentReviews.Add(review);
+                    }
                 }
                 await context.SaveChangesAsync();
                 reviews = context.IncidentReviews.Where(x => x.LeagueId == leagueId).ToList();
