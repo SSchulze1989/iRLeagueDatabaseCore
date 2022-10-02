@@ -51,8 +51,8 @@ namespace iRLeagueDatabaseCore.Models
             entity.Property(e => e.Date).HasColumnType("datetime");
 
             entity.HasOne(d => d.Team)
-                .WithMany(p => p.ScoredTeamResultRows)
-                .HasForeignKey(d => d.TeamId)
+                .WithMany()
+                .HasForeignKey(d => new { d.LeagueId, d.TeamId })
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
             entity.HasOne(d => d.ScoredSessionResult)
@@ -61,7 +61,13 @@ namespace iRLeagueDatabaseCore.Models
 
             entity.HasMany(d => d.ScoredResultRows)
                 .WithMany(p => p.ScoredTeamResultRows)
-                .UsingEntity(e => e.ToTable("ScoredTeamResultRowsResultRows"));
+                .UsingEntity<ScoredTeamResultRowsResultRows>(
+                    right => right.HasOne(e => e.ResultRow)
+                        .WithMany()
+                        .HasForeignKey(e => new {e.LeagueId, e.ResultRowRefId}),
+                    left => left.HasOne(e => e.TeamResultRow)
+                        .WithMany()
+                        .HasForeignKey(e => new {e.LeagueId, e.TeamResultRowRefId}));
         }
     }
 }

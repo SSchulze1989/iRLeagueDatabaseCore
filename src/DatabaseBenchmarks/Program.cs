@@ -97,8 +97,7 @@ namespace DatabaseBenchmarks
             using (var dbContext = BenchmarkDatabaseCreator.CreateStaticDbContext())
             {
                 var seasonResults = await dbContext.ScoredEventResults
-                    .Include(x => x.RawResult)
-                        .ThenInclude(x => x.Event)
+                    .Include(x => x.Event)
                             .ThenInclude(x => x.Schedule)
                     .Include(x => x.ScoredSessionResults)
                         .ThenInclude(x => x.ScoredResultRows)        

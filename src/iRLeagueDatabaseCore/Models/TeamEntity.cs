@@ -11,12 +11,10 @@ namespace iRLeagueDatabaseCore.Models
     {
         public TeamEntity()
         {
-            LeagueMemberEntities = new HashSet<MemberEntity>();
-            ResultRows = new HashSet<ResultRowEntity>();
-            ScoredResultRows = new HashSet<ScoredResultRowEntity>();
-            ScoredTeamResultRows = new HashSet<ScoredTeamResultRowEntity>();
+            Members = new HashSet<LeagueMemberEntity>();
         }
 
+        public long LeagueId { get; set; }
         public long TeamId { get; set; }
         public string Name { get; set; }
         public string Profile { get; set; }
@@ -30,17 +28,20 @@ namespace iRLeagueDatabaseCore.Models
         public string LastModifiedByUserId { get; set; }
         public string LastModifiedByUserName { get; set; }
 
-        public virtual ICollection<MemberEntity> LeagueMemberEntities { get; set; }
-        public virtual ICollection<ResultRowEntity> ResultRows { get; set; }
-        public virtual ICollection<ScoredResultRowEntity> ScoredResultRows { get; set; }
-        public virtual ICollection<ScoredTeamResultRowEntity> ScoredTeamResultRows { get; set; }
+        public virtual ICollection<LeagueMemberEntity> Members { get; set; }
+        public virtual LeagueEntity League { get; set; }
     }
 
     public class TeamEntityConfiguration : IEntityTypeConfiguration<TeamEntity>
     {
         public void Configure(EntityTypeBuilder<TeamEntity> entity)
         {
-            entity.HasKey(e => e.TeamId);
+            entity.HasKey(e => new { e.LeagueId, e.TeamId });
+
+            entity.HasAlternateKey(e => e.TeamId);
+
+            entity.Property(e => e.TeamId)
+                .ValueGeneratedOnAdd();
 
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
 

@@ -30,6 +30,7 @@ namespace iRLeagueDatabaseCore.Models
         public virtual DbSet<IncidentReviewEntity> IncidentReviews { get; set; }
         public virtual DbSet<LeagueEntity> Leagues { get; set; }
         public virtual DbSet<MemberEntity> Members { get; set; }
+        public virtual DbSet<LeagueMemberEntity> LeagueMembers { get; set; }
         public virtual DbSet<PointRuleEntity> PointRules { get; set; }
         public virtual DbSet<EventResultEntity> EventResults { get; set; }
         public virtual DbSet<ResultConfigurationEntity> ResultConfigurations { get; set; }
@@ -47,7 +48,7 @@ namespace iRLeagueDatabaseCore.Models
         public virtual DbSet<SessionEntity> Sessions { get; set; }
         public virtual DbSet<StatisticSetEntity> StatisticSets { get; set; }
         public virtual DbSet<TeamEntity> Teams { get; set; }
-        public virtual DbSet<VoteCategoryEntity> VoteCategorys { get; set; }
+        public virtual DbSet<VoteCategoryEntity> VoteCategories { get; set; }
         public virtual DbSet<TrackGroupEntity> TrackGroups { get; set; }
         public virtual DbSet<IRSimSessionDetailsEntity> IRSimSessionDetails { get; set; }
         public virtual DbSet<TrackConfigEntity> TrackConfigs { get; set; }

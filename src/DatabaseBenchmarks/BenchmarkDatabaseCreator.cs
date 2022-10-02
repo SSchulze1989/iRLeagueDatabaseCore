@@ -222,7 +222,7 @@ namespace DatabaseBenchmarks
                 };
                 foreach(var category in categories)
                 {
-                    context.VoteCategorys.Add(category);
+                    context.VoteCategories.Add(category);
                 }
 
                 List<IncidentReviewEntity> reviews;

@@ -102,8 +102,8 @@ namespace iRLeagueDatabaseCore.Models
             entity.Property(e => e.QualifyingTimeAt).HasColumnType("datetime");
 
             entity.HasOne(d => d.Team)
-                .WithMany(p => p.ScoredResultRows)
-                .HasForeignKey(d => d.TeamId);
+                .WithMany()
+                .HasForeignKey(d => new { d.LeagueId, d.TeamId });
 
             entity.HasOne(d => d.ScoredSessionResult)
                 .WithMany(p => p.ScoredResultRows)
