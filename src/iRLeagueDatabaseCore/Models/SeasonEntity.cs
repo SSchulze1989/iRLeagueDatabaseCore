@@ -26,6 +26,11 @@ namespace iRLeagueDatabaseCore.Models
         public bool Finished { get; set; }
         public DateTime? SeasonStart { get; set; }
         public DateTime? SeasonEnd { get; set; }
+        /// <summary>
+        /// Imported Id from old database
+        /// Will be deleted after imports have finished
+        /// </summary>
+        public long? ImportId { get; set; }
 
         public virtual LeagueEntity League { get; set; }
         public virtual ScoringEntity MainScoring { get; set; }

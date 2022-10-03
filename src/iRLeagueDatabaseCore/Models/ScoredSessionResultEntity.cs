@@ -21,6 +21,11 @@ namespace iRLeagueDatabaseCore.Models
         public long ResultId { get; set; }
         public long SessionResultId { get; set; }
         public long? ScoringId { get; set; }
+        /// <summary>
+        /// Imported Id from old database
+        /// Will be deleted after imports have finished
+        /// </summary>
+        public long? ImportId { get; set; }
 
         public string Name { get; set; }
         public long FastestLap { get; set; }

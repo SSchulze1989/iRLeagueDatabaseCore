@@ -30,6 +30,11 @@ namespace iRLeagueDatabaseCore.Models
         public string IRacingId { get; set; }
         public string DanLisaId { get; set; }
         public string DiscordId { get; set; }
+        /// <summary>
+        /// Imported Id from old database
+        /// Will be deleted after imports have finished
+        /// </summary>
+        public long? ImportId { get; set; }
 
         public virtual ICollection<AcceptedReviewVoteEntity> AcceptedReviewVotes { get; set; }
         public virtual ICollection<ReviewCommentVoteEntity> CommentReviewVotes { get; set; }

@@ -23,6 +23,11 @@ namespace iRLeagueDatabaseCore.Models
         public long LeagueId { get; set; }
         public long ScheduleId { get; set; }
         public long? TrackId { get; set; }
+        /// <summary>
+        /// Imported Id from old database
+        /// Will be deleted after imports have finished
+        /// </summary>
+        public long? ImportId { get; set; }
 
         public EventType EventType { get; set; }
         public DateTime? Date { get; set; }

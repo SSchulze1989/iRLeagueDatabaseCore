@@ -67,6 +67,11 @@ namespace iRLeagueDatabaseCore.Models
         public long SessionResultId { get; set; }
         public long MemberId { get; set; }
         public long? TeamId { get; set; }
+        /// <summary>
+        /// Imported Id from old database
+        /// Will be deleted after imports have finished
+        /// </summary>
+        public long? ImportId { get; set; }
 
         public double RacePoints { get; set; }
         public double BonusPoints { get; set; }
