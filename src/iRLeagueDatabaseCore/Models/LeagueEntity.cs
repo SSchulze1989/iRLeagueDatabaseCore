@@ -19,12 +19,16 @@ namespace iRLeagueDatabaseCore.Models
             Seasons = new HashSet<SeasonEntity>();
             ResultConfigs = new HashSet<ResultConfigurationEntity>();
             PointRules = new HashSet<PointRuleEntity>();
+            LeagueMembers = new HashSet<LeagueMemberEntity>();
+            Teams = new HashSet<TeamEntity>();
         }
 
         public virtual ICollection<SeasonEntity> Seasons { get; set; }
         public virtual ICollection<ResultConfigurationEntity> ResultConfigs { get; set; }
         public virtual ICollection<PointRuleEntity> PointRules { get; set; }
         public virtual IEnumerable<ScoringEntity> Scorings { get; set; }
+        public virtual ICollection<LeagueMemberEntity> LeagueMembers { get; set; }
+        public virtual ICollection<TeamEntity> Teams { get; set; }
     }
 
     public class LeagueEntityConfiguration : IEntityTypeConfiguration<LeagueEntity>

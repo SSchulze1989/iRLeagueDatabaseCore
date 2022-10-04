@@ -14,13 +14,17 @@ namespace iRLeagueDatabaseCore.Models
             CleanestDrivers = new HashSet<MemberEntity>();
             HardChargers = new HashSet<MemberEntity>();
             ScoredResultRows = new HashSet<ScoredResultRowEntity>();
-            ScoredTeamResultRows = new HashSet<ScoredTeamResultRowEntity>();
         }
 
         public long LeagueId { get; set; }
         public long ResultId { get; set; }
         public long SessionResultId { get; set; }
         public long? ScoringId { get; set; }
+        /// <summary>
+        /// Imported Id from old database
+        /// Will be deleted after imports have finished
+        /// </summary>
+        public long? ImportId { get; set; }
 
         public string Name { get; set; }
         public long FastestLap { get; set; }
@@ -46,7 +50,6 @@ namespace iRLeagueDatabaseCore.Models
         public virtual ICollection<MemberEntity> CleanestDrivers { get; set; }
         public virtual ICollection<MemberEntity> HardChargers { get; set; }
         public virtual ICollection<ScoredResultRowEntity> ScoredResultRows { get; set; }
-        public virtual ICollection<ScoredTeamResultRowEntity> ScoredTeamResultRows { get; set; }
     }
 
     public class ScoredSessionResultEntityConfiguration : IEntityTypeConfiguration<ScoredSessionResultEntity>

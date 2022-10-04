@@ -188,20 +188,24 @@ namespace DbIntegrationTests
 
             GenerateMembers(context, random);
 
-            // assign members to league
-            foreach (var member in context.Members)
-            {
-                var leagueMember = new LeagueMemberEntity()
-                {
-                    Member = member,
-                    League = league1
-                };
-                context.Set<LeagueMemberEntity>().Add(leagueMember);
-            }
-
             var members = context.Members
                 .Local
                 .ToList();
+            var leagues = context.Leagues
+                .Local
+                .ToList();
+            // assign members to league
+            foreach (var member in members)
+            {
+                foreach (var league in leagues)
+                {
+                    var leagueMember = new LeagueMemberEntity()
+                    {
+                        Member = member,
+                    };
+                    league.LeagueMembers.Add(leagueMember);
+                }
+            }
 
             var pointsRule = new PointRuleEntity()
             {

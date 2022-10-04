@@ -1,4 +1,5 @@
-﻿using iRLeagueDatabaseCore.Models;
+﻿using iRLeagueApiCore.Common.Enums;
+using iRLeagueDatabaseCore.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -14,13 +15,13 @@ namespace DatabaseBenchmarks
     {
         private static IConfiguration Configuration { get; }
         private static readonly int Seed = 12345;
-        private static readonly int leagueCount = 5;
-        private static readonly int seasonCount = 10;
+        private static readonly int leagueCount = 1; // 5
+        private static readonly int seasonCount = 1; // 10
         private static readonly int memberCount = 1000;
         private static readonly int trackCount = 100;
         private static readonly int scheduleCount = 2;
         private static readonly int resultConfigCount = 2;
-        private static readonly int eventCount = 12;
+        private static readonly int eventCount = 4; // 12
         private static readonly int sessionCount = 2;
 
         static BenchmarkDatabaseCreator()
@@ -147,6 +148,7 @@ namespace DatabaseBenchmarks
                         {
                             var session = CreateRandomSession(random);
                             session.Name = $"Race {j + 1}";
+                            session.SessionType = SessionType.Race;
                             @event.Sessions.Add(session);
                         }
                         schedule.Events.Add(@event);
@@ -208,6 +210,35 @@ namespace DatabaseBenchmarks
                 scoredResults = context.ScoredEventResults.Where(x => x.LeagueId == leagueId).ToList();
                 Console.Write("Finished!\n");
                 Console.WriteLine("");
+
+                Console.WriteLine("- Creating Reviews ... ");
+                var categories = new[]
+                {
+                    new VoteCategoryEntity() { Index = 0, Text = "Cat 1", DefaultPenalty = 1},
+                    new VoteCategoryEntity() { Index = 1, Text = "Cat 2", DefaultPenalty = 2},
+                    new VoteCategoryEntity() { Index = 2, Text = "Cat 3", DefaultPenalty = 3},
+                    new VoteCategoryEntity() { Index = 3, Text = "Cat 4", DefaultPenalty = 5},
+                    new VoteCategoryEntity() { Index = 4, Text = "Cat 5", DefaultPenalty = 10},
+                };
+                foreach(var category in categories)
+                {
+                    context.VoteCategories.Add(category);
+                }
+
+                List<IncidentReviewEntity> reviews;
+                foreach(var session in events.SelectMany(x => x.Sessions))
+                {
+                    var nReviews = random.Next(1, 10);
+                    for (int i = 0; i < nReviews; i++)
+                    {
+                        var review = CreateRandomReview(random, members, categories);
+                        session.IncidentReviews.Add(review);
+                    }
+                }
+                await context.SaveChangesAsync();
+                reviews = context.IncidentReviews.Where(x => x.LeagueId == leagueId).ToList();
+                Console.Write("Finished!\n");
+                Console.WriteLine("");
             }
 
             using (var context = CreateStaticDbContext())
@@ -219,13 +250,14 @@ namespace DatabaseBenchmarks
                     $"- {context.Seasons.Count()} seasons\n" +
                     $"- {context.Schedules.Count()} schedules\n" +
                     $"- {context.Scorings.Count()} scorings\n" +
-                    $"- {context.Sessions.Count()} sessions with\n" +
-                    $"-   {context.SubSessions.Count()} subsessions\n" +
+                    $"- {context.Events.Count()} events with" +
+                    $"-   {context.Sessions.Count()} sessions\n" +
                     $"- {context.EventResults.Count()} results with\n" +
-                    $"-   {context.SubResults.Count()} subresults\n" +
+                    $"-   {context.SessionResults.Count()} session results\n" +
                     $"-   {context.ResultRows.Count()} result rows\n" +
                     $"- {context.ScoredEventResults.Count()} scored results with\n" +
-                    $"-   {context.ScoredResultRows.Count()} scored result rows\n");
+                    $"-   {context.ScoredResultRows.Count()} scored result rows\n" +
+                    $"- {context.IncidentReviews.Count()} incident reviews\n");
             }
         }
 
@@ -405,6 +437,80 @@ namespace DatabaseBenchmarks
             return new IRSimSessionDetailsEntity();
         }
 
+        private static IncidentReviewEntity CreateRandomReview(Random random, IEnumerable<MemberEntity> drivers, IEnumerable<VoteCategoryEntity> voteCategories)
+        {
+            var review = new IncidentReviewEntity()
+            {
+                AuthorName = GetRandomName(random),
+                AuthorUserId = Guid.NewGuid().ToString(),
+                FullDescription = GetRandomText(random),
+                ResultLongText = GetRandomText(random),
+                Corner = random.Next(3, 15).ToString(),
+                OnLap = random.Next(1, 20).ToString(),
+                IncidentKind = GetRandomIncidentKind(random),
+            };
+
+            // add members involved
+            var nInvolvedMembers = random.Next(1, 5);
+            for (int i=0; i<nInvolvedMembers; i++)
+            {
+                var index = random.Next(drivers.Count());
+                review.InvolvedMembers.Add(drivers.ElementAt(index));
+            }
+            // add comments
+            var nComments = random.Next(1, 5);
+            for (int i=0; i<nComments; i++)
+            {
+                review.Comments.Add(CreateRandomComment(random, review.InvolvedMembers, voteCategories));
+            }
+            // add vote results
+            var commentVotes = review.Comments.SelectMany(x => x.ReviewCommentVotes).ToArray();
+            var acceptedCommentVote = commentVotes.ElementAt(random.Next(commentVotes.Count()));
+            review.AcceptedReviewVotes.Add(new AcceptedReviewVoteEntity()
+            {
+                MemberAtFault = acceptedCommentVote.MemberAtFault,
+                Description = acceptedCommentVote.Description,
+                VoteCategory = acceptedCommentVote.VoteCategory,
+            });
+            return review;
+        }
+
+        private static ReviewCommentEntity CreateRandomComment(Random random, IEnumerable<MemberEntity> involved, IEnumerable<VoteCategoryEntity> voteCategories)
+        {
+            var comment = new ReviewCommentEntity()
+            {
+                AuthorName = GetRandomName(random),
+                AuthorUserId = Guid.NewGuid().ToString(),
+                Text = GetRandomText(random),
+                Date = DateTime.UtcNow,
+            };
+            // add votes
+            var nVotes = random.Next(1, involved.Count());
+            for (int i=0; i<nVotes; i++)
+            {
+                var vote = new ReviewCommentVoteEntity()
+                {
+                    MemberAtFault = involved.ElementAt(random.Next(involved.Count())),
+                    Description = GetRandomText(random, 50),
+                    VoteCategory = voteCategories.ElementAt(random.Next(voteCategories.Count())),
+                };
+                comment.ReviewCommentVotes.Add(vote);
+            }
+            return comment;
+        }
+
+        private static string GetRandomIncidentKind(Random random)
+        {
+            var incidentKinds = new[]
+            {
+                "Contact in Corner",
+                "Contact on straight",
+                "Blocking",
+                "Intentional Crashing",
+            };
+            return incidentKinds[random.Next(incidentKinds.Length)];
+        }
+
         private static string GetRandomName(Random random)
         {
             var minLen = 3;
@@ -442,6 +548,14 @@ namespace DatabaseBenchmarks
                 .AddDays(addDays)
                 .AddHours(addHours)
                 .AddMinutes(addMinutes);
+        }
+
+        private static string GetRandomText(Random random, int maxLength = 5000)
+        {
+            var text = @"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation 
+ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.Excepteur sint 
+occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+            return text.Substring(0, random.Next(Math.Min(maxLength, text.Length)));
         }
 
         private static T GetRandomEnumValue<T>(Random random) where T : Enum

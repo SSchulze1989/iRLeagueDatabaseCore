@@ -26,6 +26,12 @@ namespace iRLeagueDatabaseCore.Models
         public string LastModifiedByUserId { get; set; }
         public string LastModifiedByUserName { get; set; }
         public long SeasonId { get; set; }
+        /// <summary>
+        /// Imported Id from old database
+        /// Will be deleted after imports have finished
+        /// </summary>
+        public long? ImportId { get; set; }
+
         public virtual SeasonEntity Season { get; set; }
         public virtual ICollection<ScoringEntity> Scorings { get; set; }
         public virtual ICollection<EventEntity> Events { get; set; }

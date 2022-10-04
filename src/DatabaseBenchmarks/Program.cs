@@ -18,12 +18,16 @@ namespace DatabaseBenchmarks
         {
             //Console.WriteLine("Hello World!");
 
+#if !DEBUG_CREATEDB
             if (args.Contains("--build-db"))
             {
+#endif
                 Console.WriteLine("Creating benchmark database...");
                 CreateDatabase().GetAwaiter().GetResult();
                 Console.Write("Finished creating");
-            }
+#if !DEBUG_CREATEDB
+        }
+#endif
 
 #if DEBUG
             var qb = new QuerySeasonResultsBenchmarks();
@@ -93,8 +97,7 @@ namespace DatabaseBenchmarks
             using (var dbContext = BenchmarkDatabaseCreator.CreateStaticDbContext())
             {
                 var seasonResults = await dbContext.ScoredEventResults
-                    .Include(x => x.RawResult)
-                        .ThenInclude(x => x.Event)
+                    .Include(x => x.Event)
                             .ThenInclude(x => x.Schedule)
                     .Include(x => x.ScoredSessionResults)
                         .ThenInclude(x => x.ScoredResultRows)        
