@@ -19,6 +19,11 @@ namespace iRLeagueDatabaseCore.Models
         public long LeagueId { get; set; }
         public long? ReviewId { get; set; }
         public long? ReplyToCommentId { get; set; }
+        /// <summary>
+        /// Imported Id from old database
+        /// Will be deleted after imports have finished
+        /// </summary>
+        public long? ImportId { get; set; }
 
         public DateTime? Date { get; set; }
         public string AuthorUserId { get; set; }

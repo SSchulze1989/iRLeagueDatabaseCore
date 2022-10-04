@@ -12,7 +12,8 @@ namespace iRLeagueDatabaseCore.Models
         public ScoredResultRowEntity()
         {
             ReviewPenalties = new HashSet<ReviewPenaltyEntity>();
-            ScoredTeamResultRows = new HashSet<ScoredTeamResultRowEntity>();
+            TeamParentRows = new HashSet<ScoredResultRowEntity>();
+            TeamResultRows = new HashSet<ScoredResultRowEntity>();
         }
 
         public ScoredResultRowEntity(ResultRowEntity resultRow)
@@ -65,8 +66,13 @@ namespace iRLeagueDatabaseCore.Models
         public long LeagueId { get; set; }
         public long ScoredResultRowId { get; set; }
         public long SessionResultId { get; set; }
-        public long MemberId { get; set; }
+        public long? MemberId { get; set; }
         public long? TeamId { get; set; }
+        /// <summary>
+        /// Imported Id from old database
+        /// Will be deleted after imports have finished
+        /// </summary>
+        public long? ImportId { get; set; }
 
         public double RacePoints { get; set; }
         public double BonusPoints { get; set; }
@@ -80,8 +86,9 @@ namespace iRLeagueDatabaseCore.Models
         public virtual TeamEntity Team { get; set; }
         public virtual ScoredSessionResultEntity ScoredSessionResult { get; set; }
         public virtual AddPenaltyEntity AddPenalty { get; set; }
+        public virtual IEnumerable<ScoredResultRowEntity> TeamParentRows { get; set; }
         public virtual ICollection<ReviewPenaltyEntity> ReviewPenalties { get; set; }
-        public virtual ICollection<ScoredTeamResultRowEntity> ScoredTeamResultRows { get; set; }
+        public virtual ICollection<ScoredResultRowEntity> TeamResultRows { get; set; }
     }
 
     public class ScoredResultRowEntityConfiguration : IEntityTypeConfiguration<ScoredResultRowEntity>
@@ -102,8 +109,10 @@ namespace iRLeagueDatabaseCore.Models
             entity.Property(e => e.QualifyingTimeAt).HasColumnType("datetime");
 
             entity.HasOne(d => d.Team)
-                .WithMany(p => p.ScoredResultRows)
-                .HasForeignKey(d => d.TeamId);
+                .WithMany()
+                .HasForeignKey(d => new { d.LeagueId, d.TeamId })
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.ClientSetNull);
 
             entity.HasOne(d => d.ScoredSessionResult)
                 .WithMany(p => p.ScoredResultRows)
@@ -112,7 +121,19 @@ namespace iRLeagueDatabaseCore.Models
             entity.HasOne(d => d.Member)
                 .WithMany()
                 .HasForeignKey(d => d.MemberId)
+                .IsRequired(false)
                 .OnDelete(DeleteBehavior.ClientSetNull);
+
+            entity.HasMany(d => d.TeamResultRows)
+                .WithMany(p => p.TeamParentRows)
+                .UsingEntity<ScoredTeamResultRowsResultRows>(
+                    left => left.HasOne(e => e.TeamResultRow)
+                        .WithMany()
+                        .HasForeignKey(e => new { e.LeagueId, e.TeamResultRowRefId }),
+                    right => right.HasOne(e => e.TeamParentRow)
+                        .WithMany()
+                        .HasForeignKey(e => new { e.LeagueId, e.TeamParentRowRefId }));
+                
         }
     }
 }

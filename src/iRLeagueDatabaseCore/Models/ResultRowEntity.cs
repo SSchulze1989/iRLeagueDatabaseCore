@@ -22,6 +22,7 @@ namespace iRLeagueDatabaseCore.Models
 
 
         public virtual MemberEntity Member { get; set; }
+        public virtual LeagueMemberEntity LeagueMember { get; set; }
         public virtual SessionResultEntity SubResult { get; set; }
         public virtual TeamEntity Team { get; set; }
     }
@@ -43,14 +44,18 @@ namespace iRLeagueDatabaseCore.Models
                 .HasForeignKey(d => d.MemberId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
+            entity.HasOne(d => d.LeagueMember)
+                .WithMany()
+                .HasForeignKey(d => new { d.LeagueId, d.MemberId });
+
             entity.HasOne(d => d.SubResult)
                 .WithMany(p => p.ResultRows)
                 .HasForeignKey(d => new { d.LeagueId, d.SubSessionId })
                 .OnDelete(DeleteBehavior.Cascade);
 
             entity.HasOne(d => d.Team)
-                .WithMany(p => p.ResultRows)
-                .HasForeignKey(d => d.TeamId)
+                .WithMany()
+                .HasForeignKey(d => new { d.LeagueId, d.TeamId })
                 .OnDelete(DeleteBehavior.ClientSetNull);
         }
     }

@@ -19,13 +19,17 @@ namespace iRLeagueDatabaseCore.Models
         public long ResultId { get; set; }
         public long EventId { get; set; }
         public long? ResultConfigId { get; set; }
+        /// <summary>
+        /// Imported Id from old database
+        /// Will be deleted after imports have finished
+        /// </summary>
+        public long? ImportId { get; set; }
 
         public string Name { get; set; }
 
         public virtual EventEntity Event { get; set; }
         public virtual ICollection<ScoredSessionResultEntity> ScoredSessionResults { get; set; }
         public virtual ResultConfigurationEntity ResultConfig { get; set; }
-        public virtual EventResultEntity RawResult { get; set; }
 
         #region version
         public DateTime? CreatedOn { get; set; }
@@ -57,12 +61,6 @@ namespace iRLeagueDatabaseCore.Models
             entity.HasOne(d => d.Event)
                 .WithMany(p => p.ScoredEventResults)
                 .HasForeignKey(d => new { d.LeagueId, d.EventId })
-                .OnDelete(DeleteBehavior.Cascade);
-
-            entity.HasOne(d => d.RawResult)
-                .WithMany(p => p.ScoredResults)
-                .HasForeignKey(d => new { d.LeagueId, d.EventId })
-                .IsRequired(false)
                 .OnDelete(DeleteBehavior.Cascade);
 
             entity.HasOne(d => d.ResultConfig)

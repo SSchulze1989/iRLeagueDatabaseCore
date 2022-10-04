@@ -19,6 +19,11 @@ namespace iRLeagueDatabaseCore.Models
         public string Text { get; set; }
         public int Index { get; set; }
         public int DefaultPenalty { get; set; }
+        /// <summary>
+        /// Imported Id from old database
+        /// Will be deleted after imports have finished
+        /// </summary>
+        public long? ImportId { get; set; }
 
         public virtual ICollection<AcceptedReviewVoteEntity> AcceptedReviewVotes { get; set; }
         public virtual ICollection<ReviewCommentVoteEntity> CommentReviewVotes { get; set; }

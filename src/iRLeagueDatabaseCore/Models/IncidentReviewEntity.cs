@@ -38,6 +38,11 @@ namespace iRLeagueDatabaseCore.Models
         public string LastModifiedByUserName { get; set; }
         public string ResultLongText { get; set; }
         public string IncidentNr { get; set; }
+        /// <summary>
+        /// Imported Id from old database
+        /// Will be deleted after imports have finished
+        /// </summary>
+        public long? ImportId { get; set; }
 
         public virtual SessionEntity Session { get; set; }
         public virtual ICollection<AcceptedReviewVoteEntity> AcceptedReviewVotes { get; set; }

@@ -25,6 +25,11 @@ namespace iRLeagueDatabaseCore.Models
         public TimeSpan StartOffset { get; set; }
         public TimeSpan Duration { get; set; }
         public int Laps { get; set; }
+        /// <summary>
+        /// Imported Id from old database
+        /// Will be deleted after imports have finished
+        /// </summary>
+        public long? ImportId { get; set; }
 
         #region version
         public DateTime? CreatedOn { get; set; }
@@ -38,7 +43,6 @@ namespace iRLeagueDatabaseCore.Models
 
         public virtual EventEntity Event { get; set; }
         public virtual SessionResultEntity SessionResult { get; set; }
-        public virtual SessionEntity ParentOfPracticeSession { get; set; }
         public virtual ICollection<IncidentReviewEntity> IncidentReviews { get; set; }
     }
 
