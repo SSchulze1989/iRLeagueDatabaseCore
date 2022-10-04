@@ -21,6 +21,11 @@ namespace iRLeagueDatabaseCore.Models
         public long? MemberAtFaultId { get; set; }
         public long? VoteCategoryId { get; set; }
         public string Description { get; set; }
+        /// <summary>
+        /// Imported Id from old database
+        /// Will be deleted after imports have finished
+        /// </summary>
+        public long? ImportId { get; set; }
 
         public virtual VoteCategoryEntity VoteCategory { get; set; }
         public virtual MemberEntity MemberAtFault { get; set; }
