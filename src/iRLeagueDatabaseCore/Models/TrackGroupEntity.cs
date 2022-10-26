@@ -28,6 +28,9 @@ namespace iRLeagueDatabaseCore.Models
         {
             entity.HasKey(e => e.TrackGroupId);
 
+            entity.Property(e => e.TrackGroupId)
+                .ValueGeneratedOnAdd();
+
             entity.HasMany(d => d.TrackConfigs)
                 .WithOne(p => p.TrackGroup)
                 .HasForeignKey(d => d.TrackGroupId)

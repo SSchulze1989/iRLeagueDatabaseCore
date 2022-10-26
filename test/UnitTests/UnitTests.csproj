@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="iRLeagueApiCore.Common" Version="0.3.6-dev.13" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="6.0.5" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />

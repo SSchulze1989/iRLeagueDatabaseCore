@@ -30,8 +30,7 @@ namespace DbIntegrationTests
                         ConfigType = ConfigType.RoadCourse,
                         Turns = j * 3,
                         LengthKm = j * 1.0,
-                        MapImageSrc = null,
-                        HasNigtLigthing = false
+                        HasNightLighting = false
                     };
                     group.TrackConfigs.Add(config);
                 }
