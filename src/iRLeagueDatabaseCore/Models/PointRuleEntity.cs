@@ -1,6 +1,7 @@
 ﻿using iRLeagueApiCore.Common.Enums;
 using iRLeagueDatabaseCore.Converters;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
@@ -55,16 +56,16 @@ namespace iRLeagueDatabaseCore.Models
                 .HasColumnType("datetime");
 
             entity.Property(e => e.PointsPerPlace)
-                .HasConversion(new CollectionToStringConverter<int>());
+                .HasConversion(new CollectionToStringConverter<int>(), new ValueComparer<ICollection<int>>(true));
 
             entity.Property(e => e.BonusPoints)
-                .HasConversion(new DictionaryToStringConverter<string, int>());
+                .HasConversion(new DictionaryToStringConverter<string, int>(), new ValueComparer<IDictionary<string,int>>(true));
 
             entity.Property(e => e.PointsSortOptions)
-                .HasConversion(new CollectionToStringConverter<SortOptions>());
+                .HasConversion(new CollectionToStringConverter<SortOptions>(), new ValueComparer<ICollection<SortOptions>>(true));
 
             entity.Property(e => e.FinalSortOptions)
-                .HasConversion(new CollectionToStringConverter<SortOptions>());
+                .HasConversion(new CollectionToStringConverter<SortOptions>(), new ValueComparer<ICollection<SortOptions>>(true));
 
             entity.HasOne(d => d.League)
                 .WithMany(p => p.PointRules)

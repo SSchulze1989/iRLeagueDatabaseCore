@@ -9,13 +9,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="BenchmarkDotNet" Version="0.13.1" />
-    <PackageReference Include="iRLeagueApiCore.Common" Version="0.3.6-dev.13" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.5" />
+    <PackageReference Include="BenchmarkDotNet" Version="0.13.2" />
+	<PackageReference Include="iRLeagueApiCore.Common" Version="0.3.6-dev.13" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.7" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="6.0.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
   </ItemGroup>
 
   <PropertyGroup>
