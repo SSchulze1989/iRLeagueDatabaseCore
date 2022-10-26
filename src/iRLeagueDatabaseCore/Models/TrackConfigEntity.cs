@@ -14,7 +14,7 @@ namespace iRLeagueDatabaseCore.Models
         public int Turns { get; set; }
         public ConfigType ConfigType { get; set; }
         public bool HasNightLighting { get; set; }
-
+        public string LegacyTrackId { get; set; }
     }
 
     public class TrackConfigEntityConfiguration : IEntityTypeConfiguration<TrackConfigEntity>
@@ -22,9 +22,6 @@ namespace iRLeagueDatabaseCore.Models
         public void Configure(EntityTypeBuilder<TrackConfigEntity> entity)
         {
             entity.HasKey(e => e.TrackId);
-
-            entity.Property(e => e.TrackId)
-                .ValueGeneratedNever();
 
             entity.Property(e => e.ConfigType)
                 .HasConversion<string>();
