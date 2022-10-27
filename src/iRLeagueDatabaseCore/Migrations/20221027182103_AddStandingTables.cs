@@ -6,7 +6,7 @@ using MySql.EntityFrameworkCore.Metadata;
 
 namespace iRLeagueDatabaseCore.Migrations
 {
-    public partial class AddStandingTable : Migration
+    public partial class AddStandingTables : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -21,6 +21,7 @@ namespace iRLeagueDatabaseCore.Migrations
                     StandingConfigId = table.Column<long>(type: "bigint", nullable: true),
                     EventId = table.Column<long>(type: "bigint", nullable: false),
                     Name = table.Column<string>(type: "longtext", nullable: true),
+                    IsTeamStanding = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     LastModifiedOn = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     Version = table.Column<int>(type: "int", nullable: false),
@@ -48,11 +49,12 @@ namespace iRLeagueDatabaseCore.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "StandingRowEntity",
+                name: "StandingRows",
                 columns: table => new
                 {
                     LeagueId = table.Column<long>(type: "bigint", nullable: false),
-                    StandingRowId = table.Column<long>(type: "bigint", nullable: false),
+                    StandingRowId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     StandingId = table.Column<long>(type: "bigint", nullable: false),
                     MemberId = table.Column<long>(type: "bigint", nullable: true),
                     TeamId = table.Column<long>(type: "bigint", nullable: true),
@@ -88,21 +90,21 @@ namespace iRLeagueDatabaseCore.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_StandingRowEntity", x => new { x.LeagueId, x.StandingRowId });
-                    table.UniqueConstraint("AK_StandingRowEntity_StandingRowId", x => x.StandingRowId);
+                    table.PrimaryKey("PK_StandingRows", x => new { x.LeagueId, x.StandingRowId });
+                    table.UniqueConstraint("AK_StandingRows_StandingRowId", x => x.StandingRowId);
                     table.ForeignKey(
-                        name: "FK_StandingRowEntity_Members_MemberId",
+                        name: "FK_StandingRows_Members_MemberId",
                         column: x => x.MemberId,
                         principalTable: "Members",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_StandingRowEntity_Standings_LeagueId_StandingRowId",
-                        columns: x => new { x.LeagueId, x.StandingRowId },
+                        name: "FK_StandingRows_Standings_LeagueId_StandingId",
+                        columns: x => new { x.LeagueId, x.StandingId },
                         principalTable: "Standings",
                         principalColumns: new[] { "LeagueId", "StandingId" },
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_StandingRowEntity_Teams_LeagueId_TeamId",
+                        name: "FK_StandingRows_Teams_LeagueId_TeamId",
                         columns: x => new { x.LeagueId, x.TeamId },
                         principalTable: "Teams",
                         principalColumns: new[] { "LeagueId", "TeamId" });
@@ -126,21 +128,26 @@ namespace iRLeagueDatabaseCore.Migrations
                         principalColumns: new[] { "LeagueId", "ScoredResultRowId" },
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_StandingRows_ScoredResultRows_StandingRowEntity_LeagueId_Sta~",
+                        name: "FK_StandingRows_ScoredResultRows_StandingRows_LeagueId_Standing~",
                         columns: x => new { x.LeagueId, x.StandingRowRefId },
-                        principalTable: "StandingRowEntity",
+                        principalTable: "StandingRows",
                         principalColumns: new[] { "LeagueId", "StandingRowId" },
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_StandingRowEntity_LeagueId_TeamId",
-                table: "StandingRowEntity",
+                name: "IX_StandingRows_LeagueId_StandingId",
+                table: "StandingRows",
+                columns: new[] { "LeagueId", "StandingId" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StandingRows_LeagueId_TeamId",
+                table: "StandingRows",
                 columns: new[] { "LeagueId", "TeamId" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_StandingRowEntity_MemberId",
-                table: "StandingRowEntity",
+                name: "IX_StandingRows_MemberId",
+                table: "StandingRows",
                 column: "MemberId");
 
             migrationBuilder.CreateIndex(
@@ -170,7 +177,7 @@ namespace iRLeagueDatabaseCore.Migrations
                 name: "StandingRows_ScoredResultRows");
 
             migrationBuilder.DropTable(
-                name: "StandingRowEntity");
+                name: "StandingRows");
 
             migrationBuilder.DropTable(
                 name: "Standings");

@@ -11,8 +11,8 @@ using iRLeagueDatabaseCore.Models;
 namespace iRLeagueDatabaseCore.Migrations
 {
     [DbContext(typeof(LeagueDbContext))]
-    [Migration("20221027153427_AddStandingTable")]
-    partial class AddStandingTable
+    [Migration("20221027182103_AddStandingTables")]
+    partial class AddStandingTables
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -1920,6 +1920,9 @@ namespace iRLeagueDatabaseCore.Migrations
                     b.Property<long>("EventId")
                         .HasColumnType("bigint");
 
+                    b.Property<bool>("IsTeamStanding")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<string>("LastModifiedByUserId")
                         .HasColumnType("longtext");
 
@@ -2063,9 +2066,11 @@ namespace iRLeagueDatabaseCore.Migrations
 
                     b.HasIndex("MemberId");
 
+                    b.HasIndex("LeagueId", "StandingId");
+
                     b.HasIndex("LeagueId", "TeamId");
 
-                    b.ToTable("StandingRowEntity");
+                    b.ToTable("StandingRows", (string)null);
                 });
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.StandingRows_ScoredResultRows", b =>
@@ -2920,7 +2925,7 @@ namespace iRLeagueDatabaseCore.Migrations
 
                     b.HasOne("iRLeagueDatabaseCore.Models.StandingEntity", "SeasonStanding")
                         .WithMany("StandingRows")
-                        .HasForeignKey("LeagueId", "StandingRowId")
+                        .HasForeignKey("LeagueId", "StandingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
