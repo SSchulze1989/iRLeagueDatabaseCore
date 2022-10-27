@@ -1,10 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using iRLeagueApiCore.Common.Enums;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace iRLeagueDatabaseCore.Models
 {
@@ -17,9 +13,8 @@ namespace iRLeagueDatabaseCore.Models
         public double LengthKm { get; set; }
         public int Turns { get; set; }
         public ConfigType ConfigType { get; set; }
-        public bool HasNigtLigthing { get; set; }
-        public string MapImageSrc { get; set; }
-
+        public bool HasNightLighting { get; set; }
+        public string LegacyTrackId { get; set; }
     }
 
     public class TrackConfigEntityConfiguration : IEntityTypeConfiguration<TrackConfigEntity>
@@ -27,16 +22,9 @@ namespace iRLeagueDatabaseCore.Models
         public void Configure(EntityTypeBuilder<TrackConfigEntity> entity)
         {
             entity.HasKey(e => e.TrackId);
-        }
-    }
 
-    public enum ConfigType
-    {
-        ShortTrack,
-        Speedway,
-        Rallycross,
-        RoadCourse,
-        DirtOval,
-        Unknown
+            entity.Property(e => e.ConfigType)
+                .HasConversion<string>();
+        }
     }
 }

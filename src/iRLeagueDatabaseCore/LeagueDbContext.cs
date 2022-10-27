@@ -4,6 +4,7 @@ using iRLeagueApiCore.Common.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Microsoft.Extensions.Configuration;
 
 #nullable disable
 
@@ -11,9 +12,9 @@ namespace iRLeagueDatabaseCore.Models
 {
     public partial class LeagueDbContext : DbContext
     {
-        public LeagueDbContext()
-        {
-        }
+        //public LeagueDbContext()
+        //{
+        //}
 
         public LeagueDbContext(DbContextOptions<LeagueDbContext> options)
             : base(options)

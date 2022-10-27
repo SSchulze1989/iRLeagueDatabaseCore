@@ -21,7 +21,6 @@ namespace iRLeagueDatabaseCore.Models
         public long SeasonId { get; set; }
         public long LeagueId { get; set; }
         public string SeasonName { get; set; }
-        public long? MainScoringScoringId { get; set; }
         public bool HideCommentsBeforeVoted { get; set; }
         public bool Finished { get; set; }
         public DateTime? SeasonStart { get; set; }
@@ -49,8 +48,6 @@ namespace iRLeagueDatabaseCore.Models
 
             entity.Property(e => e.SeasonId)
                 .ValueGeneratedOnAdd();
-
-            entity.HasIndex(e => new { e.LeagueId, e.MainScoringScoringId });
 
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
 

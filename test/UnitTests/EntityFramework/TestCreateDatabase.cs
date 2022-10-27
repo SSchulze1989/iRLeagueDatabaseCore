@@ -1,4 +1,5 @@
-﻿using iRLeagueDatabaseCore.Models;
+﻿using iRLeagueApiCore.Common.Enums;
+using iRLeagueDatabaseCore.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.InMemory;
 using System;
@@ -181,11 +182,10 @@ namespace UnitTests.EntityFramework
                     var config = new TrackConfigEntity()
                     {
                         ConfigName = $"Config{i}",
-                        ConfigType = ConfigType.RoadCourse,
+                        ConfigType = ConfigType.Road,
                         Turns = j * 3,
                         LengthKm = j * 1.0,
-                        MapImageSrc = null,
-                        HasNigtLigthing = false
+                        HasNightLighting = false
                     };
                     group.TrackConfigs.Add(config);
                 }

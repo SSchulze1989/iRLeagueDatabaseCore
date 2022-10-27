@@ -35,7 +35,7 @@ namespace iRLeagueDatabaseCore.Models
         public string LastModifiedByUserName { get; set; }
         public bool UseResultSetTeam { get; set; }
         public bool UpdateTeamOnRecalculation { get; set; }
-        public bool ShowResults { get; set; }
+        public bool ShowResults { get; set; } = true;
 
         public virtual ScoringEntity ExtScoringSource { get; set; }
         public virtual ResultConfigurationEntity ResultConfiguration { get; set; }
@@ -62,8 +62,7 @@ namespace iRLeagueDatabaseCore.Models
 
             entity.Property(e => e.LastModifiedOn).HasColumnType("datetime");
 
-            entity.Property(e => e.ShowResults)
-                .HasDefaultValueSql("((1))");
+            entity.Property(e => e.ShowResults);
 
             entity.Property(e => e.ScoringKind)
                 .HasConversion<string>();
