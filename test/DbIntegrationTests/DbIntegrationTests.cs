@@ -33,7 +33,7 @@ namespace DbIntegrationTests
             using (var dbContext = GetTestDatabaseContext())
             {
                 dbContext.Database.EnsureDeleted();
-                dbContext.Database.EnsureCreated();
+                dbContext.Database.Migrate();
 
                 PopulateTestDatabase.Populate(dbContext, random);
                 dbContext.SaveChanges();
