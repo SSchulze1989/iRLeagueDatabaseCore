@@ -14,7 +14,7 @@ namespace iRLeagueDatabaseCore.Models
         public SeasonEntity()
         {
             Schedules = new HashSet<ScheduleEntity>();
-            Standings = new HashSet<StandingEntity>();
+            //Standings = new HashSet<StandingEntity>();
             StatisticSets = new HashSet<StatisticSetEntity>();
         }
 
