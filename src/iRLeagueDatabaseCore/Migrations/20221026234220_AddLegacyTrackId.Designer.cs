@@ -11,7 +11,7 @@ using iRLeagueDatabaseCore.Models;
 namespace iRLeagueDatabaseCore.Migrations
 {
     [DbContext(typeof(LeagueDbContext))]
-    [Migration("20221026224918_AddLegacyTrackId")]
+    [Migration("20221026234220_AddLegacyTrackId")]
     partial class AddLegacyTrackId
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -182,7 +182,7 @@ namespace UnitTests.EntityFramework
                     var config = new TrackConfigEntity()
                     {
                         ConfigName = $"Config{i}",
-                        ConfigType = ConfigType.RoadCourse,
+                        ConfigType = ConfigType.Road,
                         Turns = j * 3,
                         LengthKm = j * 1.0,
                         HasNightLighting = false
