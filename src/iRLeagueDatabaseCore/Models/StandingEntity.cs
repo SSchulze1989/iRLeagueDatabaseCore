@@ -1,29 +1,30 @@
-﻿using iRLeagueApiCore.Common.Enums;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
 
-#nullable disable
-
 namespace iRLeagueDatabaseCore.Models
 {
-    public partial class StandingEntity : IVersionEntity
+    public class StandingEntity : IVersionEntity
     {
         public StandingEntity()
         {
-            Scorings = new HashSet<ScoringEntity>();
-            StatisticSets = new HashSet<StatisticSetEntity>();
+            StandingRows = new HashSet<StandingRowEntity>();
         }
 
+        public long LeagueId { get; set; }
         public long StandingId { get; set; }
-        public int ScoringKind { get; set; }
+        public long SeasonId { get; set; }
+        public long? StandingConfigId { get; set; }
+        public long EventId { get; set; }
+
         public string Name { get; set; }
-        public int DropWeeks { get; set; }
-        public int AverageRaceNr { get; set; }
-        public string ScoringFactors { get; set; }
-        public DropRacesOption DropRacesOption { get; set; }
-        public int ResultsPerRaceCount { get; set; }
+
+        public virtual SeasonEntity Season { get; set; }
+        public virtual EventEntity Event { get; set; }
+        public virtual ICollection<StandingRowEntity> StandingRows { get; set; }
+
+        #region version
         public DateTime? CreatedOn { get; set; }
         public DateTime? LastModifiedOn { get; set; }
         public int Version { get; set; }
@@ -31,37 +32,27 @@ namespace iRLeagueDatabaseCore.Models
         public string CreatedByUserName { get; set; }
         public string LastModifiedByUserId { get; set; }
         public string LastModifiedByUserName { get; set; }
-        public long SeasonId { get; set; }
-        public long LeagueId { get; set; }
-
-        public virtual SeasonEntity Season { get; set; }
-        public virtual ICollection<ScoringEntity> Scorings { get; set; }
-        public virtual ICollection<StatisticSetEntity> StatisticSets { get; set; }
+        #endregion
     }
 
-    public class StandingEntityConfiguration : IEntityTypeConfiguration<StandingEntity>
+    public class SeasonStandingEntityConfiguration : IEntityTypeConfiguration<StandingEntity>
     {
         public void Configure(EntityTypeBuilder<StandingEntity> entity)
         {
             entity.HasKey(e => new { e.LeagueId, e.StandingId });
 
-            entity.HasIndex(e => new { e.LeagueId, e.SeasonId });
+            entity.HasAlternateKey(e => e.StandingId);
 
-            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
-
-            entity.Property(e => e.LastModifiedOn).HasColumnType("datetime");
+            entity.Property(e => e.StandingId)
+                .ValueGeneratedOnAdd();
 
             entity.HasOne(d => d.Season)
                 .WithMany(p => p.Standings)
                 .HasForeignKey(d => new { d.LeagueId, d.SeasonId });
 
-            entity.HasMany(d => d.Scorings)
-                .WithMany(p => p.Standings)
-                .UsingEntity<StandingsScorings>(
-                    left => left.HasOne(d => d.ScoringRef)
-                        .WithMany().HasForeignKey(e => new { e.LeagueId, e.ScoringRefId }),
-                    right => right.HasOne(d => d.StandingRef)
-                        .WithMany().HasForeignKey(e => new { e.LeagueId, e.StandingRefId }));
+            entity.HasOne(d => d.Event)
+                .WithMany()
+                .HasForeignKey(d => new { d.LeagueId, d.EventId });
         }
     }
 }
