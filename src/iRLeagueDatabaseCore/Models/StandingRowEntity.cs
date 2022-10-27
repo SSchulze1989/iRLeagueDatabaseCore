@@ -59,6 +59,8 @@ namespace iRLeagueDatabaseCore.Models
         {
             entity.HasKey(e => new { e.LeagueId, e.StandingRowId });
 
+            entity.ToTable("StandingRows");
+
             entity.HasAlternateKey(e => e.StandingRowId);
 
             entity.Property(e => e.StandingRowId)
@@ -66,7 +68,7 @@ namespace iRLeagueDatabaseCore.Models
 
             entity.HasOne(p => p.SeasonStanding)
                 .WithMany(d => d.StandingRows)
-                .HasForeignKey(p => new { p.LeagueId, p.StandingRowId });
+                .HasForeignKey(p => new { p.LeagueId, p.StandingId });
 
             entity.HasOne(p => p.Member)
                 .WithMany()
