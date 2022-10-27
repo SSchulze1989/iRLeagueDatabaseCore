@@ -14,14 +14,13 @@ namespace iRLeagueDatabaseCore.Models
         public SeasonEntity()
         {
             Schedules = new HashSet<ScheduleEntity>();
-            Standings = new HashSet<StandingEntity>();
+            //Standings = new HashSet<StandingEntity>();
             StatisticSets = new HashSet<StatisticSetEntity>();
         }
 
         public long SeasonId { get; set; }
         public long LeagueId { get; set; }
         public string SeasonName { get; set; }
-        public long? MainScoringScoringId { get; set; }
         public bool HideCommentsBeforeVoted { get; set; }
         public bool Finished { get; set; }
         public DateTime? SeasonStart { get; set; }
@@ -49,8 +48,6 @@ namespace iRLeagueDatabaseCore.Models
 
             entity.Property(e => e.SeasonId)
                 .ValueGeneratedOnAdd();
-
-            entity.HasIndex(e => new { e.LeagueId, e.MainScoringScoringId });
 
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
 

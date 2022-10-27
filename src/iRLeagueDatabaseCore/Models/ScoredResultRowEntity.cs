@@ -14,6 +14,7 @@ namespace iRLeagueDatabaseCore.Models
             ReviewPenalties = new HashSet<ReviewPenaltyEntity>();
             TeamParentRows = new HashSet<ScoredResultRowEntity>();
             TeamResultRows = new HashSet<ScoredResultRowEntity>();
+            StandingRows = new HashSet<StandingRowEntity>();
         }
 
         public ScoredResultRowEntity(ResultRowEntity resultRow)
@@ -89,6 +90,7 @@ namespace iRLeagueDatabaseCore.Models
         public virtual IEnumerable<ScoredResultRowEntity> TeamParentRows { get; set; }
         public virtual ICollection<ReviewPenaltyEntity> ReviewPenalties { get; set; }
         public virtual ICollection<ScoredResultRowEntity> TeamResultRows { get; set; }
+        public virtual IEnumerable<StandingRowEntity> StandingRows { get; set; }
     }
 
     public class ScoredResultRowEntityConfiguration : IEntityTypeConfiguration<ScoredResultRowEntity>

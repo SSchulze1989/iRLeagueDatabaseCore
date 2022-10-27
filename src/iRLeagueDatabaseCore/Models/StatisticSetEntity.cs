@@ -40,7 +40,6 @@ namespace iRLeagueDatabaseCore.Models
         public DateTime? LastDate { get; set; }
 
         public virtual MemberEntity CurrentChamp { get; set; }
-        public virtual StandingEntity Standing { get; set; }
         public virtual SeasonEntity Season { get; set; }
         public virtual ICollection<DriverStatisticRowEntity> DriverStatisticRows { get; set; }
         public virtual ICollection<StatisticSetEntity> LeagueStatisticSets { get; set; }
@@ -70,10 +69,6 @@ namespace iRLeagueDatabaseCore.Models
             entity.HasOne(d => d.CurrentChamp)
                 .WithMany(p => p.StatisticSets)
                 .HasForeignKey(d => d.CurrentChampId);
-
-            entity.HasOne(d => d.Standing)
-                .WithMany(p => p.StatisticSets)
-                .HasForeignKey(d => new { d.LeagueId, d.StandingId });
 
             entity.HasOne(d => d.Season)
                 .WithMany(p => p.StatisticSets)
