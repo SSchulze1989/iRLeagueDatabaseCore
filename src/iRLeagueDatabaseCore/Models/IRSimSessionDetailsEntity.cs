@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
 using System.Collections.Generic;
 
@@ -27,7 +28,7 @@ namespace iRLeagueDatabaseCore.Models
         public double KmDistPerLap { get; set; }
         public int MaxWeeks { get; set; }
         public int EventStrengthOfField { get; set; }
-        public long EventAverageLap { get; set; }
+        public TimeSpan EventAverageLap { get; set; }
         public int EventLapsComplete { get; set; }
         public int NumCautions { get; set; }
         public int NumCautionLaps { get; set; }
@@ -50,7 +51,7 @@ namespace iRLeagueDatabaseCore.Models
         public int WeatherVarInitial { get; set; }
         public int WeatherVarOngoing { get; set; }
         public DateTime? SimStartUtcTime { get; set; }
-        public long SimStartUtcOffset { get; set; }
+        public TimeSpan SimStartUtcOffset { get; set; }
         public bool LeaveMarbles { get; set; }
         public int PracticeRubber { get; set; }
         public int QualifyRubber { get; set; }
@@ -75,10 +76,14 @@ namespace iRLeagueDatabaseCore.Models
             entity.Property(e => e.SessionDetailsId)
                 .ValueGeneratedOnAdd();
 
+            entity.Property(e => e.EventAverageLap)
+                .HasConversion<TimeSpanToTicksConverter>();
+
             entity.Property(e => e.EndTime)
                 .HasColumnType("datetime");
 
-            entity.Property(e => e.SimStartUtcOffset);
+            entity.Property(e => e.SimStartUtcOffset)
+                .HasConversion<TimeSpanToTicksConverter>();
 
             entity.Property(e => e.SimStartUtcTime)
                 .HasColumnType("datetime");

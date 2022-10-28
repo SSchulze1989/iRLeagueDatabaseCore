@@ -11,6 +11,13 @@ namespace iRLeagueDatabaseCore.Converters
 {
     public class DictionaryToStringConverter<TKey, TValue> : ValueConverter<IDictionary<TKey, TValue>, string>
     {
+        private const char defaultPairDelimiter = ';';
+        private const char defaultValueDelimiter = ':';
+
+        public DictionaryToStringConverter() : this(defaultPairDelimiter, defaultValueDelimiter)
+        {
+        }
+
         public DictionaryToStringConverter(CultureInfo culture, char pairDelimiter = ';', char valueDelimiter = ':') : 
             base(ConvertToString(pairDelimiter, valueDelimiter, culture), ConvertToDictionary(pairDelimiter, valueDelimiter, culture))
         {
