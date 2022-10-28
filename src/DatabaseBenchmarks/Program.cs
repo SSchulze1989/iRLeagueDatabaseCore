@@ -180,9 +180,9 @@ namespace DatabaseBenchmarks
                 ResultRows = sessionResult.ScoredResultRows.Select(row => new ResultRowModel()
                 {
                     MemberId = row.MemberId,
-                    Interval = new TimeSpan(row.Interval),
-                    FastestLapTime = new TimeSpan(row.FastestLapTime),
-                    AvgLapTime = new TimeSpan(row.AvgLapTime),
+                    Interval = row.Interval,
+                    FastestLapTime = row.FastestLapTime,
+                    AvgLapTime = row.AvgLapTime,
                     Firstname = row.Member.Firstname,
                     Lastname = row.Member.Lastname,
                     TeamName = row.Team.Name,
@@ -213,7 +213,7 @@ namespace DatabaseBenchmarks
                     OldLicenseLevel = row.OldLicenseLevel,
                     OldSafetyRating = row.OldSafetyRating,
                     PositionChange = row.PositionChange,
-                    QualifyingTime = new TimeSpan(row.QualifyingTime),
+                    QualifyingTime = row.QualifyingTime,
                     SeasonStartIrating = row.SeasonStartIRating,
                     Status = row.Status,
                     TeamId = row.TeamId

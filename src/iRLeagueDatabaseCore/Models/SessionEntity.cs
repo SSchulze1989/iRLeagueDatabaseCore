@@ -63,9 +63,9 @@ namespace iRLeagueDatabaseCore.Models
 
             entity.Property(e => e.LastModifiedOn).HasColumnType("datetime");
 
-            entity.Property(e => e.StartOffset).HasConversion(new TimeSpanToTicksConverter());
+            entity.Property(e => e.StartOffset).HasConversion<TimeSpanToTicksConverter>();
 
-            entity.Property(e => e.Duration).HasConversion(new TimeSpanToTicksConverter());
+            entity.Property(e => e.Duration).HasConversion<TimeSpanToTicksConverter>();
 
             entity.Property(e => e.SessionType)
                 .HasConversion<string>();

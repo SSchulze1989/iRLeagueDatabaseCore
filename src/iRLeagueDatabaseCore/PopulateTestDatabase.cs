@@ -268,10 +268,10 @@ namespace DbIntegrationTests
                                 Member = member,
                                 StartPosition = i + 1,
                                 FinishPosition = i + 1,
-                                QualifyingTime = GetTimeSpan(random).Ticks,
-                                FastestLapTime = GetTimeSpan(random).Ticks,
-                                AvgLapTime = GetTimeSpan(random).Ticks,
-                                Interval = GetTimeSpan(random).Ticks
+                                QualifyingTime = GetTimeSpan(random),
+                                FastestLapTime = GetTimeSpan(random),
+                                AvgLapTime = GetTimeSpan(random),
+                                Interval = GetTimeSpan(random)
                             };
                             sessionResult.ResultRows.Add(resultRow);
                             var scoredResultRow = new ScoredResultRowEntity(resultRow)
