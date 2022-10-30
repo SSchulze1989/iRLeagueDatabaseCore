@@ -10,7 +10,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace iRLeagueDatabaseCore.Models
 {
-    public partial class LeagueDbContext : DbContext
+    public partial class LeagueDbContext : DbContext, ILeagueDbContext
     {
         //public LeagueDbContext()
         //{
