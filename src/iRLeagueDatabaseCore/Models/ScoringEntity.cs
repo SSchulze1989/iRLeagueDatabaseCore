@@ -21,6 +21,7 @@ namespace iRLeagueDatabaseCore.Models
         public long ResultConfigId { get; set; }
         public long? PointsRuleId { get; set; }
 
+        public int Index { get; set; }
         public ScoringKind ScoringKind { get; set; }
         public string Name { get; set; }
         public int MaxResultsPerGroup { get; set; }
