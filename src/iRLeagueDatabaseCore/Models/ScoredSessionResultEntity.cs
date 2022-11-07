@@ -25,7 +25,10 @@ namespace iRLeagueDatabaseCore.Models
         /// Will be deleted after imports have finished
         /// </summary>
         public long? ImportId { get; set; }
-
+        /// <summary>
+        /// Number that decides order of subsessions
+        /// </summary>
+        public int SessionNr { get; set; }
         public string Name { get; set; }
         public long FastestLap { get; set; }
         public long FastestQualyLap { get; set; }
