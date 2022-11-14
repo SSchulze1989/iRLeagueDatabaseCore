@@ -75,7 +75,7 @@ namespace iRLeagueDatabaseCore.Models
                 .HasForeignKey(d => new { d.LeagueId, d.ResultConfigId });
 
             entity.HasOne(d => d.PointsRule)
-                .WithMany()
+                .WithMany(p => p.Scorings)
                 .HasForeignKey(d => new { d.LeagueId, d.PointsRuleId });
         }
     }
