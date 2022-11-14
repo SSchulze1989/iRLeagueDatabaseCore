@@ -287,6 +287,15 @@ namespace DbIntegrationTests
             }
 
             // Create reviews
+            for (int i = 0; i < 5; i++)
+            {
+                var voteCategory = new VoteCategoryEntity()
+                {
+                    Text = $"Category {i + 1}",
+                    DefaultPenalty = i + 1,
+                };
+                league1.VoteCategories.Add(voteCategory);
+            }
             foreach (var session in season1.Schedules
                 .SelectMany(x => x.Events)
                 .SelectMany(x => x.Sessions))
@@ -314,11 +323,23 @@ namespace DbIntegrationTests
                             Text = $"Comment #{j + 1} ",
                             ReviewCommentVotes = new List<ReviewCommentVoteEntity>()
                             {
-                                new ReviewCommentVoteEntity() { MemberAtFault = GetRandomMember(random, review.InvolvedMembers), Description = "Vote" }
+                                new ReviewCommentVoteEntity() 
+                                { 
+                                    MemberAtFault = GetRandomMember(random, review.InvolvedMembers), 
+                                    Description = "Vote",
+                                    VoteCategory = league1.VoteCategories.GetRandom(random),
+                                }
                             },
                         };
                         review.Comments.Add(comment);
                     }
+                    var acceptedCommentVote = review.Comments.First().ReviewCommentVotes.First();
+                    var acceptedVote = new AcceptedReviewVoteEntity()
+                    {
+                        MemberAtFault = acceptedCommentVote.MemberAtFault,
+                        Description = acceptedCommentVote.Description,
+                        VoteCategory = acceptedCommentVote.VoteCategory,
+                    };
                     session.IncidentReviews.Add(review);
                 }
             }
@@ -403,6 +424,12 @@ namespace DbIntegrationTests
             var pop = collection.ElementAt(randomIndex);
             collection.Remove(pop);
             return pop;
+        }
+
+        public static T GetRandom<T>(this ICollection<T> collection, Random random = null)
+        {
+            random ??= new();
+            return collection.ElementAt(random.Next(collection.Count()));
         }
     }
 }

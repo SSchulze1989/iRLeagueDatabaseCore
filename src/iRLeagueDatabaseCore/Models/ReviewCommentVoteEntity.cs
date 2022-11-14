@@ -32,6 +32,11 @@ namespace iRLeagueDatabaseCore.Models
         {
             entity.HasKey(e => new { e.LeagueId, e.ReviewVoteId });
 
+            entity.HasAlternateKey(e => e.ReviewVoteId);
+
+            entity.Property(e => e.ReviewVoteId)
+                .ValueGeneratedOnAdd();
+
             entity.HasIndex(e => e.CommentId);
 
             entity.HasIndex(e => e.VoteCategoryId);

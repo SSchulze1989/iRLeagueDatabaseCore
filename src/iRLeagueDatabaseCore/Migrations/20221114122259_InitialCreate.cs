@@ -65,22 +65,6 @@ namespace iRLeagueDatabaseCore.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "VoteCategories",
-                columns: table => new
-                {
-                    LeagueId = table.Column<long>(type: "bigint", nullable: false),
-                    CatId = table.Column<long>(type: "bigint", nullable: false),
-                    Text = table.Column<string>(type: "longtext", nullable: true),
-                    Index = table.Column<int>(type: "int", nullable: false),
-                    DefaultPenalty = table.Column<int>(type: "int", nullable: false),
-                    ImportId = table.Column<long>(type: "bigint", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_VoteCategories", x => new { x.LeagueId, x.CatId });
-                });
-
-            migrationBuilder.CreateTable(
                 name: "CustomIncidents",
                 columns: table => new
                 {
@@ -190,6 +174,30 @@ namespace iRLeagueDatabaseCore.Migrations
                     table.UniqueConstraint("AK_Teams_TeamId", x => x.TeamId);
                     table.ForeignKey(
                         name: "FK_Teams_Leagues_LeagueId",
+                        column: x => x.LeagueId,
+                        principalTable: "Leagues",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "VoteCategories",
+                columns: table => new
+                {
+                    LeagueId = table.Column<long>(type: "bigint", nullable: false),
+                    CatId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    Text = table.Column<string>(type: "longtext", nullable: true),
+                    Index = table.Column<int>(type: "int", nullable: false),
+                    DefaultPenalty = table.Column<int>(type: "int", nullable: false),
+                    ImportId = table.Column<long>(type: "bigint", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_VoteCategories", x => new { x.LeagueId, x.CatId });
+                    table.UniqueConstraint("AK_VoteCategories_CatId", x => x.CatId);
+                    table.ForeignKey(
+                        name: "FK_VoteCategories_Leagues_LeagueId",
                         column: x => x.LeagueId,
                         principalTable: "Leagues",
                         principalColumn: "Id",
@@ -706,7 +714,8 @@ namespace iRLeagueDatabaseCore.Migrations
                 columns: table => new
                 {
                     LeagueId = table.Column<long>(type: "bigint", nullable: false),
-                    CommentId = table.Column<long>(type: "bigint", nullable: false),
+                    CommentId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     ReviewId = table.Column<long>(type: "bigint", nullable: true),
                     ReplyToCommentId = table.Column<long>(type: "bigint", nullable: true),
                     ImportId = table.Column<long>(type: "bigint", nullable: true),
@@ -725,6 +734,7 @@ namespace iRLeagueDatabaseCore.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ReviewComments", x => new { x.LeagueId, x.CommentId });
+                    table.UniqueConstraint("AK_ReviewComments_CommentId", x => x.CommentId);
                     table.ForeignKey(
                         name: "FK_ReviewComments_IncidentReviews_LeagueId_ReviewId",
                         columns: x => new { x.LeagueId, x.ReviewId },
@@ -823,7 +833,8 @@ namespace iRLeagueDatabaseCore.Migrations
                 columns: table => new
                 {
                     LeagueId = table.Column<long>(type: "bigint", nullable: false),
-                    ReviewVoteId = table.Column<long>(type: "bigint", nullable: false),
+                    ReviewVoteId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     CommentId = table.Column<long>(type: "bigint", nullable: false),
                     MemberAtFaultId = table.Column<long>(type: "bigint", nullable: true),
                     VoteCategoryId = table.Column<long>(type: "bigint", nullable: true),
@@ -833,6 +844,7 @@ namespace iRLeagueDatabaseCore.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ReviewCommentVotes", x => new { x.LeagueId, x.ReviewVoteId });
+                    table.UniqueConstraint("AK_ReviewCommentVotes_ReviewVoteId", x => x.ReviewVoteId);
                     table.ForeignKey(
                         name: "FK_ReviewCommentVotes_Members_MemberAtFaultId",
                         column: x => x.MemberAtFaultId,

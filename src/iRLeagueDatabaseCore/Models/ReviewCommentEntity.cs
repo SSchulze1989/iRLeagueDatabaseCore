@@ -49,6 +49,11 @@ namespace iRLeagueDatabaseCore.Models
         {
             entity.HasKey(e => new { e.LeagueId, e.CommentId });
 
+            entity.HasAlternateKey(e => e.CommentId);
+
+            entity.Property(e => e.CommentId)
+                .ValueGeneratedOnAdd();
+
             entity.HasIndex(e => e.ReplyToCommentId);
 
             entity.HasIndex(e => e.ReviewId);
@@ -65,7 +70,7 @@ namespace iRLeagueDatabaseCore.Models
 
             entity.HasOne(d => d.Review)
                 .WithMany(p => p.Comments)
-                .HasForeignKey(d => new {d.LeagueId, d.ReviewId})
+                .HasForeignKey(d => new { d.LeagueId, d.ReviewId })
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }
