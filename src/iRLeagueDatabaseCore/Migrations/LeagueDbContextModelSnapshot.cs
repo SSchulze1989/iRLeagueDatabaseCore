@@ -2844,7 +2844,7 @@ namespace iRLeagueDatabaseCore.Migrations
                         .HasForeignKey("LeagueId", "ExtScoringSourceId");
 
                     b.HasOne("iRLeagueDatabaseCore.Models.PointRuleEntity", "PointsRule")
-                        .WithMany()
+                        .WithMany("Scorings")
                         .HasForeignKey("LeagueId", "PointsRuleId");
 
                     b.HasOne("iRLeagueDatabaseCore.Models.ResultConfigurationEntity", "ResultConfiguration")
@@ -3141,6 +3141,8 @@ namespace iRLeagueDatabaseCore.Migrations
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.PointRuleEntity", b =>
                 {
                     b.Navigation("ResultsFilters");
+
+                    b.Navigation("Scorings");
                 });
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.ResultConfigurationEntity", b =>
