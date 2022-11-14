@@ -15,6 +15,7 @@ namespace iRLeagueDatabaseCore.Models
             CommentReviewVotes = new HashSet<ReviewCommentVoteEntity>();
         }
 
+        public long LeagueId { get; set; }
         public long CatId { get; set; }
         public string Text { get; set; }
         public int Index { get; set; }
@@ -33,7 +34,7 @@ namespace iRLeagueDatabaseCore.Models
     {
         public void Configure(EntityTypeBuilder<VoteCategoryEntity> entity)
         {
-            entity.HasKey(e => e.CatId);
+            entity.HasKey(e => new { e.LeagueId, e.CatId });
         }
     }
 }

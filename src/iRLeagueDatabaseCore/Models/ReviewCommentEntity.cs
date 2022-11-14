@@ -15,8 +15,8 @@ namespace iRLeagueDatabaseCore.Models
             Replies = new HashSet<ReviewCommentEntity>();
         }
 
-        public long CommentId { get; set; }
         public long LeagueId { get; set; }
+        public long CommentId { get; set; }
         public long? ReviewId { get; set; }
         public long? ReplyToCommentId { get; set; }
         /// <summary>
@@ -39,7 +39,6 @@ namespace iRLeagueDatabaseCore.Models
 
         public virtual ReviewCommentEntity ReplyToComment { get; set; }
         public virtual IncidentReviewEntity Review { get; set; }
-        public virtual LeagueEntity League { get; set; }
         public virtual ICollection<ReviewCommentVoteEntity> ReviewCommentVotes { get; set; }
         public virtual ICollection<ReviewCommentEntity> Replies { get; set; }
     }
@@ -48,7 +47,7 @@ namespace iRLeagueDatabaseCore.Models
     {
         public void Configure(EntityTypeBuilder<ReviewCommentEntity> entity)
         {
-            entity.HasKey(e => e.CommentId);
+            entity.HasKey(e => new { e.LeagueId, e.CommentId });
 
             entity.HasIndex(e => e.ReplyToCommentId);
 
@@ -62,16 +61,12 @@ namespace iRLeagueDatabaseCore.Models
 
             entity.HasOne(d => d.ReplyToComment)
                 .WithMany(p => p.Replies)
-                .HasForeignKey(d => d.ReplyToCommentId);
+                .HasForeignKey(d => new { d.LeagueId, d.ReplyToCommentId });
 
             entity.HasOne(d => d.Review)
                 .WithMany(p => p.Comments)
                 .HasForeignKey(d => new {d.LeagueId, d.ReviewId})
                 .OnDelete(DeleteBehavior.Cascade);
-
-            entity.HasOne(d => d.League)
-                .WithMany()
-                .HasForeignKey(d => d.LeagueId);
         }
     }
 }
