@@ -74,6 +74,8 @@ namespace iRLeagueDatabaseCore.Migrations
 
                     b.HasIndex("LeagueId", "ReviewId");
 
+                    b.HasIndex("LeagueId", "VoteCategoryId");
+
                     b.ToTable("AcceptedReviewVotes");
                 });
 
@@ -1128,6 +1130,9 @@ namespace iRLeagueDatabaseCore.Migrations
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.ReviewCommentEntity", b =>
                 {
+                    b.Property<long>("LeagueId")
+                        .HasColumnType("bigint");
+
                     b.Property<long>("CommentId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
@@ -1162,9 +1167,6 @@ namespace iRLeagueDatabaseCore.Migrations
                     b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("datetime");
 
-                    b.Property<long>("LeagueId")
-                        .HasColumnType("bigint");
-
                     b.Property<long?>("ReplyToCommentId")
                         .HasColumnType("bigint");
 
@@ -1177,11 +1179,15 @@ namespace iRLeagueDatabaseCore.Migrations
                     b.Property<int>("Version")
                         .HasColumnType("int");
 
-                    b.HasKey("CommentId");
+                    b.HasKey("LeagueId", "CommentId");
+
+                    b.HasAlternateKey("CommentId");
 
                     b.HasIndex("ReplyToCommentId");
 
                     b.HasIndex("ReviewId");
+
+                    b.HasIndex("LeagueId", "ReplyToCommentId");
 
                     b.HasIndex("LeagueId", "ReviewId");
 
@@ -1190,6 +1196,9 @@ namespace iRLeagueDatabaseCore.Migrations
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.ReviewCommentVoteEntity", b =>
                 {
+                    b.Property<long>("LeagueId")
+                        .HasColumnType("bigint");
+
                     b.Property<long>("ReviewVoteId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
@@ -1203,22 +1212,25 @@ namespace iRLeagueDatabaseCore.Migrations
                     b.Property<long?>("ImportId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("LeagueId")
-                        .HasColumnType("bigint");
-
                     b.Property<long?>("MemberAtFaultId")
                         .HasColumnType("bigint");
 
                     b.Property<long?>("VoteCategoryId")
                         .HasColumnType("bigint");
 
-                    b.HasKey("ReviewVoteId");
+                    b.HasKey("LeagueId", "ReviewVoteId");
+
+                    b.HasAlternateKey("ReviewVoteId");
 
                     b.HasIndex("CommentId");
 
                     b.HasIndex("MemberAtFaultId");
 
                     b.HasIndex("VoteCategoryId");
+
+                    b.HasIndex("LeagueId", "CommentId");
+
+                    b.HasIndex("LeagueId", "VoteCategoryId");
 
                     b.ToTable("ReviewCommentVotes");
                 });
@@ -1927,6 +1939,9 @@ namespace iRLeagueDatabaseCore.Migrations
                     b.Property<long>("EventId")
                         .HasColumnType("bigint");
 
+                    b.Property<long?>("ImportId")
+                        .HasColumnType("bigint");
+
                     b.Property<bool>("IsTeamStanding")
                         .HasColumnType("tinyint(1)");
 
@@ -2286,6 +2301,9 @@ namespace iRLeagueDatabaseCore.Migrations
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.VoteCategoryEntity", b =>
                 {
+                    b.Property<long>("LeagueId")
+                        .HasColumnType("bigint");
+
                     b.Property<long>("CatId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
@@ -2302,7 +2320,9 @@ namespace iRLeagueDatabaseCore.Migrations
                     b.Property<string>("Text")
                         .HasColumnType("longtext");
 
-                    b.HasKey("CatId");
+                    b.HasKey("LeagueId", "CatId");
+
+                    b.HasAlternateKey("CatId");
 
                     b.ToTable("VoteCategories");
                 });
@@ -2379,15 +2399,15 @@ namespace iRLeagueDatabaseCore.Migrations
                         .WithMany("AcceptedReviewVotes")
                         .HasForeignKey("MemberAtFaultId");
 
-                    b.HasOne("iRLeagueDatabaseCore.Models.VoteCategoryEntity", "VoteCategory")
-                        .WithMany("AcceptedReviewVotes")
-                        .HasForeignKey("VoteCategoryId");
-
                     b.HasOne("iRLeagueDatabaseCore.Models.IncidentReviewEntity", "Review")
                         .WithMany("AcceptedReviewVotes")
                         .HasForeignKey("LeagueId", "ReviewId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("iRLeagueDatabaseCore.Models.VoteCategoryEntity", "VoteCategory")
+                        .WithMany("AcceptedReviewVotes")
+                        .HasForeignKey("LeagueId", "VoteCategoryId");
 
                     b.Navigation("MemberAtFault");
 
@@ -2640,22 +2660,14 @@ namespace iRLeagueDatabaseCore.Migrations
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.ReviewCommentEntity", b =>
                 {
-                    b.HasOne("iRLeagueDatabaseCore.Models.LeagueEntity", "League")
-                        .WithMany()
-                        .HasForeignKey("LeagueId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("iRLeagueDatabaseCore.Models.ReviewCommentEntity", "ReplyToComment")
                         .WithMany("Replies")
-                        .HasForeignKey("ReplyToCommentId");
+                        .HasForeignKey("LeagueId", "ReplyToCommentId");
 
                     b.HasOne("iRLeagueDatabaseCore.Models.IncidentReviewEntity", "Review")
                         .WithMany("Comments")
                         .HasForeignKey("LeagueId", "ReviewId")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.Navigation("League");
 
                     b.Navigation("ReplyToComment");
 
@@ -2664,19 +2676,19 @@ namespace iRLeagueDatabaseCore.Migrations
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.ReviewCommentVoteEntity", b =>
                 {
-                    b.HasOne("iRLeagueDatabaseCore.Models.ReviewCommentEntity", "Comment")
-                        .WithMany("ReviewCommentVotes")
-                        .HasForeignKey("CommentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("iRLeagueDatabaseCore.Models.MemberEntity", "MemberAtFault")
                         .WithMany("CommentReviewVotes")
                         .HasForeignKey("MemberAtFaultId");
 
+                    b.HasOne("iRLeagueDatabaseCore.Models.ReviewCommentEntity", "Comment")
+                        .WithMany("ReviewCommentVotes")
+                        .HasForeignKey("LeagueId", "CommentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("iRLeagueDatabaseCore.Models.VoteCategoryEntity", "VoteCategory")
                         .WithMany("CommentReviewVotes")
-                        .HasForeignKey("VoteCategoryId");
+                        .HasForeignKey("LeagueId", "VoteCategoryId");
 
                     b.Navigation("Comment");
 
@@ -3004,6 +3016,17 @@ namespace iRLeagueDatabaseCore.Migrations
                     b.Navigation("TrackGroup");
                 });
 
+            modelBuilder.Entity("iRLeagueDatabaseCore.Models.VoteCategoryEntity", b =>
+                {
+                    b.HasOne("iRLeagueDatabaseCore.Models.LeagueEntity", "League")
+                        .WithMany("VoteCategories")
+                        .HasForeignKey("LeagueId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("League");
+                });
+
             modelBuilder.Entity("MemberEntityScoredSessionResultEntity", b =>
                 {
                     b.HasOne("iRLeagueDatabaseCore.Models.MemberEntity", null)
@@ -3092,6 +3115,8 @@ namespace iRLeagueDatabaseCore.Migrations
                     b.Navigation("Seasons");
 
                     b.Navigation("Teams");
+
+                    b.Navigation("VoteCategories");
                 });
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.MemberEntity", b =>

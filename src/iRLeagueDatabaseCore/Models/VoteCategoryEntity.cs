@@ -15,6 +15,7 @@ namespace iRLeagueDatabaseCore.Models
             CommentReviewVotes = new HashSet<ReviewCommentVoteEntity>();
         }
 
+        public long LeagueId { get; set; }
         public long CatId { get; set; }
         public string Text { get; set; }
         public int Index { get; set; }
@@ -25,6 +26,7 @@ namespace iRLeagueDatabaseCore.Models
         /// </summary>
         public long? ImportId { get; set; }
 
+        public virtual LeagueEntity League { get; set; }
         public virtual ICollection<AcceptedReviewVoteEntity> AcceptedReviewVotes { get; set; }
         public virtual ICollection<ReviewCommentVoteEntity> CommentReviewVotes { get; set; }
     }
@@ -33,7 +35,16 @@ namespace iRLeagueDatabaseCore.Models
     {
         public void Configure(EntityTypeBuilder<VoteCategoryEntity> entity)
         {
-            entity.HasKey(e => e.CatId);
+            entity.HasKey(e => new { e.LeagueId, e.CatId });
+
+            entity.HasAlternateKey(e => e.CatId);
+
+            entity.Property(e => e.CatId)
+                .ValueGeneratedOnAdd();
+
+            entity.HasOne(e => e.League)
+                .WithMany(p => p.VoteCategories)
+                .HasForeignKey(e => e.LeagueId);
         }
     }
 }
