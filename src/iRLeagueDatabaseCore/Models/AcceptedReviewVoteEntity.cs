@@ -52,7 +52,7 @@ namespace iRLeagueDatabaseCore.Models
 
             entity.HasOne(d => d.VoteCategory)
                 .WithMany(p => p.AcceptedReviewVotes)
-                .HasForeignKey(d => d.VoteCategoryId);
+                .HasForeignKey(d => new { d.LeagueId, d.VoteCategoryId });
 
             entity.HasOne(d => d.MemberAtFault)
                 .WithMany(p => p.AcceptedReviewVotes)
