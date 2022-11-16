@@ -16,6 +16,7 @@ namespace iRLeagueDatabaseCore.Models
             DependendStatisticSets = new HashSet<StatisticSetEntity>();
         }
 
+        public long LeagueId { get; set; }
         public long Id { get; set; }
         public string Name { get; set; }
         public long UpdateInterval { get; set; }
@@ -30,7 +31,6 @@ namespace iRLeagueDatabaseCore.Models
         public string LastModifiedByUserName { get; set; }
         public long? CurrentChampId { get; set; }
         public long? SeasonId { get; set; }
-        public long LeagueId { get; set; }
         public long? StandingId { get; set; }
         public int? FinishedRaces { get; set; }
         public bool? IsSeasonFinished { get; set; }
@@ -50,6 +50,13 @@ namespace iRLeagueDatabaseCore.Models
     {
         public void Configure(EntityTypeBuilder<StatisticSetEntity> entity)
         {
+            entity.HasKey(e => new { e.LeagueId, e.Id });
+
+            entity.HasAlternateKey(e => e.Id);
+            
+            entity.Property(e => e.Id)
+                .ValueGeneratedOnAdd();
+
             entity.HasIndex(e => e.CurrentChampId);
 
             entity.HasIndex(e => new { e.LeagueId, e.StandingId });

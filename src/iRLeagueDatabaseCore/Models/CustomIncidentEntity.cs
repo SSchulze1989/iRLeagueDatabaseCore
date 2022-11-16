@@ -20,7 +20,12 @@ namespace iRLeagueDatabaseCore.Models
     {
         public void Configure(EntityTypeBuilder<CustomIncidentEntity> entity)
         {
-            entity.HasKey(e => e.IncidentId);
+            entity.HasKey(e => new { e.LeagueId, e.IncidentId });
+
+            entity.HasAlternateKey(e => e.IncidentId);
+
+            entity.Property(e => e.IncidentId)
+                .ValueGeneratedOnAdd();
         }
     }
 }
