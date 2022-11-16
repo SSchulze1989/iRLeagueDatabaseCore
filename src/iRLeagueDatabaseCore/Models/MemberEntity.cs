@@ -54,6 +54,9 @@ namespace iRLeagueDatabaseCore.Models
         public void Configure(EntityTypeBuilder<MemberEntity> entity)
         {
             entity.HasKey(e => e.Id);
+
+            entity.HasIndex(e => e.IRacingId)
+                .IsUnique();
         }
     }
 }
