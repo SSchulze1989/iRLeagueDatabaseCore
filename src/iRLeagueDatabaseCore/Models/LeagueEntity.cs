@@ -21,6 +21,7 @@ namespace iRLeagueDatabaseCore.Models
             PointRules = new HashSet<PointRuleEntity>();
             LeagueMembers = new HashSet<LeagueMemberEntity>();
             Teams = new HashSet<TeamEntity>();
+            VoteCategories = new HashSet<VoteCategoryEntity>();
         }
 
         public virtual ICollection<SeasonEntity> Seasons { get; set; }
@@ -29,6 +30,7 @@ namespace iRLeagueDatabaseCore.Models
         public virtual IEnumerable<ScoringEntity> Scorings { get; set; }
         public virtual ICollection<LeagueMemberEntity> LeagueMembers { get; set; }
         public virtual ICollection<TeamEntity> Teams { get; set; }
+        public virtual ICollection<VoteCategoryEntity> VoteCategories { get; set; }
     }
 
     public class LeagueEntityConfiguration : IEntityTypeConfiguration<LeagueEntity>

@@ -9,9 +9,9 @@ namespace iRLeagueDatabaseCore.Models
 {
     public partial class ReviewCommentVoteEntity
     {
+        public long LeagueId { get; set; }
         public long ReviewVoteId { get; set; }
         public long CommentId { get; set; }
-        public long LeagueId { get; set; }
         public long? MemberAtFaultId { get; set; }
         public long? VoteCategoryId { get; set; }
         public string Description { get; set; }
@@ -30,7 +30,12 @@ namespace iRLeagueDatabaseCore.Models
     {
         public void Configure(EntityTypeBuilder<ReviewCommentVoteEntity> entity)
         {
-            entity.HasKey(e => e.ReviewVoteId);
+            entity.HasKey(e => new { e.LeagueId, e.ReviewVoteId });
+
+            entity.HasAlternateKey(e => e.ReviewVoteId);
+
+            entity.Property(e => e.ReviewVoteId)
+                .ValueGeneratedOnAdd();
 
             entity.HasIndex(e => e.CommentId);
 
@@ -40,11 +45,11 @@ namespace iRLeagueDatabaseCore.Models
 
             entity.HasOne(d => d.Comment)
                 .WithMany(p => p.ReviewCommentVotes)
-                .HasForeignKey(d => d.CommentId);
+                .HasForeignKey(d => new { d.LeagueId, d.CommentId });
 
             entity.HasOne(d => d.VoteCategory)
                 .WithMany(p => p.CommentReviewVotes)
-                .HasForeignKey(d => d.VoteCategoryId);
+                .HasForeignKey(d => new { d.LeagueId, d.VoteCategoryId });
 
             entity.HasOne(d => d.MemberAtFault)
                 .WithMany(p => p.CommentReviewVotes)

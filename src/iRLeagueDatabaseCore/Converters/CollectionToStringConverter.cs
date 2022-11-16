@@ -11,12 +11,18 @@ namespace iRLeagueDatabaseCore.Converters
 {
     public class CollectionToStringConverter<T> : ValueConverter<ICollection<T>, string>
     {
+        private const char defaultDelimiter = ';';
+
         public CollectionToStringConverter(CultureInfo culture, char delimiter = ';') : 
             base(ConvertToString(delimiter, culture), ConvertToArray(delimiter, culture))
         {
         }
 
-        public CollectionToStringConverter(char delimiter = ';') : this(CultureInfo.InvariantCulture, delimiter)
+        public CollectionToStringConverter() : this(CultureInfo.InvariantCulture, defaultDelimiter)
+        {
+        }
+
+        public CollectionToStringConverter(char delimiter) : this(CultureInfo.InvariantCulture, delimiter)
         {
         }
 

@@ -19,10 +19,10 @@ namespace iRLeagueDatabaseCore.Models
         public int FastLapNr { get; set; }
         public double Incidents { get; set; }
         public int Status { get; set; }
-        public long QualifyingTime { get; set; }
-        public long Interval { get; set; }
-        public long AvgLapTime { get; set; }
-        public long FastestLapTime { get; set; }
+        public TimeSpan QualifyingTime { get; set; }
+        public TimeSpan Interval { get; set; }
+        public TimeSpan AvgLapTime { get; set; }
+        public TimeSpan FastestLapTime { get; set; }
         public double PositionChange { get; set; }
         public string IRacingId { get; set; }
         public int SimSessionType { get; set; }

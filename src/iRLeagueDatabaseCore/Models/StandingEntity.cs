@@ -20,6 +20,7 @@ namespace iRLeagueDatabaseCore.Models
 
         public string Name { get; set; }
         public bool IsTeamStanding { get; set; }
+        public long? ImportId { get; set; }
 
         public virtual SeasonEntity Season { get; set; }
         public virtual EventEntity Event { get; set; }

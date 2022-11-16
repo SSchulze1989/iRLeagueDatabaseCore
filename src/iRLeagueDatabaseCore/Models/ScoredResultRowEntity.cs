@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
 using System.Collections.Generic;
 
@@ -109,6 +110,14 @@ namespace iRLeagueDatabaseCore.Models
             entity.HasIndex(e => e.TeamId);
 
             entity.Property(e => e.QualifyingTimeAt).HasColumnType("datetime");
+
+            entity.Property(e => e.AvgLapTime).HasConversion<TimeSpanToTicksConverter>();
+
+            entity.Property(e => e.FastestLapTime).HasConversion<TimeSpanToTicksConverter>();
+
+            entity.Property(e => e.QualifyingTime).HasConversion<TimeSpanToTicksConverter>();
+
+            entity.Property(e => e.Interval).HasConversion<TimeSpanToTicksConverter>();
 
             entity.HasOne(d => d.Team)
                 .WithMany()
