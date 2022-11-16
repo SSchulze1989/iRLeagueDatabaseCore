@@ -7,6 +7,7 @@ using iRLeagueDatabaseCore.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.Threading.Tasks;
+using FluentAssertions;
 
 namespace DbIntegrationTests
 {
@@ -237,6 +238,25 @@ namespace DbIntegrationTests
             await context.SaveChangesAsync();
 
             Assert.Equal(EntityState.Detached, filterOptionEntry.State);
+        }
+
+        [Fact]
+        public async Task ShouldSetFilterValues()
+        {
+            using var tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+            using var context = GetTestDatabaseContext();
+
+            var filterOption = new ResultsFilterOptionEntity()
+            {
+                FilterValues = new[] { "Value1", "Value2" }
+            };
+            var scoring = await context.Scorings.FirstAsync();
+            scoring.ResultsFilterOptions.Add(filterOption);
+            await context.SaveChangesAsync();
+            var testFilterOption = await context.ResultsFilterOptions
+                .SingleAsync(x => x.ResultsFilterId == filterOption.ResultsFilterId);
+
+            testFilterOption.FilterValues.Should().BeEquivalentTo(filterOption.FilterValues);
         }
     }
 }

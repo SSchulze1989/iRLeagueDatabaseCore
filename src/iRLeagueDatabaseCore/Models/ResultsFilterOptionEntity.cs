@@ -12,6 +12,11 @@ namespace iRLeagueDatabaseCore.Models
 {
     public partial class ResultsFilterOptionEntity : IVersionEntity
     {
+        public ResultsFilterOptionEntity()
+        {
+            FilterValues = new HashSet<string>();
+        }
+
         public long LeagueId { get; set; }
         public long ResultsFilterId { get; set; }
         public long? ScoringId { get; set; }
@@ -20,7 +25,7 @@ namespace iRLeagueDatabaseCore.Models
         public string ColumnPropertyName { get; set; }
         public ComparatorType Comparator { get; set; }
         public bool Include { get; set; }
-        public ICollection<string> FilterValues { get; set; }
+        public virtual ICollection<string> FilterValues { get; set; }
 
         #region version
         public DateTime? CreatedOn { get; set; }

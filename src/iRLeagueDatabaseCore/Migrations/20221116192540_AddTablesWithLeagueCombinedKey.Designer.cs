@@ -11,7 +11,7 @@ using iRLeagueDatabaseCore.Models;
 namespace iRLeagueDatabaseCore.Migrations
 {
     [DbContext(typeof(LeagueDbContext))]
-    [Migration("20221116191252_AddTablesWithLeagueCombinedKey")]
+    [Migration("20221116192540_AddTablesWithLeagueCombinedKey")]
     partial class AddTablesWithLeagueCombinedKey
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
