@@ -209,7 +209,7 @@ namespace DbIntegrationTests
             using var tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
             using (var context = GetTestDatabaseContext())
             {
-                var filterOption = new ResultsFilterOptionEntity();
+                var filterOption = new FilterOptionEntity();
                 var pointRule = await context.PointRules.FirstAsync();
                 pointRule.ResultsFilters.Add(filterOption);
                 await context.SaveChangesAsync();
@@ -228,7 +228,7 @@ namespace DbIntegrationTests
             using var tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
             using var context = GetTestDatabaseContext();
 
-            var filterOption = new ResultsFilterOptionEntity();
+            var filterOption = new FilterOptionEntity();
             var pointRule = await context.PointRules.FirstAsync();
             pointRule.ResultsFilters.Add(filterOption);
             await context.SaveChangesAsync();
@@ -246,17 +246,19 @@ namespace DbIntegrationTests
             using var tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
             using var context = GetTestDatabaseContext();
 
-            var filterOption = new ResultsFilterOptionEntity()
+            var filterOption = new FilterOptionEntity()
             {
-                FilterValues = new[] { "Value1", "Value2" }
+                Conditions = new[] {
+                    new FilterConditionEntity() { FilterValues = new[] { "Value1", "Value2" } },
+                },
             };
             var scoring = await context.Scorings.FirstAsync();
             scoring.ResultsFilterOptions.Add(filterOption);
             await context.SaveChangesAsync();
             var testFilterOption = await context.ResultsFilterOptions
-                .SingleAsync(x => x.ResultsFilterId == filterOption.ResultsFilterId);
+                .SingleAsync(x => x.FilterOptionId == filterOption.FilterOptionId);
 
-            testFilterOption.FilterValues.Should().BeEquivalentTo(filterOption.FilterValues);
+            testFilterOption.Conditions.First().FilterValues.Should().BeEquivalentTo(filterOption.Conditions.First().FilterValues);
         }
     }
 }

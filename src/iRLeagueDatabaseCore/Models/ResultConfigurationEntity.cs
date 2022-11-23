@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using iRLeagueApiCore.Common.Enums;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,10 +22,13 @@ namespace iRLeagueDatabaseCore.Models
 
         public string Name { get; set; }
         public string DisplayName { get; set; }
+        public ResultKind ResultKind { get; set; } 
 
         public virtual LeagueEntity League { get; set; }
         public virtual ICollection<ScoringEntity> Scorings { get; set; }
         public virtual IEnumerable<EventEntity> Events { get; set; }
+        public virtual ICollection<FilterOptionEntity> PointFilters { get; set; }
+        public virtual ICollection<FilterOptionEntity> ResultFilters { get; set; }
 
         #region version
         public DateTime? CreatedOn { get; set; }
@@ -47,6 +52,8 @@ namespace iRLeagueDatabaseCore.Models
 
             entity.Property(e => e.ResultConfigId)
                 .ValueGeneratedOnAdd();
+
+            entity.Property(e => e.ResultKind).HasConversion<EnumToStringConverter<ResultKind>>();
 
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
 

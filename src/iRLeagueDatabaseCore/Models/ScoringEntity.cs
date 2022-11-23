@@ -13,7 +13,7 @@ namespace iRLeagueDatabaseCore.Models
         public ScoringEntity()
         {
             DependendScorings = new HashSet<ScoringEntity>();
-            ResultsFilterOptions = new HashSet<ResultsFilterOptionEntity>();
+            ResultsFilterOptions = new HashSet<FilterOptionEntity>();
         }
 
         public long LeagueId { get; set; }
@@ -22,7 +22,6 @@ namespace iRLeagueDatabaseCore.Models
         public long? PointsRuleId { get; set; }
 
         public int Index { get; set; }
-        public ScoringKind ScoringKind { get; set; }
         public string Name { get; set; }
         public int MaxResultsPerGroup { get; set; }
         public long? ExtScoringSourceId { get; set; }
@@ -41,7 +40,7 @@ namespace iRLeagueDatabaseCore.Models
         public virtual ResultConfigurationEntity ResultConfiguration { get; set; }
         public virtual PointRuleEntity PointsRule { get; set; }
         public virtual ICollection<ScoringEntity> DependendScorings { get; set; }
-        public virtual ICollection<ResultsFilterOptionEntity> ResultsFilterOptions { get; set; }
+        public virtual ICollection<FilterOptionEntity> ResultsFilterOptions { get; set; }
     }
 
     public class ScoringEntityConfiguration : IEntityTypeConfiguration<ScoringEntity>
@@ -62,9 +61,6 @@ namespace iRLeagueDatabaseCore.Models
             entity.Property(e => e.LastModifiedOn).HasColumnType("datetime");
 
             entity.Property(e => e.ShowResults);
-
-            entity.Property(e => e.ScoringKind)
-                .HasConversion<string>();
 
             entity.HasOne(d => d.ExtScoringSource)
                 .WithMany(p => p.DependendScorings)

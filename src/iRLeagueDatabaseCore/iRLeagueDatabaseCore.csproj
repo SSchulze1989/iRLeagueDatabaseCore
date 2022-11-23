@@ -3,7 +3,7 @@
   <PropertyGroup />
 
   <ItemGroup>
-	<PackageReference Include="iRLeagueApiCore.Common" Version="0.3.6" />
+	<PackageReference Include="iRLeagueApiCore.Common" Version="0.3.8-dev.18" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="6.0.7" />
@@ -23,12 +23,13 @@
     <OutputType>Library</OutputType>
 	<TargetFramework>net6.0</TargetFramework>
     <PackageId>iRLeagueDatabaseCore</PackageId>
-    <Version>0.3.8-dev.1</Version>
+    <Version>0.3.8-dev.3</Version>
     <Authors>Simon Schulze</Authors>
     <Company>Simon Schulze</Company>
     <PackageDescription>This package contains the Entityframework configuration for a Code first project</PackageDescription>
     <RepositoryUrl>https://github.com/SSchulze1989/iRLeagueDatabaseCore</RepositoryUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+	<ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
 </Project>

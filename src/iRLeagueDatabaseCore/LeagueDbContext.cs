@@ -36,7 +36,7 @@ namespace iRLeagueDatabaseCore.Models
         public virtual DbSet<EventResultEntity> EventResults { get; set; }
         public virtual DbSet<ResultConfigurationEntity> ResultConfigurations { get; set; }
         public virtual DbSet<ResultRowEntity> ResultRows { get; set; }
-        public virtual DbSet<ResultsFilterOptionEntity> ResultsFilterOptions { get; set; }
+        public virtual DbSet<FilterOptionEntity> ResultsFilterOptions { get; set; }
         public virtual DbSet<ReviewPenaltyEntity> ReviewPenaltys { get; set; }
         public virtual DbSet<ScheduleEntity> Schedules { get; set; }
         public virtual DbSet<ScoredEventResultEntity> ScoredEventResults { get; set; }
