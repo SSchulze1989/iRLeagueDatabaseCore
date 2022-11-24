@@ -543,19 +543,7 @@ namespace iRLeagueDatabaseCore.Migrations
                     b.Property<long?>("PointFilterResultConfigId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("PointRuleEntityLeagueId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("PointRuleEntityPointRuleId")
-                        .HasColumnType("bigint");
-
                     b.Property<long?>("ResultFilterResultConfigId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("ScoringEntityLeagueId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("ScoringEntityScoringId")
                         .HasColumnType("bigint");
 
                     b.Property<int>("Version")
@@ -568,10 +556,6 @@ namespace iRLeagueDatabaseCore.Migrations
                     b.HasIndex("LeagueId", "PointFilterResultConfigId");
 
                     b.HasIndex("LeagueId", "ResultFilterResultConfigId");
-
-                    b.HasIndex("PointRuleEntityLeagueId", "PointRuleEntityPointRuleId");
-
-                    b.HasIndex("ScoringEntityLeagueId", "ScoringEntityScoringId");
 
                     b.ToTable("FilterOptions");
                 });
@@ -2612,14 +2596,6 @@ namespace iRLeagueDatabaseCore.Migrations
                         .HasForeignKey("LeagueId", "ResultFilterResultConfigId")
                         .OnDelete(DeleteBehavior.ClientCascade);
 
-                    b.HasOne("iRLeagueDatabaseCore.Models.PointRuleEntity", null)
-                        .WithMany("ResultsFilters")
-                        .HasForeignKey("PointRuleEntityLeagueId", "PointRuleEntityPointRuleId");
-
-                    b.HasOne("iRLeagueDatabaseCore.Models.ScoringEntity", null)
-                        .WithMany("ResultsFilterOptions")
-                        .HasForeignKey("ScoringEntityLeagueId", "ScoringEntityScoringId");
-
                     b.Navigation("PointFilterResultConfig");
 
                     b.Navigation("ResultFilterResultConfig");
@@ -3213,8 +3189,6 @@ namespace iRLeagueDatabaseCore.Migrations
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.PointRuleEntity", b =>
                 {
-                    b.Navigation("ResultsFilters");
-
                     b.Navigation("Scorings");
                 });
 
@@ -3261,8 +3235,6 @@ namespace iRLeagueDatabaseCore.Migrations
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.ScoringEntity", b =>
                 {
                     b.Navigation("DependendScorings");
-
-                    b.Navigation("ResultsFilterOptions");
                 });
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.SeasonEntity", b =>

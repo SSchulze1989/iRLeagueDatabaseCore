@@ -25,21 +25,12 @@ namespace iRLeagueDatabaseCore.Migrations
                     CreatedByUserId = table.Column<string>(type: "longtext", nullable: true),
                     CreatedByUserName = table.Column<string>(type: "longtext", nullable: true),
                     LastModifiedByUserId = table.Column<string>(type: "longtext", nullable: true),
-                    LastModifiedByUserName = table.Column<string>(type: "longtext", nullable: true),
-                    PointRuleEntityLeagueId = table.Column<long>(type: "bigint", nullable: true),
-                    PointRuleEntityPointRuleId = table.Column<long>(type: "bigint", nullable: true),
-                    ScoringEntityLeagueId = table.Column<long>(type: "bigint", nullable: true),
-                    ScoringEntityScoringId = table.Column<long>(type: "bigint", nullable: true)
+                    LastModifiedByUserName = table.Column<string>(type: "longtext", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_FilterOptions", x => new { x.LeagueId, x.FilterOptionId });
                     table.UniqueConstraint("AK_FilterOptions_FilterOptionId", x => x.FilterOptionId);
-                    table.ForeignKey(
-                        name: "FK_FilterOptions_PointRules_PointRuleEntityLeagueId_PointRuleEn~",
-                        columns: x => new { x.PointRuleEntityLeagueId, x.PointRuleEntityPointRuleId },
-                        principalTable: "PointRules",
-                        principalColumns: new[] { "LeagueId", "PointRuleId" });
                     table.ForeignKey(
                         name: "FK_FilterOptions_ResultConfigurations_LeagueId_PointFilterResul~",
                         columns: x => new { x.LeagueId, x.PointFilterResultConfigId },
@@ -50,11 +41,6 @@ namespace iRLeagueDatabaseCore.Migrations
                         columns: x => new { x.LeagueId, x.ResultFilterResultConfigId },
                         principalTable: "ResultConfigurations",
                         principalColumns: new[] { "LeagueId", "ResultConfigId" });
-                    table.ForeignKey(
-                        name: "FK_FilterOptions_Scorings_ScoringEntityLeagueId_ScoringEntitySc~",
-                        columns: x => new { x.ScoringEntityLeagueId, x.ScoringEntityScoringId },
-                        principalTable: "Scorings",
-                        principalColumns: new[] { "LeagueId", "ScoringId" });
                 });
 
             migrationBuilder.CreateTable(
@@ -97,16 +83,6 @@ namespace iRLeagueDatabaseCore.Migrations
                 name: "IX_FilterOptions_LeagueId_ResultFilterResultConfigId",
                 table: "FilterOptions",
                 columns: new[] { "LeagueId", "ResultFilterResultConfigId" });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_FilterOptions_PointRuleEntityLeagueId_PointRuleEntityPointRu~",
-                table: "FilterOptions",
-                columns: new[] { "PointRuleEntityLeagueId", "PointRuleEntityPointRuleId" });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_FilterOptions_ScoringEntityLeagueId_ScoringEntityScoringId",
-                table: "FilterOptions",
-                columns: new[] { "ScoringEntityLeagueId", "ScoringEntityScoringId" });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
