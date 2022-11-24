@@ -13,7 +13,6 @@ namespace iRLeagueDatabaseCore.Models
         public ScoringEntity()
         {
             DependendScorings = new HashSet<ScoringEntity>();
-            ResultsFilterOptions = new HashSet<FilterOptionEntity>();
         }
 
         public long LeagueId { get; set; }
@@ -40,7 +39,6 @@ namespace iRLeagueDatabaseCore.Models
         public virtual ResultConfigurationEntity ResultConfiguration { get; set; }
         public virtual PointRuleEntity PointsRule { get; set; }
         public virtual ICollection<ScoringEntity> DependendScorings { get; set; }
-        public virtual ICollection<FilterOptionEntity> ResultsFilterOptions { get; set; }
     }
 
     public class ScoringEntityConfiguration : IEntityTypeConfiguration<ScoringEntity>

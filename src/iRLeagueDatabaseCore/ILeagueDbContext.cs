@@ -19,7 +19,8 @@ namespace iRLeagueDatabaseCore.Models
         public DbSet<EventResultEntity> EventResults { get; set; }
         public DbSet<ResultConfigurationEntity> ResultConfigurations { get; set; }
         public DbSet<ResultRowEntity> ResultRows { get; set; }
-        public DbSet<FilterOptionEntity> ResultsFilterOptions { get; set; }
+        public DbSet<FilterOptionEntity> FilterOptions { get; set; }
+        public DbSet<FilterConditionEntity> FilterConditions { get; set; }
         public DbSet<ReviewPenaltyEntity> ReviewPenaltys { get; set; }
         public DbSet<ScheduleEntity> Schedules { get; set; }
         public DbSet<ScoredEventResultEntity> ScoredEventResults { get; set; }

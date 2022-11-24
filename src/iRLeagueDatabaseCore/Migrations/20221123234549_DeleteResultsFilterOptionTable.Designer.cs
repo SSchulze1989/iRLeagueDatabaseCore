@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using iRLeagueDatabaseCore.Models;
 
@@ -10,9 +11,10 @@ using iRLeagueDatabaseCore.Models;
 namespace iRLeagueDatabaseCore.Migrations
 {
     [DbContext(typeof(LeagueDbContext))]
-    partial class LeagueDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221123234549_DeleteResultsFilterOptionTable")]
+    partial class DeleteResultsFilterOptionTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -474,108 +476,6 @@ namespace iRLeagueDatabaseCore.Migrations
                     b.ToTable("EventResults");
                 });
 
-            modelBuilder.Entity("iRLeagueDatabaseCore.Models.FilterConditionEntity", b =>
-                {
-                    b.Property<long>("LeagueId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("ConditionId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Action")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("ColumnPropertyName")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Comparator")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<long>("FilterOptionId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("FilterType")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("FilterValues")
-                        .HasColumnType("longtext");
-
-                    b.HasKey("LeagueId", "ConditionId");
-
-                    b.HasAlternateKey("ConditionId");
-
-                    b.HasIndex("LeagueId", "FilterOptionId");
-
-                    b.ToTable("FilterConditions");
-                });
-
-            modelBuilder.Entity("iRLeagueDatabaseCore.Models.FilterOptionEntity", b =>
-                {
-                    b.Property<long>("LeagueId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("FilterOptionId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("CreatedByUserId")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("CreatedByUserName")
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime?>("CreatedOn")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("LastModifiedByUserId")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("LastModifiedByUserName")
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime?>("LastModifiedOn")
-                        .HasColumnType("datetime");
-
-                    b.Property<long?>("PointFilterResultConfigId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("PointRuleEntityLeagueId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("PointRuleEntityPointRuleId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("ResultFilterResultConfigId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("ScoringEntityLeagueId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("ScoringEntityScoringId")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("Version")
-                        .HasColumnType("int");
-
-                    b.HasKey("LeagueId", "FilterOptionId");
-
-                    b.HasAlternateKey("FilterOptionId");
-
-                    b.HasIndex("LeagueId", "PointFilterResultConfigId");
-
-                    b.HasIndex("LeagueId", "ResultFilterResultConfigId");
-
-                    b.HasIndex("PointRuleEntityLeagueId", "PointRuleEntityPointRuleId");
-
-                    b.HasIndex("ScoringEntityLeagueId", "ScoringEntityScoringId");
-
-                    b.ToTable("FilterOptions");
-                });
-
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.IncidentReviewEntity", b =>
                 {
                     b.Property<long>("LeagueId")
@@ -998,10 +898,6 @@ namespace iRLeagueDatabaseCore.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<string>("Name")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("ResultKind")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<int>("Version")
@@ -1751,6 +1647,10 @@ namespace iRLeagueDatabaseCore.Migrations
 
                     b.Property<long?>("ScheduleEntityScheduleId")
                         .HasColumnType("bigint");
+
+                    b.Property<string>("ScoringKind")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<bool>("ShowResults")
                         .HasColumnType("tinyint(1)");
@@ -2589,42 +2489,6 @@ namespace iRLeagueDatabaseCore.Migrations
                     b.Navigation("Event");
                 });
 
-            modelBuilder.Entity("iRLeagueDatabaseCore.Models.FilterConditionEntity", b =>
-                {
-                    b.HasOne("iRLeagueDatabaseCore.Models.FilterOptionEntity", "FilterOption")
-                        .WithMany("Conditions")
-                        .HasForeignKey("LeagueId", "FilterOptionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("FilterOption");
-                });
-
-            modelBuilder.Entity("iRLeagueDatabaseCore.Models.FilterOptionEntity", b =>
-                {
-                    b.HasOne("iRLeagueDatabaseCore.Models.ResultConfigurationEntity", "PointFilterResultConfig")
-                        .WithMany("PointFilters")
-                        .HasForeignKey("LeagueId", "PointFilterResultConfigId")
-                        .OnDelete(DeleteBehavior.ClientCascade);
-
-                    b.HasOne("iRLeagueDatabaseCore.Models.ResultConfigurationEntity", "ResultFilterResultConfig")
-                        .WithMany("ResultFilters")
-                        .HasForeignKey("LeagueId", "ResultFilterResultConfigId")
-                        .OnDelete(DeleteBehavior.ClientCascade);
-
-                    b.HasOne("iRLeagueDatabaseCore.Models.PointRuleEntity", null)
-                        .WithMany("ResultsFilters")
-                        .HasForeignKey("PointRuleEntityLeagueId", "PointRuleEntityPointRuleId");
-
-                    b.HasOne("iRLeagueDatabaseCore.Models.ScoringEntity", null)
-                        .WithMany("ResultsFilterOptions")
-                        .HasForeignKey("ScoringEntityLeagueId", "ScoringEntityScoringId");
-
-                    b.Navigation("PointFilterResultConfig");
-
-                    b.Navigation("ResultFilterResultConfig");
-                });
-
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.IncidentReviewEntity", b =>
                 {
                     b.HasOne("iRLeagueDatabaseCore.Models.SessionEntity", "Session")
@@ -3161,11 +3025,6 @@ namespace iRLeagueDatabaseCore.Migrations
                     b.Navigation("SessionResults");
                 });
 
-            modelBuilder.Entity("iRLeagueDatabaseCore.Models.FilterOptionEntity", b =>
-                {
-                    b.Navigation("Conditions");
-                });
-
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.IncidentReviewEntity", b =>
                 {
                     b.Navigation("AcceptedReviewVotes");
@@ -3213,17 +3072,11 @@ namespace iRLeagueDatabaseCore.Migrations
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.PointRuleEntity", b =>
                 {
-                    b.Navigation("ResultsFilters");
-
                     b.Navigation("Scorings");
                 });
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.ResultConfigurationEntity", b =>
                 {
-                    b.Navigation("PointFilters");
-
-                    b.Navigation("ResultFilters");
-
                     b.Navigation("Scorings");
                 });
 
@@ -3261,8 +3114,6 @@ namespace iRLeagueDatabaseCore.Migrations
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.ScoringEntity", b =>
                 {
                     b.Navigation("DependendScorings");
-
-                    b.Navigation("ResultsFilterOptions");
                 });
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.SeasonEntity", b =>

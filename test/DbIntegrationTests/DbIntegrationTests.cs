@@ -204,21 +204,21 @@ namespace DbIntegrationTests
         }
 
         [Fact]
-        public async Task ShouldAddFilterToPointRule()
+        public async Task ShouldAddFilterToConfiguration()
         {
             using var tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
             using (var context = GetTestDatabaseContext())
             {
                 var filterOption = new FilterOptionEntity();
-                var pointRule = await context.PointRules.FirstAsync();
-                pointRule.ResultsFilters.Add(filterOption);
+                var config = await context.ResultConfigurations.FirstAsync();
+                config.PointFilters.Add(filterOption);
                 await context.SaveChangesAsync();
             }
 
             using (var context = GetTestDatabaseContext())
             {
-                var pointRule = await context.PointRules.FirstAsync();
-                Assert.NotEmpty(pointRule.ResultsFilters);
+                var config = await context.ResultConfigurations.FirstAsync();
+                Assert.NotEmpty(config.PointFilters);
             }
         }
 
@@ -229,11 +229,11 @@ namespace DbIntegrationTests
             using var context = GetTestDatabaseContext();
 
             var filterOption = new FilterOptionEntity();
-            var pointRule = await context.PointRules.FirstAsync();
-            pointRule.ResultsFilters.Add(filterOption);
+            var config = await context.ResultConfigurations.FirstAsync();
+            config.PointFilters.Add(filterOption);
             await context.SaveChangesAsync();
 
-            pointRule.ResultsFilters.Remove(filterOption);
+            config.PointFilters.Remove(filterOption);
             var filterOptionEntry = context.Entry(filterOption);
             await context.SaveChangesAsync();
 
@@ -252,10 +252,10 @@ namespace DbIntegrationTests
                     new FilterConditionEntity() { FilterValues = new[] { "Value1", "Value2" } },
                 },
             };
-            var scoring = await context.Scorings.FirstAsync();
-            scoring.ResultsFilterOptions.Add(filterOption);
+            var config = await context.ResultConfigurations.FirstAsync();
+            config.PointFilters.Add(filterOption);
             await context.SaveChangesAsync();
-            var testFilterOption = await context.ResultsFilterOptions
+            var testFilterOption = await context.FilterOptions
                 .SingleAsync(x => x.FilterOptionId == filterOption.FilterOptionId);
 
             testFilterOption.Conditions.First().FilterValues.Should().BeEquivalentTo(filterOption.Conditions.First().FilterValues);
