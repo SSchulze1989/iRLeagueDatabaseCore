@@ -21,12 +21,14 @@ namespace iRLeagueDatabaseCore.Models
 
         public long LeagueId { get; set; }
         public long ResultConfigId { get; set; }
+        public long? SourceResultConfigId { get; set; }
 
         public string Name { get; set; }
         public string DisplayName { get; set; }
         public ResultKind ResultKind { get; set; } 
 
         public virtual LeagueEntity League { get; set; }
+        public virtual ResultConfigurationEntity SourceResultConfig { get; set; }
         public virtual ICollection<ScoringEntity> Scorings { get; set; }
         public virtual IEnumerable<EventEntity> Events { get; set; }
         public virtual ICollection<FilterOptionEntity> PointFilters { get; set; }
@@ -64,6 +66,12 @@ namespace iRLeagueDatabaseCore.Models
             entity.HasOne(d => d.League)
                 .WithMany(p => p.ResultConfigs)
                 .HasForeignKey(d => d.LeagueId);
+
+            entity.HasOne(d => d.SourceResultConfig)
+                .WithMany()
+                .HasForeignKey(d => new { d.LeagueId, d.SourceResultConfigId })
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.ClientSetNull);
         }
     }
 }
