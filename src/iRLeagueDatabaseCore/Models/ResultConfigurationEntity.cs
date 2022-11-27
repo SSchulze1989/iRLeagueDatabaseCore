@@ -26,6 +26,7 @@ namespace iRLeagueDatabaseCore.Models
         public string Name { get; set; }
         public string DisplayName { get; set; }
         public ResultKind ResultKind { get; set; } 
+        public int ResultsPerTeam { get; set; }
 
         public virtual LeagueEntity League { get; set; }
         public virtual ResultConfigurationEntity SourceResultConfig { get; set; }
