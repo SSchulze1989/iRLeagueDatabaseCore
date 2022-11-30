@@ -30,9 +30,9 @@ namespace iRLeagueDatabaseCore.Models
         /// </summary>
         public int SessionNr { get; set; }
         public string Name { get; set; }
-        public long FastestLap { get; set; }
-        public long FastestQualyLap { get; set; }
-        public long FastestAvgLap { get; set; }
+        public TimeSpan FastestLap { get; set; }
+        public TimeSpan FastestQualyLap { get; set; }
+        public TimeSpan FastestAvgLap { get; set; }
         public DateTime? CreatedOn { get; set; }
         public DateTime? LastModifiedOn { get; set; }
         public int Version { get; set; }
@@ -75,6 +75,12 @@ namespace iRLeagueDatabaseCore.Models
             entity.Property(e => e.CreatedOn).HasColumnType("datetime");
 
             entity.Property(e => e.LastModifiedOn).HasColumnType("datetime");
+
+            entity.Property(e => e.FastestAvgLap).HasConversion<TimeSpanToTicksConverter>();
+
+            entity.Property(e => e.FastestLap).HasConversion<TimeSpanToTicksConverter>();
+
+            entity.Property(e => e.FastestQualyLap).HasConversion<TimeSpanToTicksConverter>();
 
             entity.HasOne(d => d.FastestAvgLapDriver)
                 .WithMany(p => p.FastestAvgLapResults)
