@@ -92,7 +92,7 @@ namespace iRLeagueDatabaseCore.Models
                 .HasColumnType("datetime");
 
             entity.HasOne(d => d.Event)
-                .WithMany()
+                .WithMany(p => p.SimSessionDetails)
                 .HasForeignKey(d => new { d.LeagueId, d.EventId });
         }
     }

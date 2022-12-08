@@ -39,11 +39,13 @@ namespace iRLeagueDatabaseCore.Models
             entity.HasOne(d => d.Review)
                 .WithMany(p => p.ReviewPenaltys)
                 .HasForeignKey(d => new { d.LeagueId, d.ReviewId })
-                .OnDelete(DeleteBehavior.ClientSetNull);
+                .OnDelete(DeleteBehavior.Cascade);
 
             entity.HasOne(d => d.ReviewVote)
                 .WithMany(p => p.ReviewPenaltys)
-                .HasForeignKey(d => new { d.LeagueId, d.ReviewVoteId });
+                .HasForeignKey(d => new { d.LeagueId, d.ReviewVoteId })
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.ClientCascade);
         }
     }
 }

@@ -2,6 +2,10 @@
 
 public partial class FilterOptionEntity : IVersionEntity
 {
+    public FilterOptionEntity()
+    {
+        Conditions = new HashSet<FilterConditionEntity>();
+    }
 
     public long LeagueId { get; set; }
     public long FilterOptionId { get; set; }
