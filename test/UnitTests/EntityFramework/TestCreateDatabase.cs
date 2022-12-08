@@ -42,7 +42,7 @@ namespace UnitTests.EntityFramework
             optionsBuilder.UseInMemoryDatabase(databaseName: "TestDatabase")
                .UseLazyLoadingProxies();
             var dbContext = new LeagueDbContext(optionsBuilder.Options);
-	    dbContext.Database.EnsureCreated();
+	            dbContext.Database.EnsureCreated();
 
             return dbContext;
         }

@@ -20,11 +20,9 @@ namespace iRLeagueDatabaseCore.Models
     {
         public void Configure(EntityTypeBuilder<AddPenaltyEntity> entity)
         {
-            entity.HasKey(e => e.ScoredResultRowId);
+            entity.HasKey(e => new { e.LeagueId, e.ScoredResultRowId });
 
             entity.HasIndex(e => new { e.LeagueId, e.ScoredResultRowId });
-
-            entity.Property(e => e.ScoredResultRowId).ValueGeneratedNever();
 
             entity.HasOne(d => d.ScoredResultRow)
                 .WithOne(p => p.AddPenalty)

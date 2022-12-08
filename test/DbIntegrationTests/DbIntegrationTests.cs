@@ -7,6 +7,7 @@ using iRLeagueDatabaseCore.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.Threading.Tasks;
+using FluentAssertions;
 
 namespace DbIntegrationTests
 {
@@ -203,21 +204,21 @@ namespace DbIntegrationTests
         }
 
         [Fact]
-        public async Task ShouldAddFilterToPointRule()
+        public async Task ShouldAddFilterToConfiguration()
         {
             using var tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
             using (var context = GetTestDatabaseContext())
             {
-                var filterOption = new ResultsFilterOptionEntity();
-                var pointRule = await context.PointRules.FirstAsync();
-                pointRule.ResultsFilters.Add(filterOption);
+                var filterOption = new FilterOptionEntity();
+                var config = await context.ResultConfigurations.FirstAsync();
+                config.PointFilters.Add(filterOption);
                 await context.SaveChangesAsync();
             }
 
             using (var context = GetTestDatabaseContext())
             {
-                var pointRule = await context.PointRules.FirstAsync();
-                Assert.NotEmpty(pointRule.ResultsFilters);
+                var config = await context.ResultConfigurations.FirstAsync();
+                Assert.NotEmpty(config.PointFilters);
             }
         }
 
@@ -227,16 +228,37 @@ namespace DbIntegrationTests
             using var tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
             using var context = GetTestDatabaseContext();
 
-            var filterOption = new ResultsFilterOptionEntity();
-            var pointRule = await context.PointRules.FirstAsync();
-            pointRule.ResultsFilters.Add(filterOption);
+            var filterOption = new FilterOptionEntity();
+            var config = await context.ResultConfigurations.FirstAsync();
+            config.PointFilters.Add(filterOption);
             await context.SaveChangesAsync();
 
-            pointRule.ResultsFilters.Remove(filterOption);
+            config.PointFilters.Remove(filterOption);
             var filterOptionEntry = context.Entry(filterOption);
             await context.SaveChangesAsync();
 
             Assert.Equal(EntityState.Detached, filterOptionEntry.State);
+        }
+
+        [Fact]
+        public async Task ShouldSetFilterValues()
+        {
+            using var tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+            using var context = GetTestDatabaseContext();
+
+            var filterOption = new FilterOptionEntity()
+            {
+                Conditions = new[] {
+                    new FilterConditionEntity() { FilterValues = new[] { "Value1", "Value2" } },
+                },
+            };
+            var config = await context.ResultConfigurations.FirstAsync();
+            config.PointFilters.Add(filterOption);
+            await context.SaveChangesAsync();
+            var testFilterOption = await context.FilterOptions
+                .SingleAsync(x => x.FilterOptionId == filterOption.FilterOptionId);
+
+            testFilterOption.Conditions.First().FilterValues.Should().BeEquivalentTo(filterOption.Conditions.First().FilterValues);
         }
     }
 }

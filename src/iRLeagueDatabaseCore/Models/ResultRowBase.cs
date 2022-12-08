@@ -48,5 +48,6 @@ namespace iRLeagueDatabaseCore.Models
         public string OfftrackLaps { get; set; }
         public int NumContactLaps { get; set; }
         public string ContactLaps { get; set; }
+        public double RacePoints { get; set; }
     }
 }

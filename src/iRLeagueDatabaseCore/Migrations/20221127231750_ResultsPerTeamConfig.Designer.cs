@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using iRLeagueDatabaseCore.Models;
 
@@ -10,9 +11,10 @@ using iRLeagueDatabaseCore.Models;
 namespace iRLeagueDatabaseCore.Migrations
 {
     [DbContext(typeof(LeagueDbContext))]
-    partial class LeagueDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221127231750_ResultsPerTeamConfig")]
+    partial class ResultsPerTeamConfig
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1717,9 +1719,6 @@ namespace iRLeagueDatabaseCore.Migrations
                     b.Property<int>("Index")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsCombinedResult")
-                        .HasColumnType("tinyint(1)");
-
                     b.Property<string>("LastModifiedByUserId")
                         .HasColumnType("longtext");
 
@@ -2626,7 +2625,7 @@ namespace iRLeagueDatabaseCore.Migrations
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.IRSimSessionDetailsEntity", b =>
                 {
                     b.HasOne("iRLeagueDatabaseCore.Models.EventEntity", "Event")
-                        .WithMany("SimSessionDetails")
+                        .WithMany()
                         .HasForeignKey("LeagueId", "EventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -2769,7 +2768,6 @@ namespace iRLeagueDatabaseCore.Migrations
                     b.HasOne("iRLeagueDatabaseCore.Models.IncidentReviewEntity", "Review")
                         .WithMany("ReviewPenaltys")
                         .HasForeignKey("LeagueId", "ReviewId")
-                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("iRLeagueDatabaseCore.Models.AcceptedReviewVoteEntity", "ReviewVote")
@@ -3146,8 +3144,6 @@ namespace iRLeagueDatabaseCore.Migrations
                     b.Navigation("ScoredEventResults");
 
                     b.Navigation("Sessions");
-
-                    b.Navigation("SimSessionDetails");
                 });
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.EventResultEntity", b =>

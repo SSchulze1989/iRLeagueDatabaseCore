@@ -13,7 +13,6 @@ namespace iRLeagueDatabaseCore.Models
         public ScoringEntity()
         {
             DependendScorings = new HashSet<ScoringEntity>();
-            ResultsFilterOptions = new HashSet<ResultsFilterOptionEntity>();
         }
 
         public long LeagueId { get; set; }
@@ -21,7 +20,7 @@ namespace iRLeagueDatabaseCore.Models
         public long ResultConfigId { get; set; }
         public long? PointsRuleId { get; set; }
 
-        public ScoringKind ScoringKind { get; set; }
+        public int Index { get; set; }
         public string Name { get; set; }
         public int MaxResultsPerGroup { get; set; }
         public long? ExtScoringSourceId { get; set; }
@@ -35,12 +34,12 @@ namespace iRLeagueDatabaseCore.Models
         public bool UseResultSetTeam { get; set; }
         public bool UpdateTeamOnRecalculation { get; set; }
         public bool ShowResults { get; set; } = true;
+        public bool IsCombinedResult { get; set; } = false;
 
         public virtual ScoringEntity ExtScoringSource { get; set; }
         public virtual ResultConfigurationEntity ResultConfiguration { get; set; }
         public virtual PointRuleEntity PointsRule { get; set; }
         public virtual ICollection<ScoringEntity> DependendScorings { get; set; }
-        public virtual ICollection<ResultsFilterOptionEntity> ResultsFilterOptions { get; set; }
     }
 
     public class ScoringEntityConfiguration : IEntityTypeConfiguration<ScoringEntity>
@@ -62,9 +61,6 @@ namespace iRLeagueDatabaseCore.Models
 
             entity.Property(e => e.ShowResults);
 
-            entity.Property(e => e.ScoringKind)
-                .HasConversion<string>();
-
             entity.HasOne(d => d.ExtScoringSource)
                 .WithMany(p => p.DependendScorings)
                 .HasForeignKey(d => new { d.LeagueId, d.ExtScoringSourceId });
@@ -74,7 +70,7 @@ namespace iRLeagueDatabaseCore.Models
                 .HasForeignKey(d => new { d.LeagueId, d.ResultConfigId });
 
             entity.HasOne(d => d.PointsRule)
-                .WithMany()
+                .WithMany(p => p.Scorings)
                 .HasForeignKey(d => new { d.LeagueId, d.PointsRuleId });
         }
     }

@@ -76,7 +76,6 @@ namespace iRLeagueDatabaseCore.Models
         /// </summary>
         public long? ImportId { get; set; }
 
-        public double RacePoints { get; set; }
         public double BonusPoints { get; set; }
         public double PenaltyPoints { get; set; }
         public int FinalPosition { get; set; }
