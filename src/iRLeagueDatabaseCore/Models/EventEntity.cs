@@ -17,6 +17,7 @@ namespace iRLeagueDatabaseCore.Models
             Sessions = new HashSet<SessionEntity>();
             ScoredEventResults = new HashSet<ScoredEventResultEntity>();
             ResultConfigs = new HashSet<ResultConfigurationEntity>();
+            SimSessionDetails = new HashSet<IRSimSessionDetailsEntity>();
         }
 
         public long EventId { get; set; }
@@ -42,6 +43,7 @@ namespace iRLeagueDatabaseCore.Models
         public virtual ICollection<SessionEntity> Sessions { get; set; }
         public virtual ICollection<ScoredEventResultEntity> ScoredEventResults { get; set; }
         public virtual ICollection<ResultConfigurationEntity> ResultConfigs { get; set; }
+        public virtual ICollection<IRSimSessionDetailsEntity> SimSessionDetails { get; set; }
 
         #region Version
         public DateTime? CreatedOn { get; set; }

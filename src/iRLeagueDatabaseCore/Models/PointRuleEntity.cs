@@ -25,7 +25,7 @@ namespace iRLeagueDatabaseCore.Models
         public ICollection<SortOptions> FinalSortOptions { get; set; }
 
         public virtual LeagueEntity League { get; set; }
-        public virtual ICollection<ResultsFilterOptionEntity> ResultsFilters { get; set; }
+        public virtual IEnumerable<ScoringEntity> Scorings { get; set; }
 
         #region version
         public DateTime? CreatedOn { get; set; }

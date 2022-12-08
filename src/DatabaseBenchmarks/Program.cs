@@ -180,7 +180,7 @@ namespace DatabaseBenchmarks
                 ResultRows = sessionResult.ScoredResultRows.Select(row => new ResultRowModel()
                 {
                     MemberId = row.MemberId,
-                    Interval = row.Interval,
+                    Interval = new Interval(row.Interval),
                     FastestLapTime = row.FastestLapTime,
                     AvgLapTime = row.AvgLapTime,
                     Firstname = row.Member.Firstname,

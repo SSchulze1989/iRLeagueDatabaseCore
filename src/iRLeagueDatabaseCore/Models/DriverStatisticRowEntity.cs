@@ -92,7 +92,7 @@ namespace iRLeagueDatabaseCore.Models
     {
         public void Configure(EntityTypeBuilder<DriverStatisticRowEntity> entity)
         {
-            entity.HasKey(e => new { e.StatisticSetId, e.MemberId });
+            entity.HasKey(e => new { e.LeagueId, e.StatisticSetId, e.MemberId });
 
             entity.HasIndex(e => new { e.LeagueId, e.FirstRaceId });
 
@@ -152,7 +152,7 @@ namespace iRLeagueDatabaseCore.Models
 
             entity.HasOne(d => d.StatisticSet)
                 .WithMany(p => p.DriverStatisticRows)
-                .HasForeignKey(d => d.StatisticSetId);
+                .HasForeignKey(d => new { d.LeagueId, d.StatisticSetId });
         }
     }
 }
