@@ -37,7 +37,7 @@ namespace iRLeagueDatabaseCore.Migrations
                 name: "IX_Members_IRacingId",
                 table: "Members",
                 column: "IRacingId",
-                unique: true);
+                unique: false);
         }
     }
 }
