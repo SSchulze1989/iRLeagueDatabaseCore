@@ -2,6 +2,12 @@
 
 public partial class StandingConfigurationEntity : IVersionEntity
 {
+    public StandingConfigurationEntity()
+    {
+        ResultConfigurations = new HashSet<ResultConfigurationEntity>();
+        Standings = new HashSet<StandingEntity>();
+    }
+
     public long LeagueId { get; set; }
     public long StandingConfigId { get; set; }
 
@@ -28,6 +34,8 @@ public sealed class StandingConfigurationEntityConfiguration : IEntityTypeConfig
 {
     public void Configure(EntityTypeBuilder<StandingConfigurationEntity> entity)
     {
+        entity.ToTable("StandingConfigurationEntity");
+
         entity.HasKey(e => new { e.LeagueId, e.StandingConfigId });
 
         entity.HasAlternateKey(e => e.StandingConfigId);

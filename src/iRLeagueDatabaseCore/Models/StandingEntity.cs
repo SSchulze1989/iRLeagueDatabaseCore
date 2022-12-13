@@ -24,6 +24,7 @@ public partial class StandingEntity : IVersionEntity
 
     public virtual SeasonEntity Season { get; set; }
     public virtual EventEntity Event { get; set; }
+    public virtual StandingConfigurationEntity StandingConfig { get; set; }
     public virtual ICollection<StandingRowEntity> StandingRows { get; set; }
 
     #region version
@@ -55,5 +56,11 @@ public class SeasonStandingEntityConfiguration : IEntityTypeConfiguration<Standi
         entity.HasOne(d => d.Event)
             .WithMany()
             .HasForeignKey(d => new { d.LeagueId, d.EventId });
+
+        entity.HasOne(d => d.StandingConfig)
+            .WithMany(p => p.Standings)
+            .HasForeignKey(d => new { d.LeagueId, d.StandingConfigId })
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.ClientCascade);
     }
 }

@@ -17,6 +17,7 @@ namespace iRLeagueDatabaseCore.Models
             Scorings = new HashSet<ScoringEntity>();
             PointFilters = new HashSet<FilterOptionEntity>();
             ResultFilters = new HashSet<FilterOptionEntity>();
+            StandingConfigurations = new HashSet<StandingConfigurationEntity>();
         }
 
         public long LeagueId { get; set; }
