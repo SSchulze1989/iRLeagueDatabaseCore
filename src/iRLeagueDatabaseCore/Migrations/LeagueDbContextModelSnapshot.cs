@@ -2017,7 +2017,7 @@ namespace iRLeagueDatabaseCore.Migrations
 
                     b.HasAlternateKey("StandingConfigId");
 
-                    b.ToTable("StandingConfigurationEntity", (string)null);
+                    b.ToTable("StandingConfigurations");
                 });
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.StandingEntity", b =>
