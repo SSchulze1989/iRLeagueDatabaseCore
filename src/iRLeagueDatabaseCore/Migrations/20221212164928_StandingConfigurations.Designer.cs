@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using iRLeagueDatabaseCore.Models;
 
@@ -10,9 +11,10 @@ using iRLeagueDatabaseCore.Models;
 namespace iRLeagueDatabaseCore.Migrations
 {
     [DbContext(typeof(LeagueDbContext))]
-    partial class LeagueDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221212164928_StandingConfigurations")]
+    partial class StandingConfigurations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2017,7 +2019,7 @@ namespace iRLeagueDatabaseCore.Migrations
 
                     b.HasAlternateKey("StandingConfigId");
 
-                    b.ToTable("StandingConfigurationEntity", (string)null);
+                    b.ToTable("StandingConfigurationEntity");
                 });
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.StandingEntity", b =>
@@ -2065,6 +2067,12 @@ namespace iRLeagueDatabaseCore.Migrations
                     b.Property<long?>("StandingConfigId")
                         .HasColumnType("bigint");
 
+                    b.Property<long?>("StandingConfigurationEntityLeagueId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("StandingConfigurationEntityStandingConfigId")
+                        .HasColumnType("bigint");
+
                     b.Property<int>("Version")
                         .HasColumnType("int");
 
@@ -2076,7 +2084,7 @@ namespace iRLeagueDatabaseCore.Migrations
 
                     b.HasIndex("LeagueId", "SeasonId");
 
-                    b.HasIndex("LeagueId", "StandingConfigId");
+                    b.HasIndex("StandingConfigurationEntityLeagueId", "StandingConfigurationEntityStandingConfigId");
 
                     b.ToTable("Standings");
                 });
@@ -3084,16 +3092,13 @@ namespace iRLeagueDatabaseCore.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("iRLeagueDatabaseCore.Models.StandingConfigurationEntity", "StandingConfig")
+                    b.HasOne("iRLeagueDatabaseCore.Models.StandingConfigurationEntity", null)
                         .WithMany("Standings")
-                        .HasForeignKey("LeagueId", "StandingConfigId")
-                        .OnDelete(DeleteBehavior.ClientCascade);
+                        .HasForeignKey("StandingConfigurationEntityLeagueId", "StandingConfigurationEntityStandingConfigId");
 
                     b.Navigation("Event");
 
                     b.Navigation("Season");
-
-                    b.Navigation("StandingConfig");
                 });
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.StandingRowEntity", b =>

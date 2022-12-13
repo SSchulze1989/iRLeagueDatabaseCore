@@ -17,6 +17,7 @@ namespace iRLeagueDatabaseCore.Models
             Scorings = new HashSet<ScoringEntity>();
             PointFilters = new HashSet<FilterOptionEntity>();
             ResultFilters = new HashSet<FilterOptionEntity>();
+            StandingConfigurations = new HashSet<StandingConfigurationEntity>();
         }
 
         public long LeagueId { get; set; }
@@ -30,6 +31,7 @@ namespace iRLeagueDatabaseCore.Models
 
         public virtual LeagueEntity League { get; set; }
         public virtual ResultConfigurationEntity SourceResultConfig { get; set; }
+        public virtual ICollection<StandingConfigurationEntity> StandingConfigurations { get; set; }
         public virtual ICollection<ScoringEntity> Scorings { get; set; }
         public virtual IEnumerable<EventEntity> Events { get; set; }
         public virtual ICollection<FilterOptionEntity> PointFilters { get; set; }
@@ -47,7 +49,7 @@ namespace iRLeagueDatabaseCore.Models
 
     }
 
-    public class ResultConfigurationEntityConfiguration : IEntityTypeConfiguration<ResultConfigurationEntity>
+    public sealed class ResultConfigurationEntityConfiguration : IEntityTypeConfiguration<ResultConfigurationEntity>
     {
         public void Configure(EntityTypeBuilder<ResultConfigurationEntity> entity)
         {

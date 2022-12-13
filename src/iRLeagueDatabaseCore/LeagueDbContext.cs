@@ -45,6 +45,7 @@ namespace iRLeagueDatabaseCore.Models
         public virtual DbSet<ScoredSessionResultEntity> ScoredSessionResults { get; set; }
         public virtual DbSet<ScoringEntity> Scorings { get; set; }
         public virtual DbSet<StandingEntity> Standings { get; set; }
+        public virtual DbSet<StandingConfigurationEntity> StandingConfigurations { get; set; }
         public virtual DbSet<SeasonEntity> Seasons { get; set; }
         public virtual DbSet<SessionEntity> Sessions { get; set; }
         public virtual DbSet<StatisticSetEntity> StatisticSets { get; set; }
