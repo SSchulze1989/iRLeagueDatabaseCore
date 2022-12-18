@@ -35,6 +35,7 @@ namespace iRLeagueDatabaseCore.Models
         public bool UpdateTeamOnRecalculation { get; set; }
         public bool ShowResults { get; set; } = true;
         public bool IsCombinedResult { get; set; } = false;
+        public bool UseExternalSourcePoints { get; set; } = false;
 
         public virtual ScoringEntity ExtScoringSource { get; set; }
         public virtual ResultConfigurationEntity ResultConfiguration { get; set; }
