@@ -9,7 +9,6 @@ public partial class ProtestEntity
 
     public long LeagueId { get; set; }
     public long ProtestId { get; set; }
-    public long EventId { get; set; }
     public long SessionId { get; set; }
     public long AuthorMemberId { get; set; }
     
@@ -18,7 +17,6 @@ public partial class ProtestEntity
     public string Corner { get; set; }
 
     public virtual LeagueMemberEntity Author { get; set; }
-    public virtual EventEntity Event { get; set; }
     public virtual SessionEntity Session { get; set; }
     public virtual ICollection<LeagueMemberEntity> InvolvedMembers { get; set; }
 }
@@ -39,10 +37,6 @@ public sealed class ProtestEntityConfiguration : IEntityTypeConfiguration<Protes
         entity.HasOne(p => p.Author)
             .WithMany()
             .HasForeignKey(p => new { p.LeagueId, p.AuthorMemberId });
-
-        entity.HasOne(p => p.Event)
-            .WithMany()
-            .HasForeignKey(p => new { p.LeagueId, p.EventId });
 
         entity.HasOne(p => p.Session)
             .WithMany()

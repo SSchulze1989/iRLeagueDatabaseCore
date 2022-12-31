@@ -963,9 +963,6 @@ namespace iRLeagueDatabaseCore.Migrations
                     b.Property<string>("Corner")
                         .HasColumnType("longtext");
 
-                    b.Property<long>("EventId")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("FullDescription")
                         .HasColumnType("longtext");
 
@@ -980,8 +977,6 @@ namespace iRLeagueDatabaseCore.Migrations
                     b.HasAlternateKey("ProtestId");
 
                     b.HasIndex("LeagueId", "AuthorMemberId");
-
-                    b.HasIndex("LeagueId", "EventId");
 
                     b.HasIndex("LeagueId", "SessionId");
 
@@ -2818,12 +2813,6 @@ namespace iRLeagueDatabaseCore.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("iRLeagueDatabaseCore.Models.EventEntity", "Event")
-                        .WithMany()
-                        .HasForeignKey("LeagueId", "EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("iRLeagueDatabaseCore.Models.SessionEntity", "Session")
                         .WithMany()
                         .HasForeignKey("LeagueId", "SessionId")
@@ -2831,8 +2820,6 @@ namespace iRLeagueDatabaseCore.Migrations
                         .IsRequired();
 
                     b.Navigation("Author");
-
-                    b.Navigation("Event");
 
                     b.Navigation("Session");
                 });

@@ -16,7 +16,6 @@ namespace iRLeagueDatabaseCore.Migrations
                     LeagueId = table.Column<long>(type: "bigint", nullable: false),
                     ProtestId = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    EventId = table.Column<long>(type: "bigint", nullable: false),
                     SessionId = table.Column<long>(type: "bigint", nullable: false),
                     AuthorMemberId = table.Column<long>(type: "bigint", nullable: false),
                     FullDescription = table.Column<string>(type: "longtext", nullable: true),
@@ -27,12 +26,6 @@ namespace iRLeagueDatabaseCore.Migrations
                 {
                     table.PrimaryKey("PK_Protests", x => new { x.LeagueId, x.ProtestId });
                     table.UniqueConstraint("AK_Protests_ProtestId", x => x.ProtestId);
-                    table.ForeignKey(
-                        name: "FK_Protests_Events_LeagueId_EventId",
-                        columns: x => new { x.LeagueId, x.EventId },
-                        principalTable: "Events",
-                        principalColumns: new[] { "LeagueId", "EventId" },
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Protests_LeagueMembers_LeagueId_AuthorMemberId",
                         columns: x => new { x.LeagueId, x.AuthorMemberId },
@@ -76,11 +69,6 @@ namespace iRLeagueDatabaseCore.Migrations
                 name: "IX_Protests_LeagueId_AuthorMemberId",
                 table: "Protests",
                 columns: new[] { "LeagueId", "AuthorMemberId" });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Protests_LeagueId_EventId",
-                table: "Protests",
-                columns: new[] { "LeagueId", "EventId" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Protests_LeagueId_SessionId",
