@@ -33,6 +33,7 @@ namespace iRLeagueDatabaseCore.Models
         public virtual DbSet<MemberEntity> Members { get; set; }
         public virtual DbSet<LeagueMemberEntity> LeagueMembers { get; set; }
         public virtual DbSet<PointRuleEntity> PointRules { get; set; }
+        public virtual DbSet<ProtestEntity> Protests { get; set; }
         public virtual DbSet<EventResultEntity> EventResults { get; set; }
         public virtual DbSet<ResultConfigurationEntity> ResultConfigurations { get; set; }
         public virtual DbSet<ResultRowEntity> ResultRows { get; set; }
