@@ -20,6 +20,7 @@ namespace iRLeagueDatabaseCore.Models
         public virtual MemberEntity Member { get; set; }
         public virtual LeagueEntity League { get; set; }
         public virtual TeamEntity Team { get; set; }
+        public virtual IEnumerable<ProtestEntity> ProtestsInvolved { get; set; }
     }
 
     public class LeagueMemberEntityConfiguration : IEntityTypeConfiguration<LeagueMemberEntity>

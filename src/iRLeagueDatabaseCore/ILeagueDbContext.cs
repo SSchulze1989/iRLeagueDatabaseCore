@@ -16,6 +16,7 @@ namespace iRLeagueDatabaseCore.Models
         public DbSet<MemberEntity> Members { get; set; }
         public DbSet<LeagueMemberEntity> LeagueMembers { get; set; }
         public DbSet<PointRuleEntity> PointRules { get; set; }
+        public DbSet<ProtestEntity> Protests { get; set; }
         public DbSet<EventResultEntity> EventResults { get; set; }
         public DbSet<ResultConfigurationEntity> ResultConfigurations { get; set; }
         public DbSet<ResultRowEntity> ResultRows { get; set; }
