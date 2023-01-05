@@ -1,52 +1,61 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace iRLeagueDatabaseCore.Models;
 
-namespace iRLeagueDatabaseCore.Models
+public class LeagueEntity : Revision, IVersionEntity
 {
-    public class LeagueEntity : Revision, IVersionEntity
+    public LeagueEntity()
     {
-        public long Id { get; set; }
-        public string Name { get; set; }
-        public string NameFull { get; set; }
-
-        public LeagueEntity()
-        {
-            Seasons = new HashSet<SeasonEntity>();
-            ResultConfigs = new HashSet<ResultConfigurationEntity>();
-            PointRules = new HashSet<PointRuleEntity>();
-            LeagueMembers = new HashSet<LeagueMemberEntity>();
-            Teams = new HashSet<TeamEntity>();
-            VoteCategories = new HashSet<VoteCategoryEntity>();
-        }
-
-        public virtual ICollection<SeasonEntity> Seasons { get; set; }
-        public virtual ICollection<ResultConfigurationEntity> ResultConfigs { get; set; }
-        public virtual ICollection<PointRuleEntity> PointRules { get; set; }
-        public virtual IEnumerable<ScoringEntity> Scorings { get; set; }
-        public virtual ICollection<LeagueMemberEntity> LeagueMembers { get; set; }
-        public virtual ICollection<TeamEntity> Teams { get; set; }
-        public virtual ICollection<VoteCategoryEntity> VoteCategories { get; set; }
+        Seasons = new HashSet<SeasonEntity>();
+        ResultConfigs = new HashSet<ResultConfigurationEntity>();
+        PointRules = new HashSet<PointRuleEntity>();
+        LeagueMembers = new HashSet<LeagueMemberEntity>();
+        Teams = new HashSet<TeamEntity>();
+        VoteCategories = new HashSet<VoteCategoryEntity>();
     }
+    public long Id { get; set; }
+    public string Name { get; set; }
+    public string NameFull { get; set; }
+    public bool EnableProtests { get; set; }
+    /// <summary>
+    /// Time span after a race has finished (according to event duration) after which a protest can be filed
+    /// </summary>
+    public TimeSpan ProtestCoolDownPeriod { get; set; }
+    /// <summary>
+    /// Time span after a race has finished (according to event duration) until a protest can be filed
+    /// </summary>
+    public TimeSpan ProtestsClosedAfter { get; set; }
+    /// <summary>
+    /// Set public visibility of protests
+    /// </summary>
+    public ProtestPublicSetting ProtestsPublic { get; set; }
 
-    public class LeagueEntityConfiguration : IEntityTypeConfiguration<LeagueEntity>
+    public virtual ICollection<SeasonEntity> Seasons { get; set; }
+    public virtual ICollection<ResultConfigurationEntity> ResultConfigs { get; set; }
+    public virtual ICollection<PointRuleEntity> PointRules { get; set; }
+    public virtual IEnumerable<ScoringEntity> Scorings { get; set; }
+    public virtual ICollection<LeagueMemberEntity> LeagueMembers { get; set; }
+    public virtual ICollection<TeamEntity> Teams { get; set; }
+    public virtual ICollection<VoteCategoryEntity> VoteCategories { get; set; }
+}
+
+public class LeagueEntityConfiguration : IEntityTypeConfiguration<LeagueEntity>
+{
+    public void Configure(EntityTypeBuilder<LeagueEntity> entity)
     {
-        public void Configure(EntityTypeBuilder<LeagueEntity> entity)
-        {
-            entity.HasKey(e => e.Id);
+        entity.HasKey(e => e.Id);
 
-            entity.HasAlternateKey(e => e.Name);
+        entity.HasAlternateKey(e => e.Name);
 
-            entity.Property(e => e.Name)
-                .HasMaxLength(85);
+        entity.Property(e => e.Name)
+            .HasMaxLength(85);
 
-            entity.HasMany(d => d.Scorings)
-                .WithOne()
-                .HasForeignKey(p => p.LeagueId);
-        }
+        entity.Property(e => e.ProtestCoolDownPeriod)
+            .HasConversion<TimeSpanToTicksConverter>();
+
+        entity.Property(e => e.ProtestsClosedAfter)
+            .HasConversion<TimeSpanToTicksConverter>();
+
+        entity.HasMany(d => d.Scorings)
+            .WithOne()
+            .HasForeignKey(p => p.LeagueId);
     }
 }
