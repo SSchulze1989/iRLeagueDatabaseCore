@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using iRLeagueDatabaseCore.Models;
 
@@ -10,9 +11,10 @@ using iRLeagueDatabaseCore.Models;
 namespace iRLeagueDatabaseCore.Migrations
 {
     [DbContext(typeof(LeagueDbContext))]
-    partial class LeagueDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221218194901_UseExternalPointsOption")]
+    partial class UseExternalPointsOption
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -814,9 +816,6 @@ namespace iRLeagueDatabaseCore.Migrations
                     b.Property<DateTime?>("CreatedOn")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<bool>("EnableProtests")
-                        .HasColumnType("tinyint(1)");
-
                     b.Property<string>("LastModifiedByUserId")
                         .HasColumnType("longtext");
 
@@ -833,15 +832,6 @@ namespace iRLeagueDatabaseCore.Migrations
 
                     b.Property<string>("NameFull")
                         .HasColumnType("longtext");
-
-                    b.Property<long>("ProtestCoolDownPeriod")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("ProtestsClosedAfter")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("ProtestsPublic")
-                        .HasColumnType("int");
 
                     b.Property<int>("Version")
                         .HasColumnType("int");
@@ -958,61 +948,6 @@ namespace iRLeagueDatabaseCore.Migrations
                     b.HasAlternateKey("PointRuleId");
 
                     b.ToTable("PointRules");
-                });
-
-            modelBuilder.Entity("iRLeagueDatabaseCore.Models.ProtestEntity", b =>
-                {
-                    b.Property<long>("LeagueId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("ProtestId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("AuthorMemberId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Corner")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("FullDescription")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("OnLap")
-                        .HasColumnType("longtext");
-
-                    b.Property<long>("SessionId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("LeagueId", "ProtestId");
-
-                    b.HasAlternateKey("ProtestId");
-
-                    b.HasIndex("LeagueId", "AuthorMemberId");
-
-                    b.HasIndex("LeagueId", "SessionId");
-
-                    b.ToTable("Protests", (string)null);
-                });
-
-            modelBuilder.Entity("iRLeagueDatabaseCore.Models.Protests_LeagueMembers", b =>
-                {
-                    b.Property<long>("MemberId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("LeagueId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("ProtestId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("MemberId", "LeagueId", "ProtestId");
-
-                    b.HasIndex("LeagueId", "MemberId");
-
-                    b.HasIndex("LeagueId", "ProtestId");
-
-                    b.ToTable("Protests_LeagueMembers");
                 });
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.ResultConfigurationEntity", b =>
@@ -2815,44 +2750,6 @@ namespace iRLeagueDatabaseCore.Migrations
                         .IsRequired();
 
                     b.Navigation("League");
-                });
-
-            modelBuilder.Entity("iRLeagueDatabaseCore.Models.ProtestEntity", b =>
-                {
-                    b.HasOne("iRLeagueDatabaseCore.Models.LeagueMemberEntity", "Author")
-                        .WithMany()
-                        .HasForeignKey("LeagueId", "AuthorMemberId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("iRLeagueDatabaseCore.Models.SessionEntity", "Session")
-                        .WithMany()
-                        .HasForeignKey("LeagueId", "SessionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Author");
-
-                    b.Navigation("Session");
-                });
-
-            modelBuilder.Entity("iRLeagueDatabaseCore.Models.Protests_LeagueMembers", b =>
-                {
-                    b.HasOne("iRLeagueDatabaseCore.Models.LeagueMemberEntity", "Member")
-                        .WithMany()
-                        .HasForeignKey("LeagueId", "MemberId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("iRLeagueDatabaseCore.Models.ProtestEntity", "Protest")
-                        .WithMany()
-                        .HasForeignKey("LeagueId", "ProtestId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Member");
-
-                    b.Navigation("Protest");
                 });
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.ResultConfigurationEntity", b =>

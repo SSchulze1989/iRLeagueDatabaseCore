@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using iRLeagueDatabaseCore.Models;
 
@@ -10,9 +11,10 @@ using iRLeagueDatabaseCore.Models;
 namespace iRLeagueDatabaseCore.Migrations
 {
     [DbContext(typeof(LeagueDbContext))]
-    partial class LeagueDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221231141402_ProtestEntity")]
+    partial class ProtestEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -814,9 +816,6 @@ namespace iRLeagueDatabaseCore.Migrations
                     b.Property<DateTime?>("CreatedOn")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<bool>("EnableProtests")
-                        .HasColumnType("tinyint(1)");
-
                     b.Property<string>("LastModifiedByUserId")
                         .HasColumnType("longtext");
 
@@ -833,15 +832,6 @@ namespace iRLeagueDatabaseCore.Migrations
 
                     b.Property<string>("NameFull")
                         .HasColumnType("longtext");
-
-                    b.Property<long>("ProtestCoolDownPeriod")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("ProtestsClosedAfter")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("ProtestsPublic")
-                        .HasColumnType("int");
 
                     b.Property<int>("Version")
                         .HasColumnType("int");
