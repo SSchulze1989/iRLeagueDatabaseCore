@@ -11,7 +11,7 @@ public partial class ProtestEntity
     public long ProtestId { get; set; }
     public long SessionId { get; set; }
     public long AuthorMemberId { get; set; }
-    
+
     public string FullDescription { get; set; }
     public string OnLap { get; set; }
     public string Corner { get; set; }
@@ -27,7 +27,7 @@ public sealed class ProtestEntityConfiguration : IEntityTypeConfiguration<Protes
     {
         entity.ToTable("Protests");
 
-        entity.HasKey(e => new {e.LeagueId, e.ProtestId});
+        entity.HasKey(e => new { e.LeagueId, e.ProtestId });
 
         entity.HasAlternateKey(e => e.ProtestId);
 

@@ -2,15 +2,14 @@
 using Microsoft.Extensions.DependencyInjection;
 using MySql.EntityFrameworkCore.Extensions;
 
-namespace iRLeagueDatabaseCore
+namespace iRLeagueDatabaseCore;
+
+internal class MysqlEntityFrameworkDesignTimeServices : IDesignTimeServices
 {
-    internal class MysqlEntityFrameworkDesignTimeServices : IDesignTimeServices
+    public void ConfigureDesignTimeServices(IServiceCollection serviceCollection)
     {
-        public void ConfigureDesignTimeServices(IServiceCollection serviceCollection)
-        {
-            serviceCollection.AddEntityFrameworkMySQL();
-            new EntityFrameworkRelationalDesignServicesBuilder(serviceCollection)
-                .TryAddCoreServices();
-        }
+        serviceCollection.AddEntityFrameworkMySQL();
+        new EntityFrameworkRelationalDesignServicesBuilder(serviceCollection)
+            .TryAddCoreServices();
     }
 }
