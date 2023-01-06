@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace iRLeagueDatabaseCore.Models
+﻿namespace iRLeagueDatabaseCore.Models
 {
     public interface ILeagueDbContext
     {

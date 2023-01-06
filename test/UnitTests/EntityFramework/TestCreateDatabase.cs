@@ -1,12 +1,8 @@
 ﻿using iRLeagueApiCore.Common.Enums;
 using iRLeagueDatabaseCore.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.InMemory;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -36,20 +32,20 @@ namespace UnitTests.EntityFramework
             }
         }
 
-        public static LeagueDbContext  GetTestDatabaseContext()
+        public static LeagueDbContext GetTestDatabaseContext()
         {
             var optionsBuilder = new DbContextOptionsBuilder<LeagueDbContext>();
             optionsBuilder.UseInMemoryDatabase(databaseName: "TestDatabase")
                .UseLazyLoadingProxies();
             var dbContext = new LeagueDbContext(optionsBuilder.Options);
-	            dbContext.Database.EnsureCreated();
+            dbContext.Database.EnsureCreated();
 
             return dbContext;
         }
 
         public void Dispose()
         {
-            
+
         }
 
         [Fact]
@@ -63,14 +59,14 @@ namespace UnitTests.EntityFramework
                 Assert.Equal(2, league.Seasons.Count());
 
                 // validate structure
-                foreach(var season in league.Seasons)
+                foreach (var season in league.Seasons)
                 {
                     Assert.Equal(league, season.League);
                     Assert.Equal(league.Id, season.LeagueId);
                 }
 
                 var seasonSchedules = league.Seasons.SelectMany(x => x.Schedules.Select(y => (x, y)));
-                foreach((var season, var schedule) in seasonSchedules)
+                foreach ((var season, var schedule) in seasonSchedules)
                 {
                     Assert.Equal(season, schedule.Season);
                     Assert.Equal(league.Id, schedule.LeagueId);
@@ -249,7 +245,7 @@ namespace UnitTests.EntityFramework
                 LastModifiedByUserId = ClientGuid
             };
             // Create sessions on schedule1
-            for (int i = 0; i<5; i++)
+            for (int i = 0; i < 5; i++)
             {
                 var session = new EventEntity()
                 {
@@ -296,7 +292,7 @@ namespace UnitTests.EntityFramework
             var memberCount = random.Next(maxMemberCount - minMemberCount + 1) + minMemberCount;
             var members = context.Set<MemberEntity>();
 
-            for (int i = 0; i< memberCount; i++)
+            for (int i = 0; i < memberCount; i++)
             {
                 var member = new MemberEntity()
                 {
@@ -328,7 +324,7 @@ namespace UnitTests.EntityFramework
         {
             var len = 6;
             char[] id = new char[len];
-            for (int i = 0;i < len; i++)
+            for (int i = 0; i < len; i++)
             {
                 id[i] = (char)('0' + random.Next(10));
             }

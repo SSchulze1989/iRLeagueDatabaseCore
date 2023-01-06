@@ -1,13 +1,13 @@
-using System;
-using System.Linq;
-using System.Transactions;
-using Xunit;
-using Xunit.Abstractions;
+using FluentAssertions;
 using iRLeagueDatabaseCore.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
+using System.Transactions;
+using Xunit;
+using Xunit.Abstractions;
 
 namespace DbIntegrationTests
 {
@@ -41,7 +41,7 @@ namespace DbIntegrationTests
             }
         }
 
-        public static LeagueDbContext  GetTestDatabaseContext()
+        public static LeagueDbContext GetTestDatabaseContext()
         {
             var optionsBuilder = new DbContextOptionsBuilder<LeagueDbContext>();
             optionsBuilder.UseMySQL(_config.GetConnectionString("ModelDb"))
@@ -62,14 +62,14 @@ namespace DbIntegrationTests
                 Assert.Equal(2, league.Seasons.Count());
 
                 // validate structure
-                foreach(var season in league.Seasons)
+                foreach (var season in league.Seasons)
                 {
                     Assert.Equal(league, season.League);
                     Assert.Equal(league.Id, season.LeagueId);
                 }
 
                 var seasonSchedules = league.Seasons.SelectMany(x => x.Schedules.Select(y => (x, y)));
-                foreach((var season, var schedule) in seasonSchedules)
+                foreach ((var season, var schedule) in seasonSchedules)
                 {
                     Assert.Equal(season, schedule.Season);
                     Assert.Equal(league.Id, schedule.LeagueId);

@@ -1,15 +1,4 @@
-﻿using iRLeagueApiCore.Common.Enums;
-using iRLeagueDatabaseCore.Converters;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace iRLeagueDatabaseCore.Models
+﻿namespace iRLeagueDatabaseCore.Models
 {
     public class PointRuleEntity : IVersionEntity
     {
@@ -59,7 +48,7 @@ namespace iRLeagueDatabaseCore.Models
                 .HasConversion(new CollectionToStringConverter<int>(), new ValueComparer<ICollection<int>>(true));
 
             entity.Property(e => e.BonusPoints)
-                .HasConversion(new DictionaryToStringConverter<string, int>(), new ValueComparer<IDictionary<string,int>>(true));
+                .HasConversion(new DictionaryToStringConverter<string, int>(), new ValueComparer<IDictionary<string, int>>(true));
 
             entity.Property(e => e.PointsSortOptions)
                 .HasConversion(new CollectionToStringConverter<SortOptions>(), new ValueComparer<ICollection<SortOptions>>(true));

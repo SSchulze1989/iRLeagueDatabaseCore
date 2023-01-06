@@ -1,11 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
+﻿using System.Globalization;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace iRLeagueDatabaseCore.Converters
 {
@@ -18,7 +12,7 @@ namespace iRLeagueDatabaseCore.Converters
         {
         }
 
-        public DictionaryToStringConverter(CultureInfo culture, char pairDelimiter = ';', char valueDelimiter = ':') : 
+        public DictionaryToStringConverter(CultureInfo culture, char pairDelimiter = ';', char valueDelimiter = ':') :
             base(ConvertToString(pairDelimiter, valueDelimiter, culture), ConvertToDictionary(pairDelimiter, valueDelimiter, culture))
         {
         }

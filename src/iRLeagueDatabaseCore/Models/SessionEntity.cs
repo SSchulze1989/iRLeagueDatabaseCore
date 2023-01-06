@@ -1,11 +1,4 @@
-﻿using iRLeagueApiCore.Common.Enums;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using System;
-using System.Collections.Generic;
-
-namespace iRLeagueDatabaseCore.Models
+﻿namespace iRLeagueDatabaseCore.Models
 {
     public partial class SessionEntity : IVersionEntity
     {

@@ -1,10 +1,4 @@
-﻿using iRLeagueApiCore.Common.Enums;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-
-#nullable disable
+﻿#nullable disable
 
 namespace iRLeagueDatabaseCore.Models
 {

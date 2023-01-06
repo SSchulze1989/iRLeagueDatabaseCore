@@ -1,10 +1,4 @@
-﻿using iRLeagueApiCore.Common.Enums;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-
-namespace iRLeagueDatabaseCore.Models
+﻿namespace iRLeagueDatabaseCore.Models
 {
     public partial class SessionResultEntity : IVersionEntity
     {
@@ -17,7 +11,7 @@ namespace iRLeagueDatabaseCore.Models
         public long EventId { get; set; }
         public long SessionId { get; set; }
         public long? IRSimSessionDetailsId { get; set; }
-        
+
         public SimSessionType SimSessionType { get; set; }
 
         #region version

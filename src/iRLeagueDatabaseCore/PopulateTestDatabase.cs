@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using iRLeagueApiCore.Common.Enums;
-using iRLeagueDatabaseCore.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using iRLeagueDatabaseCore.Models;
 
 namespace DbIntegrationTests
 {
@@ -136,7 +131,7 @@ namespace DbIntegrationTests
                         .SelectMany(x => x.TrackConfigs)
                         .Skip(i)
                         .FirstOrDefault(),
-                    EventType= EventType.SingleRace
+                    EventType = EventType.SingleRace
                 };
                 var session = new SessionEntity()
                 {
@@ -234,7 +229,7 @@ namespace DbIntegrationTests
             };
             league1.ResultConfigs.Add(resultConfig);
 
-            for (int i=0; i < 2; i++)
+            for (int i = 0; i < 2; i++)
             {
                 var scoring = new ScoringEntity()
                 {
@@ -244,15 +239,15 @@ namespace DbIntegrationTests
                 resultConfig.Scorings.Add(scoring);
             }
 
-            foreach((var season, var index) in league1.Seasons.Select((x, i) => (x, i)))
+            foreach ((var season, var index) in league1.Seasons.Select((x, i) => (x, i)))
             {
-                foreach(var @event in season.Schedules.SelectMany(x => x.Events))
+                foreach (var @event in season.Schedules.SelectMany(x => x.Events))
                 {
                     var result = new EventResultEntity();
                     @event.EventResult = result;
                     var scoredResult = new ScoredEventResultEntity();
                     @event.ScoredEventResults.Add(scoredResult);
-                    foreach(var session in @event.Sessions)
+                    foreach (var session in @event.Sessions)
                     {
                         var sessionResult = new SessionResultEntity();
                         session.SessionResult = sessionResult;
@@ -260,7 +255,7 @@ namespace DbIntegrationTests
                         var scoredSessionResult = new ScoredSessionResultEntity();
                         scoredResult.ScoredSessionResults.Add(scoredSessionResult);
                         var resultMembers = members.ToList();
-                        for(int i=0; i<10; i++)
+                        for (int i = 0; i < 10; i++)
                         {
                             var member = resultMembers.PopRandom();
                             var resultRow = new ResultRowEntity()
@@ -306,7 +301,7 @@ namespace DbIntegrationTests
                     {
                         Corner = (i + 1).ToString(),
                         OnLap = (i + 1).ToString(),
-                        FullDescription = $"Incident review #{i+1} Event {session.Event.Name} - {session.Name}",
+                        FullDescription = $"Incident review #{i + 1} Event {session.Event.Name} - {session.Name}",
                         IncidentKind = "Contact",
                         IncidentNr = (i + 1).ToString(),
                     };
@@ -323,9 +318,9 @@ namespace DbIntegrationTests
                             Text = $"Comment #{j + 1} ",
                             ReviewCommentVotes = new List<ReviewCommentVoteEntity>()
                             {
-                                new ReviewCommentVoteEntity() 
-                                { 
-                                    MemberAtFault = GetRandomMember(random, review.InvolvedMembers), 
+                                new ReviewCommentVoteEntity()
+                                {
+                                    MemberAtFault = GetRandomMember(random, review.InvolvedMembers),
                                     Description = "Vote",
                                     VoteCategory = league1.VoteCategories.GetRandom(random),
                                 }

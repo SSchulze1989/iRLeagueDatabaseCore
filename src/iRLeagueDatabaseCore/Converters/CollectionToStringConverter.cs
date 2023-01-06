@@ -1,11 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
+﻿using System.Globalization;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace iRLeagueDatabaseCore.Converters
 {
@@ -13,7 +7,7 @@ namespace iRLeagueDatabaseCore.Converters
     {
         private const char defaultDelimiter = ';';
 
-        public CollectionToStringConverter(CultureInfo culture, char delimiter = ';') : 
+        public CollectionToStringConverter(CultureInfo culture, char delimiter = ';') :
             base(ConvertToString(delimiter, culture), ConvertToArray(delimiter, culture))
         {
         }

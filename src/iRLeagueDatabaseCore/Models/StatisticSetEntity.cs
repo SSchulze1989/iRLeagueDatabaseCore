@@ -1,9 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-
-#nullable disable
+﻿#nullable disable
 
 namespace iRLeagueDatabaseCore.Models
 {
@@ -53,7 +48,7 @@ namespace iRLeagueDatabaseCore.Models
             entity.HasKey(e => new { e.LeagueId, e.Id });
 
             entity.HasAlternateKey(e => e.Id);
-            
+
             entity.Property(e => e.Id)
                 .ValueGeneratedOnAdd();
 

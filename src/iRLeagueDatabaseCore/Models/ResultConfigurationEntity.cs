@@ -1,14 +1,4 @@
-﻿using iRLeagueApiCore.Common.Enums;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace iRLeagueDatabaseCore.Models
+﻿namespace iRLeagueDatabaseCore.Models
 {
     public class ResultConfigurationEntity : IVersionEntity
     {
@@ -26,7 +16,7 @@ namespace iRLeagueDatabaseCore.Models
 
         public string Name { get; set; }
         public string DisplayName { get; set; }
-        public ResultKind ResultKind { get; set; } 
+        public ResultKind ResultKind { get; set; }
         public int ResultsPerTeam { get; set; }
 
         public virtual LeagueEntity League { get; set; }
@@ -53,7 +43,7 @@ namespace iRLeagueDatabaseCore.Models
     {
         public void Configure(EntityTypeBuilder<ResultConfigurationEntity> entity)
         {
-            entity.HasKey(e => new {e.LeagueId, e.ResultConfigId});
+            entity.HasKey(e => new { e.LeagueId, e.ResultConfigId });
 
             entity.HasAlternateKey(e => e.ResultConfigId);
 

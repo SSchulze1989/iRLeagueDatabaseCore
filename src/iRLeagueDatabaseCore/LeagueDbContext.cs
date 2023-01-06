@@ -1,12 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations.Schema;
-using iRLeagueApiCore.Common.Enums;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Microsoft.Extensions.Configuration;
-
-#nullable disable
+﻿#nullable disable
 
 namespace iRLeagueDatabaseCore.Models
 {
@@ -18,7 +10,7 @@ namespace iRLeagueDatabaseCore.Models
 
         public LeagueDbContext(DbContextOptions<LeagueDbContext> options)
             : base(options)
-        {   
+        {
         }
 
         public virtual DbSet<AcceptedReviewVoteEntity> AcceptedReviewVotes { get; set; }

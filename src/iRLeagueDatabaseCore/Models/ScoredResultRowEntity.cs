@@ -1,10 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using System;
-using System.Collections.Generic;
-
-#nullable disable
+﻿#nullable disable
 
 namespace iRLeagueDatabaseCore.Models
 {
@@ -63,7 +57,7 @@ namespace iRLeagueDatabaseCore.Models
             OfftrackLaps = resultRow.OfftrackLaps;
             NumContactLaps = resultRow.NumContactLaps;
             ContactLaps = resultRow.ContactLaps;
-    }
+        }
 
         public long LeagueId { get; set; }
         public long ScoredResultRowId { get; set; }
@@ -143,7 +137,7 @@ namespace iRLeagueDatabaseCore.Models
                     right => right.HasOne(e => e.TeamParentRow)
                         .WithMany()
                         .HasForeignKey(e => new { e.LeagueId, e.TeamParentRowRefId }));
-                
+
         }
     }
 }

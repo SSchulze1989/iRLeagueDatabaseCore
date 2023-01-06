@@ -1,10 +1,8 @@
 ﻿using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Running;
 using iRLeagueApiCore.Common.Models;
 using iRLeagueDatabaseCore.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
@@ -26,7 +24,7 @@ namespace DatabaseBenchmarks
                 CreateDatabase().GetAwaiter().GetResult();
                 Console.Write("Finished creating");
 #if !DEBUG_CREATEDB
-        }
+            }
 #endif
 
 #if DEBUG
@@ -36,7 +34,7 @@ namespace DatabaseBenchmarks
 
             stopWatch.Start();
             Console.WriteLine("Test normal for loop...");
-            for (int i=0; i<loops; i++)
+            for (int i = 0; i < loops; i++)
             {
                 qb.TestSeparateQuery().Wait();
                 qb.TestDirectQuery().Wait();
@@ -59,7 +57,7 @@ namespace DatabaseBenchmarks
                 }
             });
             stopWatch.Stop();
-            Console.WriteLine("Elapsed: {0} s", stopWatch.ElapsedMilliseconds/1000);
+            Console.WriteLine("Elapsed: {0} s", stopWatch.ElapsedMilliseconds / 1000);
 #else
             var summary = BenchmarkRunner.Run<QuerySeasonResultsBenchmarks>();
 #endif
@@ -100,7 +98,7 @@ namespace DatabaseBenchmarks
                     .Include(x => x.Event)
                             .ThenInclude(x => x.Schedule)
                     .Include(x => x.ScoredSessionResults)
-                        .ThenInclude(x => x.ScoredResultRows)        
+                        .ThenInclude(x => x.ScoredResultRows)
                             .ThenInclude(x => x.Member)
                     .Include(x => x.ScoredSessionResults)
                         .ThenInclude(x => x.ScoredResultRows)

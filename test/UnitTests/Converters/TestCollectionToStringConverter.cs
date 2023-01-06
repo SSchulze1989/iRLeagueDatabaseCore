@@ -2,9 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace UnitTests.Converters
@@ -25,7 +22,7 @@ namespace UnitTests.Converters
         }
 
         [Theory]
-        [InlineData(new double[] {1.2, 2.4}, "1.2;2.4")]
+        [InlineData(new double[] { 1.2, 2.4 }, "1.2;2.4")]
         public void ShouldConvertToDoubleString(IEnumerable<double> doubleCollection, string arrayStr)
         {
             var converter = new CollectionToStringConverter<double>();
@@ -45,7 +42,7 @@ namespace UnitTests.Converters
         [Theory]
         [InlineData("1;3;5;8;7", new int[] { 1, 3, 5, 8, 7 })]
         [InlineData("0,4,42,3", new int[] { 0, 4, 42, 3 }, ',')]
-        [InlineData("0.1.2.3", new int[] {0, 1, 2, 3}, '.')]
+        [InlineData("0.1.2.3", new int[] { 0, 1, 2, 3 }, '.')]
         [InlineData("1;;52345;", new int[] { 1, 52345 })]
         public void ShouldConvertToIntCollection(string arrayStr, IEnumerable<int> intCollection, char delimiter = delimiter)
         {
@@ -55,7 +52,7 @@ namespace UnitTests.Converters
         }
 
         [Theory]
-        [InlineData("1.2;2.4", new double[] {1.2, 2.4})]
+        [InlineData("1.2;2.4", new double[] { 1.2, 2.4 })]
         public void ShouldConvertToDoubleCollection(string arrayStr, IEnumerable<double> doubleCollection)
         {
             var converter = new CollectionToStringConverter<double>();

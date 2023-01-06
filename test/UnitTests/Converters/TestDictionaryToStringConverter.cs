@@ -1,9 +1,6 @@
 ﻿using iRLeagueDatabaseCore.Converters;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace UnitTests.Converters
@@ -39,7 +36,7 @@ namespace UnitTests.Converters
             var converter = new DictionaryToStringConverter<TKey, TValue>();
             var result = (IDictionary<TKey, TValue>)converter.ConvertFromProvider(str);
             Assert.Equal(expected.Count, result.Count);
-            for (int i=0; i<result.Count; i++)
+            for (int i = 0; i < result.Count; i++)
             {
                 Assert.Equal(expected.ElementAt(i).Key, result.ElementAt(i).Key);
                 Assert.Equal(expected.ElementAt(i).Value, result.ElementAt(i).Value);

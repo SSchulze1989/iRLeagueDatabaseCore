@@ -1,14 +1,4 @@
-﻿using iRLeagueApiCore.Common.Enums;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace iRLeagueDatabaseCore.Models
+﻿namespace iRLeagueDatabaseCore.Models
 {
     public class EventEntity : IVersionEntity
     {
@@ -60,7 +50,7 @@ namespace iRLeagueDatabaseCore.Models
     {
         public void Configure(EntityTypeBuilder<EventEntity> entity)
         {
-            entity.HasKey(e => new {e.LeagueId, e.EventId});
+            entity.HasKey(e => new { e.LeagueId, e.EventId });
 
             entity.HasAlternateKey(e => e.EventId);
 

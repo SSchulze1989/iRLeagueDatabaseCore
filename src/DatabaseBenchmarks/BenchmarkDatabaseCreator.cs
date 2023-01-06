@@ -2,11 +2,9 @@
 using iRLeagueDatabaseCore.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DatabaseBenchmarks
@@ -92,7 +90,7 @@ namespace DatabaseBenchmarks
                 Console.Write("Finished!\n");
             }
 
-            for (int k=0; k<leagueCount; k++)
+            for (int k = 0; k < leagueCount; k++)
             {
                 using var context = CreateStaticDbContext();
                 var trackConfigs = context.TrackConfigs.ToList();
@@ -100,7 +98,7 @@ namespace DatabaseBenchmarks
 
                 Console.Write($"Creating League #{k}\n");
                 var league = CreateRandomLeague(random);
-                
+
                 List<SeasonEntity> seasons;
                 context.Leagues.Add(league);
                 await context.SaveChangesAsync();
@@ -132,8 +130,8 @@ namespace DatabaseBenchmarks
                 List<ScheduleEntity> schedules = context.Schedules.Where(x => x.LeagueId == leagueId).ToList();
                 List<ResultConfigurationEntity> resultConfigs = context.ResultConfigurations
                     .Where(x => x.LeagueId == leagueId).ToList();
-                
-                
+
+
                 Console.Write("Finished!\n");
 
                 Console.Write("- Creating Sessions ... ");
@@ -220,13 +218,13 @@ namespace DatabaseBenchmarks
                     new VoteCategoryEntity() { Index = 3, Text = "Cat 4", DefaultPenalty = 5},
                     new VoteCategoryEntity() { Index = 4, Text = "Cat 5", DefaultPenalty = 10},
                 };
-                foreach(var category in categories)
+                foreach (var category in categories)
                 {
                     context.VoteCategories.Add(category);
                 }
 
                 List<IncidentReviewEntity> reviews;
-                foreach(var session in events.SelectMany(x => x.Sessions))
+                foreach (var session in events.SelectMany(x => x.Sessions))
                 {
                     var nReviews = random.Next(1, 10);
                     for (int i = 0; i < nReviews; i++)
@@ -344,7 +342,7 @@ namespace DatabaseBenchmarks
                 Location = GetRandomName(random),
             };
             var configsCount = random.Next(4) + 1;
-            for (int i=0; i<4; i++)
+            for (int i = 0; i < 4; i++)
             {
                 group.TrackConfigs.Add(CreateRandomTrackConfig(random));
             }
@@ -412,7 +410,7 @@ namespace DatabaseBenchmarks
             {
                 Name = sessionResult.Session.Name,
             };
-            for (int i=0; i<rowsCount; i++)
+            for (int i = 0; i < rowsCount; i++)
             {
                 var resultRow = sessionResult.ResultRows.ElementAt(i);
                 var scoredResultRow = CreateRandomScoredResultRow(random, resultRow);
@@ -452,14 +450,14 @@ namespace DatabaseBenchmarks
 
             // add members involved
             var nInvolvedMembers = random.Next(1, 5);
-            for (int i=0; i<nInvolvedMembers; i++)
+            for (int i = 0; i < nInvolvedMembers; i++)
             {
                 var index = random.Next(drivers.Count());
                 review.InvolvedMembers.Add(drivers.ElementAt(index));
             }
             // add comments
             var nComments = random.Next(1, 5);
-            for (int i=0; i<nComments; i++)
+            for (int i = 0; i < nComments; i++)
             {
                 review.Comments.Add(CreateRandomComment(random, review.InvolvedMembers, voteCategories));
             }
@@ -486,7 +484,7 @@ namespace DatabaseBenchmarks
             };
             // add votes
             var nVotes = random.Next(1, involved.Count());
-            for (int i=0; i<nVotes; i++)
+            for (int i = 0; i < nVotes; i++)
             {
                 var vote = new ReviewCommentVoteEntity()
                 {
