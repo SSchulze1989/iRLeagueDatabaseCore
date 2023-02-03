@@ -4,10 +4,11 @@ public class ResultConfigurationEntity : IVersionEntity
 {
     public ResultConfigurationEntity()
     {
+        ChampSeasons = new HashSet<ChampSeasonEntity>();
         Scorings = new HashSet<ScoringEntity>();
+        Events = new HashSet<EventEntity>();
         PointFilters = new HashSet<FilterOptionEntity>();
         ResultFilters = new HashSet<FilterOptionEntity>();
-        StandingConfigurations = new HashSet<StandingConfigurationEntity>();
     }
 
     public long LeagueId { get; set; }
@@ -21,7 +22,7 @@ public class ResultConfigurationEntity : IVersionEntity
 
     public virtual LeagueEntity League { get; set; }
     public virtual ResultConfigurationEntity SourceResultConfig { get; set; }
-    public virtual ICollection<StandingConfigurationEntity> StandingConfigurations { get; set; }
+    public virtual IEnumerable<ChampSeasonEntity> ChampSeasons { get; set; }
     public virtual ICollection<ScoringEntity> Scorings { get; set; }
     public virtual IEnumerable<EventEntity> Events { get; set; }
     public virtual ICollection<FilterOptionEntity> PointFilters { get; set; }

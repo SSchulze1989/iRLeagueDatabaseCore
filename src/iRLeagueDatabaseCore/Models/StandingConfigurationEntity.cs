@@ -4,7 +4,7 @@ public partial class StandingConfigurationEntity : IVersionEntity
 {
     public StandingConfigurationEntity()
     {
-        ResultConfigurations = new HashSet<ResultConfigurationEntity>();
+        ChampSeasons = new HashSet<ChampSeasonEntity>();
         Standings = new HashSet<StandingEntity>();
     }
 
@@ -16,8 +16,9 @@ public partial class StandingConfigurationEntity : IVersionEntity
     public bool UseCombinedResult { get; set; }
     public int WeeksCounted { get; set; }
 
-    public virtual ICollection<ResultConfigurationEntity> ResultConfigurations { get; set; }
+    public virtual IEnumerable<ChampSeasonEntity> ChampSeasons { get; set; }
     public virtual IEnumerable<StandingEntity> Standings { get; set; }
+    public virtual IEnumerable<ResultConfigurationEntity> ResultConfigurations { get; set; }
 
     #region version
     public DateTime? CreatedOn { get; set; }
@@ -40,15 +41,5 @@ public sealed class StandingConfigurationEntityConfiguration : IEntityTypeConfig
 
         entity.Property(e => e.StandingConfigId)
             .ValueGeneratedOnAdd();
-
-        entity.HasMany(p => p.ResultConfigurations)
-            .WithMany(d => d.StandingConfigurations)
-            .UsingEntity<StandingConfigs_ResultConfigs>(
-                right => right.HasOne(e => e.ResultConfig)
-                    .WithMany()
-                    .HasForeignKey(e => new { e.LeagueId, e.ResultConfigId }),
-                left => left.HasOne(e => e.StandingConfig)
-                    .WithMany()
-                    .HasForeignKey(e => new { e.LeagueId, e.StandingConfigId }));
     }
 }

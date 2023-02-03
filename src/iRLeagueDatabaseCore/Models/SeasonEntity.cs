@@ -7,8 +7,9 @@ public partial class SeasonEntity : Revision, IVersionEntity
     public SeasonEntity()
     {
         Schedules = new HashSet<ScheduleEntity>();
-        //Standings = new HashSet<StandingEntity>();
+        Standings = new HashSet<StandingEntity>();
         StatisticSets = new HashSet<StatisticSetEntity>();
+        ChampSeasons = new HashSet<ChampSeasonEntity>();
     }
 
     public long SeasonId { get; set; }
@@ -29,6 +30,7 @@ public partial class SeasonEntity : Revision, IVersionEntity
     public virtual ICollection<ScheduleEntity> Schedules { get; set; }
     public virtual ICollection<StandingEntity> Standings { get; set; }
     public virtual ICollection<StatisticSetEntity> StatisticSets { get; set; }
+    public virtual ICollection<ChampSeasonEntity> ChampSeasons { get; set; }
 }
 
 public class SeasonEntityConfiguration : IEntityTypeConfiguration<SeasonEntity>

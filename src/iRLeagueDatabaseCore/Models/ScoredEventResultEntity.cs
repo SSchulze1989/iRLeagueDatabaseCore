@@ -10,6 +10,7 @@ public class ScoredEventResultEntity : IVersionEntity
     public long LeagueId { get; set; }
     public long ResultId { get; set; }
     public long EventId { get; set; }
+    public long? ChampSeasonId { get; set; }
     public long? ResultConfigId { get; set; }
     /// <summary>
     /// Imported Id from old database
@@ -20,6 +21,7 @@ public class ScoredEventResultEntity : IVersionEntity
     public string Name { get; set; }
 
     public virtual EventEntity Event { get; set; }
+    public virtual ChampSeasonEntity ChampSeason { get; set; }
     public virtual ICollection<ScoredSessionResultEntity> ScoredSessionResults { get; set; }
     public virtual ResultConfigurationEntity ResultConfig { get; set; }
 

@@ -1,10 +1,18 @@
 ﻿namespace iRLeagueDatabaseCore.Models;
 public partial class ChampionshipEntity : IVersionEntity
 {
+    public ChampionshipEntity()
+    {
+        ChampSeasons = new HashSet<ChampSeasonEntity>();
+    }
+
     public long LeagueId { get; set; }
     public long ChampionshipId { get; set; }
     public string Name { get; set; }
     public string DisplayName { get; set; }
+
+    public virtual LeagueEntity League { get; set; }
+    public virtual ICollection<ChampSeasonEntity> ChampSeasons { get; set; }
 
     #region version
     public DateTime? CreatedOn { get; set; }
@@ -21,6 +29,8 @@ public sealed class ChampionshipEntityConfiguration : IEntityTypeConfiguration<C
 {
     public void Configure(EntityTypeBuilder<ChampionshipEntity> entity)
     {
+        entity.ToTable("Championships");
+
         entity.HasKey(e => new { e.LeagueId, e.ChampionshipId });
 
         entity.HasAlternateKey(e => e.ChampionshipId);
@@ -31,5 +41,11 @@ public sealed class ChampionshipEntityConfiguration : IEntityTypeConfiguration<C
         entity.Property(e => e.Name).HasMaxLength(80);
 
         entity.Property(e => e.DisplayName).HasMaxLength(255);
+
+        entity.HasOne(d => d.League)
+            .WithMany(p => p.Championships)
+            .HasForeignKey(d => d.LeagueId)
+            .IsRequired(true)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

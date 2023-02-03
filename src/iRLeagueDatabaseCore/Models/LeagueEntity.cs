@@ -10,6 +10,7 @@ public class LeagueEntity : Revision, IVersionEntity
         LeagueMembers = new HashSet<LeagueMemberEntity>();
         Teams = new HashSet<TeamEntity>();
         VoteCategories = new HashSet<VoteCategoryEntity>();
+        Championships = new HashSet<ChampionshipEntity>();
     }
     public long Id { get; set; }
     public string Name { get; set; }
@@ -35,6 +36,7 @@ public class LeagueEntity : Revision, IVersionEntity
     public virtual ICollection<LeagueMemberEntity> LeagueMembers { get; set; }
     public virtual ICollection<TeamEntity> Teams { get; set; }
     public virtual ICollection<VoteCategoryEntity> VoteCategories { get; set; }
+    public virtual ICollection<ChampionshipEntity> Championships { get; set; }
 }
 
 public class LeagueEntityConfiguration : IEntityTypeConfiguration<LeagueEntity>

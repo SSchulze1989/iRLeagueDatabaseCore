@@ -10,6 +10,7 @@ public partial class StandingEntity : IVersionEntity
     public long LeagueId { get; set; }
     public long StandingId { get; set; }
     public long SeasonId { get; set; }
+    public long? ChampSeasonId { get; set; }
     public long? StandingConfigId { get; set; }
     public long EventId { get; set; }
 
@@ -19,6 +20,7 @@ public partial class StandingEntity : IVersionEntity
 
     public virtual SeasonEntity Season { get; set; }
     public virtual EventEntity Event { get; set; }
+    public virtual ChampSeasonEntity ChampSeason { get; set; }
     public virtual StandingConfigurationEntity StandingConfig { get; set; }
     public virtual ICollection<StandingRowEntity> StandingRows { get; set; }
 
