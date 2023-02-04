@@ -16,6 +16,7 @@ public partial class StandingConfigurationEntity : IVersionEntity
     public bool UseCombinedResult { get; set; }
     public int WeeksCounted { get; set; }
 
+    public virtual LeagueEntity League { get; set; }
     public virtual IEnumerable<ChampSeasonEntity> ChampSeasons { get; set; }
     public virtual IEnumerable<StandingEntity> Standings { get; set; }
 
@@ -40,5 +41,9 @@ public sealed class StandingConfigurationEntityConfiguration : IEntityTypeConfig
 
         entity.Property(e => e.StandingConfigId)
             .ValueGeneratedOnAdd();
+
+        entity.HasOne(d => d.League)
+            .WithMany(p => p.StandingConfigs)
+            .HasForeignKey(d => d.LeagueId);
     }
 }
