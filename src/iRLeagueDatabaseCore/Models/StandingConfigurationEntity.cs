@@ -18,7 +18,6 @@ public partial class StandingConfigurationEntity : IVersionEntity
 
     public virtual IEnumerable<ChampSeasonEntity> ChampSeasons { get; set; }
     public virtual IEnumerable<StandingEntity> Standings { get; set; }
-    public virtual IEnumerable<ResultConfigurationEntity> ResultConfigurations { get; set; }
 
     #region version
     public DateTime? CreatedOn { get; set; }
