@@ -1,7 +1,7 @@
 ﻿using iRLeagueApiCore.Common.Models.Reviews;
 
 namespace iRLeagueDatabaseCore.Models;
-public partial class ChampSeasonEntity
+public partial class ChampSeasonEntity : IVersionEntity
 {
     public ChampSeasonEntity()
     {
@@ -15,6 +15,7 @@ public partial class ChampSeasonEntity
     public long ChampionshipId { get; set; }
     public long SeasonId { get; set; }
     public long? StandingConfigId { get; set; }
+    public bool IsActive { get; set; }
 
     public virtual ChampionshipEntity Championship { get; set; }
     public virtual SeasonEntity Season { get; set; }
@@ -22,6 +23,16 @@ public partial class ChampSeasonEntity
     public virtual StandingConfigurationEntity StandingConfiguration { get; set; }
     public virtual IEnumerable<ScoredEventResultEntity> EventResults { get; set; }
     public virtual IEnumerable<StandingEntity> Standings { get; set; }
+
+    #region version
+    public DateTime? CreatedOn { get; set; }
+    public DateTime? LastModifiedOn { get; set; }
+    public int Version { get; set; }
+    public string CreatedByUserId { get; set; }
+    public string CreatedByUserName { get; set; }
+    public string LastModifiedByUserId { get; set; }
+    public string LastModifiedByUserName { get; set; }
+    #endregion
 }
 
 public sealed class ChampSeasonEntityConfiguration : IEntityTypeConfiguration<ChampSeasonEntity>

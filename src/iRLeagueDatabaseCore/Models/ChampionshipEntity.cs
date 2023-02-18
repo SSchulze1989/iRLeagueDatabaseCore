@@ -1,5 +1,5 @@
 ﻿namespace iRLeagueDatabaseCore.Models;
-public partial class ChampionshipEntity : IVersionEntity
+public partial class ChampionshipEntity : IArchivableVersionEntity
 {
     public ChampionshipEntity()
     {
@@ -15,6 +15,7 @@ public partial class ChampionshipEntity : IVersionEntity
     public virtual ICollection<ChampSeasonEntity> ChampSeasons { get; set; }
 
     #region version
+    public bool IsArchived { get; set; }
     public DateTime? CreatedOn { get; set; }
     public DateTime? LastModifiedOn { get; set; }
     public int Version { get; set; }
