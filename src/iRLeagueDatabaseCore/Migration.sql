@@ -1,5 +1,7 @@
 ﻿USE TestDatabase;
 
+START TRANSACTION;
+
 CREATE TEMPORARY TABLE TmpChampionships (
 	LeagueId BIGINT NOT NULL,
 	ChampionshipId BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -59,5 +61,29 @@ INSERT INTO ChampSeasons_ResultConfigs
 
 SELECT * FROM ChampSeasons_ResultConfigs;
 
+UPDATE ScoredEventResults AS er
+	JOIN Events AS ev
+		ON er.EventId=ev.EventId
+	JOIN Schedules AS sch
+		ON ev.ScheduleId=sch.ScheduleId
+	JOIN ChampSeasons_ResultConfigs as cs_rc
+		ON er.ResultConfigId=cs_rc.ResultConfigId
+	JOIN ChampSeasons cs
+		ON cs_rc.ChampSeasonId=cs.ChampSeasonId 
+		AND sch.SeasonId=cs.SeasonId
+	SET er.ChampSeasonId=cs.ChampSeasonId;
+
+SELECT LeagueId, EventId, ResultConfigId, ChampSeasonId
+	FROM ScoredEventResults;
+
+UPDATE Standings AS s
+	JOIN ChampSeasons AS cs
+		ON s.StandingConfigId=cs.StandingConfigId
+	SET s.ChampSeasonId=cs.ChampSeasonId;
+
+SELECT LeagueId, StandingConfigId, ChampSeasonId FROM Standings;
+
 DROP TABLE TmpChampionships;
 DROP TABLE TmpChampSeasons;
+
+ROLLBACK;
