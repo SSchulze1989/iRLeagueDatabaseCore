@@ -67,15 +67,8 @@ public sealed class ChampSeasonEntityConfiguration : IEntityTypeConfiguration<Ch
             .OnDelete(DeleteBehavior.ClientSetNull);
 
         entity.HasMany(d => d.ResultConfigurations)
-            .WithMany(p => p.ChampSeasons)
-            .UsingEntity<ChampSeasons_ResultConfigurations>(
-                right => right.HasOne(e => e.ResultConfig)
-                    .WithMany()
-                    .HasForeignKey(e => new { e.LeagueId, e.ResultConfigId }),
-                left => left.HasOne(e => e.ChampSeason)
-                    .WithMany()
-                    .HasForeignKey(e => new { e.LeagueId, e.ChampSeasonId }))
-            .ToTable("ChampSeasons_ResultConfigs");
+            .WithOne(p => p.ChampSeason)
+            .HasForeignKey(d => new { d.LeagueId, d.ChampSeasonId });
 
         entity.HasMany(p => p.EventResults)
             .WithOne(d => d.ChampSeason)
