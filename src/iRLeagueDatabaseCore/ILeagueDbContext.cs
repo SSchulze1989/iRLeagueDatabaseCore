@@ -7,6 +7,8 @@ public interface ILeagueDbContext
     public DbSet<ReviewCommentEntity> ReviewComments { get; set; }
     public DbSet<ReviewCommentVoteEntity> ReviewCommentVotes { get; set; }
     public DbSet<CustomIncidentEntity> CustomIncidents { get; set; }
+    public DbSet<ChampionshipEntity> Championships { get; set; }
+    public DbSet<ChampSeasonEntity> ChampSeasons { get; set; }
     public DbSet<DriverStatisticRowEntity> DriverStatisticRows { get; set; }
     public DbSet<EventEntity> Events { get; set; }
     public DbSet<IncidentReviewEntity> IncidentReviews { get; set; }

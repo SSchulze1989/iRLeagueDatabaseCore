@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using iRLeagueDatabaseCore.Models;
 
@@ -10,9 +11,10 @@ using iRLeagueDatabaseCore.Models;
 namespace iRLeagueDatabaseCore.Migrations
 {
     [DbContext(typeof(LeagueDbContext))]
-    partial class LeagueDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230218115909_ArchivableChampionship")]
+    partial class ArchivableChampionship
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -198,6 +200,26 @@ namespace iRLeagueDatabaseCore.Migrations
                     b.HasIndex("LeagueId", "StandingConfigId");
 
                     b.ToTable("ChampSeasons", (string)null);
+                });
+
+            modelBuilder.Entity("iRLeagueDatabaseCore.Models.ChampSeasons_ResultConfigurations", b =>
+                {
+                    b.Property<long>("ChampSeasonId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("LeagueId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ResultConfigId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("ChampSeasonId", "LeagueId", "ResultConfigId");
+
+                    b.HasIndex("LeagueId", "ChampSeasonId");
+
+                    b.HasIndex("LeagueId", "ResultConfigId");
+
+                    b.ToTable("ChampSeasons_ResultConfigs", (string)null);
                 });
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.CustomIncidentEntity", b =>
@@ -1127,9 +1149,6 @@ namespace iRLeagueDatabaseCore.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    b.Property<long>("ChampSeasonId")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("CreatedByUserId")
                         .HasColumnType("longtext");
 
@@ -1170,8 +1189,6 @@ namespace iRLeagueDatabaseCore.Migrations
                     b.HasKey("LeagueId", "ResultConfigId");
 
                     b.HasAlternateKey("ResultConfigId");
-
-                    b.HasIndex("LeagueId", "ChampSeasonId");
 
                     b.HasIndex("LeagueId", "SourceResultConfigId");
 
@@ -2751,6 +2768,25 @@ namespace iRLeagueDatabaseCore.Migrations
                     b.Navigation("StandingConfiguration");
                 });
 
+            modelBuilder.Entity("iRLeagueDatabaseCore.Models.ChampSeasons_ResultConfigurations", b =>
+                {
+                    b.HasOne("iRLeagueDatabaseCore.Models.ChampSeasonEntity", "ChampSeason")
+                        .WithMany()
+                        .HasForeignKey("LeagueId", "ChampSeasonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("iRLeagueDatabaseCore.Models.ResultConfigurationEntity", "ResultConfig")
+                        .WithMany()
+                        .HasForeignKey("LeagueId", "ResultConfigId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ChampSeason");
+
+                    b.Navigation("ResultConfig");
+                });
+
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.CustomIncidentEntity", b =>
                 {
                     b.HasOne("iRLeagueDatabaseCore.Models.LeagueEntity", "League")
@@ -2997,17 +3033,9 @@ namespace iRLeagueDatabaseCore.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("iRLeagueDatabaseCore.Models.ChampSeasonEntity", "ChampSeason")
-                        .WithMany("ResultConfigurations")
-                        .HasForeignKey("LeagueId", "ChampSeasonId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("iRLeagueDatabaseCore.Models.ResultConfigurationEntity", "SourceResultConfig")
                         .WithMany()
                         .HasForeignKey("LeagueId", "SourceResultConfigId");
-
-                    b.Navigation("ChampSeason");
 
                     b.Navigation("League");
 
@@ -3505,8 +3533,6 @@ namespace iRLeagueDatabaseCore.Migrations
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.ChampSeasonEntity", b =>
                 {
                     b.Navigation("EventResults");
-
-                    b.Navigation("ResultConfigurations");
 
                     b.Navigation("Standings");
                 });

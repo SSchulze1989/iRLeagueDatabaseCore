@@ -18,6 +18,8 @@ public partial class LeagueDbContext : DbContext, ILeagueDbContext
     public virtual DbSet<ReviewCommentEntity> ReviewComments { get; set; }
     public virtual DbSet<ReviewCommentVoteEntity> ReviewCommentVotes { get; set; }
     public virtual DbSet<CustomIncidentEntity> CustomIncidents { get; set; }
+    public virtual DbSet<ChampionshipEntity> Championships { get; set; }
+    public virtual DbSet<ChampSeasonEntity> ChampSeasons { get; set; }
     public virtual DbSet<DriverStatisticRowEntity> DriverStatisticRows { get; set; }
     public virtual DbSet<EventEntity> Events { get; set; }
     public virtual DbSet<IncidentReviewEntity> IncidentReviews { get; set; }
