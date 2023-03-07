@@ -223,20 +223,35 @@ public static class PopulateTestDatabase
         };
         league1.PointRules.Add(pointsRule);
 
-        var resultConfig = new ResultConfigurationEntity()
+        var championship = new ChampionshipEntity()
         {
             League = league1,
+            Name = "Championship"
         };
-        league1.ResultConfigs.Add(resultConfig);
-
-        for (int i = 0; i < 2; i++)
+        league1.Championships.Add(championship);
+        foreach(var season in league1.Seasons)
         {
-            var scoring = new ScoringEntity()
+            var champSeason = new ChampSeasonEntity()
             {
-                Name = $"Scoring {i + 1}",
-                PointsRule = pointsRule,
+                Championship = championship,
+                Season = season,
             };
-            resultConfig.Scorings.Add(scoring);
+            championship.ChampSeasons.Add(champSeason);
+            var resultConfig = new ResultConfigurationEntity()
+            {
+                League = league1,
+                ChampSeason = champSeason,
+            };
+            league1.ResultConfigs.Add(resultConfig);
+            for (int i = 0; i < 2; i++)
+            {
+                var scoring = new ScoringEntity()
+                {
+                    Name = $"Scoring {i + 1}",
+                    PointsRule = pointsRule,
+                };
+                resultConfig.Scorings.Add(scoring);
+            }
         }
 
         foreach ((var season, var index) in league1.Seasons.Select((x, i) => (x, i)))
