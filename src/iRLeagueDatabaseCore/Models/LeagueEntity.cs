@@ -29,6 +29,7 @@ public class LeagueEntity : Revision, IVersionEntity
     /// Set public visibility of protests
     /// </summary>
     public ProtestPublicSetting ProtestsPublic { get; set; }
+    public LeaguePublicSetting LeaguePublic { get; set; }
 
     public virtual ICollection<SeasonEntity> Seasons { get; set; }
     public virtual ICollection<ResultConfigurationEntity> ResultConfigs { get; set; }
