@@ -18,6 +18,7 @@ public class LeagueEntity : Revision, IVersionEntity
     public string NameFull { get; set; }
     public string Description { get; set; }
     public string DescriptionPlain { get; set; }
+    public bool IsInitialized { get; set; }
     public bool EnableProtests { get; set; }
     /// <summary>
     /// Time span after a race has finished (according to event duration) after which a protest can be filed
