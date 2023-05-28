@@ -4,13 +4,12 @@ namespace iRLeagueDatabaseCore.Models;
 
 public partial class LeagueDbContext : DbContext, ILeagueDbContext
 {
-    //public LeagueDbContext()
-    //{
-    //}
+    private readonly ILeagueProvider leagueProvider;
 
-    public LeagueDbContext(DbContextOptions<LeagueDbContext> options)
+    public LeagueDbContext(DbContextOptions<LeagueDbContext> options, ILeagueProvider leagueProvider)
         : base(options)
     {
+        this.leagueProvider = leagueProvider;
     }
 
     public virtual DbSet<AcceptedReviewVoteEntity> AcceptedReviewVotes { get; set; }
@@ -62,7 +61,81 @@ public partial class LeagueDbContext : DbContext, ILeagueDbContext
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(LeagueDbContext).Assembly);
 
         OnModelCreatingPartial(modelBuilder);
+
+        ConfigureMultiTenancy(modelBuilder);
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+
+    private void ConfigureMultiTenancy(ModelBuilder builder)
+    {
+        builder.Entity<AcceptedReviewVoteEntity>()
+            .HasQueryFilter(mt => mt.LeagueId == leagueProvider.LeagueId);
+        builder.Entity<AddPenaltyEntity>()
+            .HasQueryFilter(mt => mt.LeagueId == leagueProvider.LeagueId);
+        builder.Entity<ReviewCommentEntity>()
+            .HasQueryFilter(mt => mt.LeagueId == leagueProvider.LeagueId);
+        builder.Entity<ReviewCommentVoteEntity>()
+            .HasQueryFilter(mt => mt.LeagueId == leagueProvider.LeagueId);
+        builder.Entity<CustomIncidentEntity>()
+            .HasQueryFilter(mt => mt.LeagueId == leagueProvider.LeagueId);
+        builder.Entity<ChampionshipEntity>()
+            .HasQueryFilter(mt => mt.LeagueId == leagueProvider.LeagueId);
+        builder.Entity<ChampSeasonEntity>()
+            .HasQueryFilter(mt => mt.LeagueId == leagueProvider.LeagueId);
+        builder.Entity<DriverStatisticRowEntity>()
+            .HasQueryFilter(mt => mt.LeagueId == leagueProvider.LeagueId);
+        builder.Entity<EventEntity>()
+            .HasQueryFilter(mt => mt.LeagueId == leagueProvider.LeagueId);
+        builder.Entity<IncidentReviewEntity>()
+            .HasQueryFilter(mt => mt.LeagueId == leagueProvider.LeagueId);
+        builder.Entity<LeagueMemberEntity>()
+            .HasQueryFilter(mt => mt.LeagueId == leagueProvider.LeagueId);
+        builder.Entity<PointRuleEntity>()
+            .HasQueryFilter(mt => mt.LeagueId == leagueProvider.LeagueId);
+        builder.Entity<ProtestEntity>()
+            .HasQueryFilter(mt => mt.LeagueId == leagueProvider.LeagueId);
+        builder.Entity<EventResultEntity>()
+            .HasQueryFilter(mt => mt.LeagueId == leagueProvider.LeagueId);
+        builder.Entity<ResultConfigurationEntity>()
+            .HasQueryFilter(mt => mt.LeagueId == leagueProvider.LeagueId);
+        builder.Entity<ResultRowEntity>()
+            .HasQueryFilter(mt => mt.LeagueId == leagueProvider.LeagueId);
+        builder.Entity<FilterOptionEntity>()
+            .HasQueryFilter(mt => mt.LeagueId == leagueProvider.LeagueId);
+        builder.Entity<FilterConditionEntity>()
+            .HasQueryFilter(mt => mt.LeagueId == leagueProvider.LeagueId);
+        builder.Entity<ReviewPenaltyEntity>()
+            .HasQueryFilter(mt => mt.LeagueId == leagueProvider.LeagueId);
+        builder.Entity<ScheduleEntity>()
+            .HasQueryFilter(mt => mt.LeagueId == leagueProvider.LeagueId);
+        builder.Entity<ScoredEventResultEntity>()
+            .HasQueryFilter(mt => mt.LeagueId == leagueProvider.LeagueId);
+        builder.Entity<ScoredResultRowEntity>()
+            .HasQueryFilter(mt => mt.LeagueId == leagueProvider.LeagueId);
+        builder.Entity<ScoredSessionResultEntity>()
+            .HasQueryFilter(mt => mt.LeagueId == leagueProvider.LeagueId);
+        builder.Entity<ScoringEntity>()
+            .HasQueryFilter(mt => mt.LeagueId == leagueProvider.LeagueId);
+        builder.Entity<StandingEntity>()
+            .HasQueryFilter(mt => mt.LeagueId == leagueProvider.LeagueId);
+        builder.Entity<StandingConfigurationEntity>()
+            .HasQueryFilter(mt => mt.LeagueId == leagueProvider.LeagueId);
+        builder.Entity<SeasonEntity>()
+            .HasQueryFilter(mt => mt.LeagueId == leagueProvider.LeagueId);
+        builder.Entity<SessionEntity>()
+            .HasQueryFilter(mt => mt.LeagueId == leagueProvider.LeagueId);
+        builder.Entity<StatisticSetEntity>()
+            .HasQueryFilter(mt => mt.LeagueId == leagueProvider.LeagueId);
+        builder.Entity<TeamEntity>()
+            .HasQueryFilter(mt => mt.LeagueId == leagueProvider.LeagueId);
+        builder.Entity<VoteCategoryEntity>()
+            .HasQueryFilter(mt => mt.LeagueId == leagueProvider.LeagueId);
+        builder.Entity<IRSimSessionDetailsEntity>()
+            .HasQueryFilter(mt => mt.LeagueId == leagueProvider.LeagueId);
+        builder.Entity<SessionResultEntity>()
+            .HasQueryFilter(mt => mt.LeagueId == leagueProvider.LeagueId);
+        builder.Entity<ResultConfigurationEntity>()
+            .HasQueryFilter(mt => mt.LeagueId == leagueProvider.LeagueId);
+    }
 }

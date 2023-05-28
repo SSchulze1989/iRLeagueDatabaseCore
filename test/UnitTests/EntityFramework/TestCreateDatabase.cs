@@ -1,6 +1,8 @@
 ﻿using iRLeagueApiCore.Common.Enums;
+using iRLeagueDatabaseCore;
 using iRLeagueDatabaseCore.Models;
 using Microsoft.EntityFrameworkCore;
+using Moq;
 using System;
 using System.Linq;
 using Xunit;
@@ -15,9 +17,13 @@ public class TestCreateDatabase : IDisposable
 
     private static readonly int Seed = 12345;
 
+    private long CurrentLeagueId { get; set; }
+    private readonly Mock<ILeagueProvider> mockLeagueProvider = new();
+
     public TestCreateDatabase(ITestOutputHelper output)
     {
         output.WriteLine($"Randomizer seed: {Seed}");
+        mockLeagueProvider.Setup(x => x.LeagueId).Returns(() => CurrentLeagueId);
     }
 
     static TestCreateDatabase()
@@ -25,22 +31,28 @@ public class TestCreateDatabase : IDisposable
         var random = new Random(Seed);
 
         // Setup database
-        using (var dbContext = GetTestDatabaseContext())
+        var mockLeagueProvider = new Mock<ILeagueProvider>();
+        using (var dbContext = GetStaticTestDatabaseContext(mockLeagueProvider.Object))
         {
             Populate(dbContext, random);
             dbContext.SaveChanges();
         }
     }
 
-    public static LeagueDbContext GetTestDatabaseContext()
+    private static LeagueDbContext GetStaticTestDatabaseContext(ILeagueProvider leagueProvider)
     {
         var optionsBuilder = new DbContextOptionsBuilder<LeagueDbContext>();
         optionsBuilder.UseInMemoryDatabase(databaseName: "TestDatabase")
            .UseLazyLoadingProxies();
-        var dbContext = new LeagueDbContext(optionsBuilder.Options);
+        var dbContext = new LeagueDbContext(optionsBuilder.Options, leagueProvider);
         dbContext.Database.EnsureCreated();
 
         return dbContext;
+    }
+
+    private LeagueDbContext GetTestDatabaseContext()
+    {
+        return GetStaticTestDatabaseContext(mockLeagueProvider.Object);
     }
 
     public void Dispose()
@@ -54,6 +66,7 @@ public class TestCreateDatabase : IDisposable
         using (var dbContext = GetTestDatabaseContext())
         {
             var league = dbContext.Leagues.FirstOrDefault();
+            SetCurrentLeague(league);
             Assert.NotNull(league);
             Assert.Equal("TestLeague", league.Name);
             Assert.Equal(2, league.Seasons.Count());
@@ -101,6 +114,7 @@ public class TestCreateDatabase : IDisposable
         {
             Assert.Equal(2, dbContext.Leagues.Count());
             var league = dbContext.Leagues.OrderBy(x => x.Id).Last();
+            SetCurrentLeague(league);
             Assert.Equal("TestLeague2", league.Name);
             Assert.Equal(1, league.Seasons.Count);
             Assert.Equal(league, league.Seasons.First().League);
@@ -122,6 +136,7 @@ public class TestCreateDatabase : IDisposable
         using (var dbContext = GetTestDatabaseContext())
         {
             var league = dbContext.Leagues.First();
+            SetCurrentLeague(league);
             Assert.NotNull(league);
             Assert.Equal(2, league.Seasons.Count);
         }
@@ -145,6 +160,7 @@ public class TestCreateDatabase : IDisposable
         using (var dbContext = GetTestDatabaseContext())
         {
             dbContext.ChangeTracker.LazyLoadingEnabled = false;
+            SetCurrentLeague(dbContext.Leagues.First());
             var league = dbContext.Leagues
                 .Include(e => e.Seasons)
                 .First();
@@ -156,6 +172,7 @@ public class TestCreateDatabase : IDisposable
         {
             dbContext.ChangeTracker.LazyLoadingEnabled = false;
             var league = dbContext.Leagues.First();
+            SetCurrentLeague(league);
             dbContext.Seasons.Load();
 
             Assert.NotNull(league);
@@ -335,5 +352,14 @@ public class TestCreateDatabase : IDisposable
     public void TestJustThisOneThing()
     {
         Assert.True(true);
+    }
+
+    /// <summary>
+    /// Set the current league id for multi tenancy - must be called before any league specific entity is queried
+    /// </summary>
+    /// <param name="league"></param>
+    private void SetCurrentLeague(LeagueEntity league)
+    {
+        CurrentLeagueId = league.Id;
     }
 }
