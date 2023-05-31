@@ -1,7 +1,9 @@
 ﻿using iRLeagueApiCore.Common.Enums;
+using iRLeagueDatabaseCore;
 using iRLeagueDatabaseCore.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,14 +24,22 @@ public class BenchmarkDatabaseCreator
     private static readonly int eventCount = 4; // 12
     private static readonly int sessionCount = 2;
 
+    private static long ProviderLeagueId { get; set; }
+    private static readonly Mock<ILeagueProvider> mockLeagueProvider = new Mock<ILeagueProvider>();
+
     static BenchmarkDatabaseCreator()
     {
         Configuration = ((IConfigurationBuilder)new ConfigurationBuilder())
             .AddUserSecrets<BenchmarkDatabaseCreator>()
             .Build();
 
+        mockLeagueProvider.Setup(x => x.LeagueId).Returns(ProviderLeagueId);
+        mockLeagueProvider.Setup(x => x.HasLeagueName).Returns(false);
+        mockLeagueProvider.Setup(x => x.LeagueName).Returns(string.Empty);
         var random = new Random(Seed);
     }
+
+
 
     public static LeagueDbContext CreateStaticDbContext()
     {
@@ -46,7 +56,7 @@ public class BenchmarkDatabaseCreator
             //.EnableSensitiveDataLogging(true)
             .UseMySQL(connectionString);
 
-        var dbContext = new LeagueDbContext(optionsBuilder.Options);
+        var dbContext = new LeagueDbContext(optionsBuilder.Options, mockLeagueProvider.Object);
         return dbContext;
     }
 
@@ -102,6 +112,8 @@ public class BenchmarkDatabaseCreator
             List<SeasonEntity> seasons;
             context.Leagues.Add(league);
             await context.SaveChangesAsync();
+
+            ProviderLeagueId = league.Id;
 
             Console.Write("- Creating seasons ... ");
             var leagueId = league.Id;
