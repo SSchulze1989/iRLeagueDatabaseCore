@@ -137,5 +137,15 @@ public partial class LeagueDbContext : DbContext, ILeagueDbContext
             .HasQueryFilter(mt => mt.LeagueId == LeagueProvider.LeagueId);
         builder.Entity<ResultConfigurationEntity>()
             .HasQueryFilter(mt => mt.LeagueId == LeagueProvider.LeagueId);
+        builder.Entity<EventResultConfigs>()
+            .HasQueryFilter(mt => mt.LeagueId == LeagueProvider.LeagueId);
+        builder.Entity<Protests_LeagueMembers>()
+            .HasQueryFilter(mt => mt.LeagueId == LeagueProvider.LeagueId);
+        builder.Entity<ScoredTeamResultRowsResultRows>()
+            .HasQueryFilter(mt => mt.LeagueId == LeagueProvider.LeagueId);
+        builder.Entity<StandingRowEntity>()
+            .HasQueryFilter(mt => mt.LeagueId == LeagueProvider.LeagueId);
+        builder.Entity<StandingRows_ScoredResultRows>()
+            .HasQueryFilter(mt => mt.LeagueId == LeagueProvider.LeagueId);
     }
 }
