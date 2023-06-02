@@ -1,13 +1,11 @@
-﻿#nullable disable
-
-namespace iRLeagueDatabaseCore.Models;
+﻿namespace iRLeagueDatabaseCore.Models;
 
 public partial class ReviewPenaltyEntity
 {
     public long LeagueId { get; set; }
     public long ResultRowId { get; set; }
     public long ReviewId { get; set; }
-    public int PenaltyPoints { get; set; }
+    //public PenaltyValue Value { get; set; }
     public long? ReviewVoteId { get; set; }
 
     public virtual ScoredResultRowEntity ResultRow { get; set; }
@@ -26,6 +24,8 @@ public class ReviewPenaltyEntityConfiguration : IEntityTypeConfiguration<ReviewP
         entity.HasIndex(e => e.ReviewId);
 
         entity.HasIndex(e => e.ReviewVoteId);
+
+        //entity.OwnsOne(e => e.Value).ToJson();
 
         entity.HasOne(d => d.ResultRow)
             .WithMany(p => p.ReviewPenalties)

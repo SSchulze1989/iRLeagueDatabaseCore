@@ -1,12 +1,10 @@
-﻿#nullable disable
-
-namespace iRLeagueDatabaseCore.Models;
+﻿namespace iRLeagueDatabaseCore.Models;
 
 public partial class AddPenaltyEntity
 {
     public long LeagueId { get; set; }
     public long ScoredResultRowId { get; set; }
-    public int PenaltyPoints { get; set; }
+    //public PenaltyValue Value { get; set; }
 
     public virtual ScoredResultRowEntity ScoredResultRow { get; set; }
 }
@@ -18,6 +16,8 @@ public class AddPenaltyEntityConfiguration : IEntityTypeConfiguration<AddPenalty
         entity.HasKey(e => new { e.LeagueId, e.ScoredResultRowId });
 
         entity.HasIndex(e => new { e.LeagueId, e.ScoredResultRowId });
+
+        //entity.OwnsOne(e => e.Value).ToJson();
 
         entity.HasOne(d => d.ScoredResultRow)
             .WithOne(p => p.AddPenalty)
