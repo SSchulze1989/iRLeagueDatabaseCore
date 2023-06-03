@@ -5,5 +5,5 @@ public interface ILeagueProvider
     public bool HasLeagueName { get; }
     public string LeagueName { get; }
 
-    public void SetLeague(long leagueId, string? leagueName = null);
+    public void SetLeague(long leagueId, string leagueName = null);
 }

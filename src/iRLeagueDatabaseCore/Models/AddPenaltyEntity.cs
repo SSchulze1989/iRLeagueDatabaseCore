@@ -1,27 +1,45 @@
-﻿namespace iRLeagueDatabaseCore.Models;
+﻿using iRLeagueApiCore.Common.Converters;
+using System.Text.Json;
+
+namespace iRLeagueDatabaseCore.Models;
 
 public partial class AddPenaltyEntity
 {
     public long LeagueId { get; set; }
+    public long AddPenaltyId { get; set; }
     public long ScoredResultRowId { get; set; }
-    //public PenaltyValue Value { get; set; }
+    public PenaltyValue Value { get; set; }
 
     public virtual ScoredResultRowEntity ScoredResultRow { get; set; }
 }
 
 public class AddPenaltyEntityConfiguration : IEntityTypeConfiguration<AddPenaltyEntity>
 {
+    private static readonly JsonSerializerOptions jsonOptions = new()
+    {
+        Converters = { new JsonTimeSpanToTicksConverter() }
+    };
+
     public void Configure(EntityTypeBuilder<AddPenaltyEntity> entity)
     {
-        entity.HasKey(e => new { e.LeagueId, e.ScoredResultRowId });
+        entity.HasKey(e => new { e.LeagueId, e.AddPenaltyId });
+
+        entity.HasAlternateKey(e => e.AddPenaltyId);
+
+        entity.Property(e => e.AddPenaltyId)
+            .ValueGeneratedOnAdd();
 
         entity.HasIndex(e => new { e.LeagueId, e.ScoredResultRowId });
 
-        //entity.OwnsOne(e => e.Value).ToJson();
+        entity.Property(e => e.Value)
+            .HasColumnType("json")
+            .HasConversion(
+                v => JsonSerializer.Serialize(v, jsonOptions),
+                v => JsonSerializer.Deserialize<PenaltyValue>(v, jsonOptions));
 
         entity.HasOne(d => d.ScoredResultRow)
-            .WithOne(p => p.AddPenalty)
-            .HasForeignKey<AddPenaltyEntity>(d => new { d.LeagueId, d.ScoredResultRowId })
-            .OnDelete(DeleteBehavior.ClientSetNull);
+            .WithMany(p => p.AddPenalties)
+            .HasForeignKey(d => new { d.LeagueId, d.ScoredResultRowId })
+            .OnDelete(DeleteBehavior.ClientCascade);
     }
 }

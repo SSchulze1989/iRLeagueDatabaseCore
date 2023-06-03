@@ -1,11 +1,14 @@
-﻿namespace iRLeagueDatabaseCore.Models;
+﻿using iRLeagueApiCore.Common.Converters;
+using System.Text.Json;
+
+namespace iRLeagueDatabaseCore.Models;
 
 public partial class ReviewPenaltyEntity
 {
     public long LeagueId { get; set; }
     public long ResultRowId { get; set; }
     public long ReviewId { get; set; }
-    //public PenaltyValue Value { get; set; }
+    public PenaltyValue Value { get; set; }
     public long? ReviewVoteId { get; set; }
 
     public virtual ScoredResultRowEntity ResultRow { get; set; }
@@ -15,6 +18,11 @@ public partial class ReviewPenaltyEntity
 
 public class ReviewPenaltyEntityConfiguration : IEntityTypeConfiguration<ReviewPenaltyEntity>
 {
+    private static readonly JsonSerializerOptions jsonOptions = new()
+    {
+        Converters = { new JsonTimeSpanToTicksConverter() }
+    };
+
     public void Configure(EntityTypeBuilder<ReviewPenaltyEntity> entity)
     {
         entity.HasKey(e => new { e.LeagueId, e.ResultRowId, e.ReviewId });
@@ -25,7 +33,11 @@ public class ReviewPenaltyEntityConfiguration : IEntityTypeConfiguration<ReviewP
 
         entity.HasIndex(e => e.ReviewVoteId);
 
-        //entity.OwnsOne(e => e.Value).ToJson();
+        entity.Property(e => e.Value)
+            .HasColumnType("json")
+            .HasConversion(
+                v => JsonSerializer.Serialize(v, jsonOptions),
+                v => JsonSerializer.Deserialize<PenaltyValue>(v, jsonOptions));
 
         entity.HasOne(d => d.ResultRow)
             .WithMany(p => p.ReviewPenalties)

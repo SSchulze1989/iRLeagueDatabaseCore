@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using iRLeagueDatabaseCore.Models;
 
@@ -10,9 +11,10 @@ using iRLeagueDatabaseCore.Models;
 namespace iRLeagueDatabaseCore.Migrations
 {
     [DbContext(typeof(LeagueDbContext))]
-    partial class LeagueDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230603160948_DropAddPenaltyTable")]
+    partial class DropAddPenaltyTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -77,30 +79,6 @@ namespace iRLeagueDatabaseCore.Migrations
                     b.HasIndex("LeagueId", "VoteCategoryId");
 
                     b.ToTable("AcceptedReviewVotes");
-                });
-
-            modelBuilder.Entity("iRLeagueDatabaseCore.Models.AddPenaltyEntity", b =>
-                {
-                    b.Property<long>("LeagueId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("AddPenaltyId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("ScoredResultRowId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Value")
-                        .HasColumnType("json");
-
-                    b.HasKey("LeagueId", "AddPenaltyId");
-
-                    b.HasAlternateKey("AddPenaltyId");
-
-                    b.HasIndex("LeagueId", "ScoredResultRowId");
-
-                    b.ToTable("AddPenaltys");
                 });
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.ChampionshipEntity", b =>
@@ -1478,11 +1456,11 @@ namespace iRLeagueDatabaseCore.Migrations
                     b.Property<long>("ReviewId")
                         .HasColumnType("bigint");
 
+                    b.Property<int>("PenaltyPoints")
+                        .HasColumnType("int");
+
                     b.Property<long?>("ReviewVoteId")
                         .HasColumnType("bigint");
-
-                    b.Property<string>("Value")
-                        .HasColumnType("json");
 
                     b.HasKey("LeagueId", "ResultRowId", "ReviewId");
 
@@ -2728,17 +2706,6 @@ namespace iRLeagueDatabaseCore.Migrations
                     b.Navigation("VoteCategory");
                 });
 
-            modelBuilder.Entity("iRLeagueDatabaseCore.Models.AddPenaltyEntity", b =>
-                {
-                    b.HasOne("iRLeagueDatabaseCore.Models.ScoredResultRowEntity", "ScoredResultRow")
-                        .WithMany("AddPenalties")
-                        .HasForeignKey("LeagueId", "ScoredResultRowId")
-                        .OnDelete(DeleteBehavior.ClientCascade)
-                        .IsRequired();
-
-                    b.Navigation("ScoredResultRow");
-                });
-
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.ChampionshipEntity", b =>
                 {
                     b.HasOne("iRLeagueDatabaseCore.Models.LeagueEntity", "League")
@@ -3648,8 +3615,6 @@ namespace iRLeagueDatabaseCore.Migrations
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.ScoredResultRowEntity", b =>
                 {
-                    b.Navigation("AddPenalties");
-
                     b.Navigation("ReviewPenalties");
 
                     b.Navigation("StandingRows");
