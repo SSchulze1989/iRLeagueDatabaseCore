@@ -9,7 +9,7 @@ public partial class ReviewPenaltyEntity
     public long ResultRowId { get; set; }
     public long ReviewId { get; set; }
     public PenaltyValue Value { get; set; }
-    public long? ReviewVoteId { get; set; }
+    public long ReviewVoteId { get; set; }
 
     public virtual ScoredResultRowEntity ResultRow { get; set; }
     public virtual IncidentReviewEntity Review { get; set; }
@@ -25,7 +25,7 @@ public class ReviewPenaltyEntityConfiguration : IEntityTypeConfiguration<ReviewP
 
     public void Configure(EntityTypeBuilder<ReviewPenaltyEntity> entity)
     {
-        entity.HasKey(e => new { e.LeagueId, e.ResultRowId, e.ReviewId });
+        entity.HasKey(e => new { e.LeagueId, e.ResultRowId, e.ReviewId, e.ReviewVoteId });
 
         entity.HasIndex(e => new { e.LeagueId, e.ResultRowId });
 
@@ -51,7 +51,6 @@ public class ReviewPenaltyEntityConfiguration : IEntityTypeConfiguration<ReviewP
         entity.HasOne(d => d.ReviewVote)
             .WithMany(p => p.ReviewPenaltys)
             .HasForeignKey(d => new { d.LeagueId, d.ReviewVoteId })
-            .IsRequired(false)
-            .OnDelete(DeleteBehavior.ClientCascade);
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }
