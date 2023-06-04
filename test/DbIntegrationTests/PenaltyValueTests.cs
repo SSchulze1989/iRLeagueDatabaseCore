@@ -3,6 +3,7 @@ using iRLeagueApiCore.Common.Enums;
 using iRLeagueDatabaseCore.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Transactions;
 using Xunit;
@@ -65,5 +66,24 @@ public sealed class PenaltyValueTests : DatabaseTestBase
         var test = await DbContext.AddPenaltys.FirstAsync(x => x.AddPenaltyId == addPenalty.AddPenaltyId);
         test.Value.Type.Should().Be(addPenalty.Value.Type);
         test.Value.Points.Should().Be(addPenalty.Value.Points);
+    }
+
+    [Fact]
+    public async Task ShouldBeAbleToHaveMultipleReviewPenalties()
+    {
+        var resultRow = await DbContext.ScoredResultRows.FirstAsync();
+        var review = await DbContext.IncidentReviews.FirstAsync();
+        var vote1 = new AcceptedReviewVoteEntity() { LeagueId = review.LeagueId, Review = review };
+        var vote2 = new AcceptedReviewVoteEntity() { LeagueId = review.LeagueId, Review = review };
+        var penalty1 = new ReviewPenaltyEntity() { LeagueId = review.LeagueId, Review = review, ResultRow = resultRow, ReviewVote = vote1 };
+        var penalty2 = new ReviewPenaltyEntity() { LeagueId = review.LeagueId, Review = review, ResultRow = resultRow, ReviewVote = vote2 };
+        DbContext.ReviewPenaltys.Add(penalty1);
+        DbContext.ReviewPenaltys.Add(penalty2);
+        await DbContext.SaveChangesAsync();
+
+        var test = await DbContext.ReviewPenaltys
+            .Where(x => x.ResultRowId == resultRow.ScoredResultRowId && x.ReviewId == review.ReviewId)
+            .ToListAsync();
+        test.Should().Satisfy(x => x.ReviewVoteId == vote1.ReviewVoteId, x => x.ReviewVoteId == vote2.ReviewVoteId);
     }
 }
