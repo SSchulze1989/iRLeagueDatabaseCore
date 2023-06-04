@@ -1,9 +1,6 @@
 using FluentAssertions;
-using iRLeagueDatabaseCore;
 using iRLeagueDatabaseCore.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Moq;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,55 +11,15 @@ using Xunit.Abstractions;
 namespace DbIntegrationTests;
 
 [Collection("DbIntegration")]
-public class DbIntegrationTests
+public class DbIntegrationTests : DatabaseTestBase
 {
-    static IConfiguration _config;
-
-    private static readonly int Seed = 12345;
-
-    private long CurrentLeagueId { get; set; }
-    private readonly Mock<ILeagueProvider> mockLeagueProvider = new();
-
     public DbIntegrationTests(ITestOutputHelper output)
     {
         output.WriteLine($"Randomizer seed: {Seed}");
-        mockLeagueProvider.Setup(x => x.LeagueId).Returns(() => CurrentLeagueId);
-    }
-
-    static DbIntegrationTests()
-    {
-        var random = new Random(Seed);
-        _config = new ConfigurationBuilder()
-            .AddUserSecrets<DbIntegrationTests>()
-            .Build();
-
-        // Setup database
-        var leagueProvider = Mock.Of<ILeagueProvider>();
-        using var dbContext = GetStaticTestDatabaseContext(leagueProvider);
-        dbContext.Database.EnsureDeleted();
-        dbContext.Database.Migrate();
-
-        PopulateTestDatabase.Populate(dbContext, random);
-        dbContext.SaveChanges();
-    }
-
-    private static LeagueDbContext GetStaticTestDatabaseContext(ILeagueProvider leagueProvider)
-    {
-        var optionsBuilder = new DbContextOptionsBuilder<LeagueDbContext>();
-        optionsBuilder.UseMySQL(_config.GetConnectionString("ModelDb"))
-            .UseLazyLoadingProxies();
-        optionsBuilder.EnableSensitiveDataLogging();
-        var dbContext = new LeagueDbContext(optionsBuilder.Options, leagueProvider);
-        return dbContext;
-    }
-
-    private LeagueDbContext GetTestDatabaseContext()
-    {
-        return GetStaticTestDatabaseContext(mockLeagueProvider.Object);
     }
 
     [Fact]
-    public void Populate()
+    public void ShouldPopulate()
     {
         using (var dbContext = GetTestDatabaseContext())
         {
@@ -89,7 +46,7 @@ public class DbIntegrationTests
     }
 
     [Fact]
-    public async Task DeleteLeage()
+    public async Task ShouldDeleteLeage()
     {
         using var tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
         using var dbContext = GetTestDatabaseContext();
@@ -137,7 +94,7 @@ public class DbIntegrationTests
     }
 
     [Fact]
-    public void LazyLoading()
+    public void ShouldUseLazyLoading()
     {
         using (var dbContext = GetTestDatabaseContext())
         {
@@ -149,7 +106,7 @@ public class DbIntegrationTests
     }
 
     [Fact]
-    public void LazyLoadingDisabled()
+    public void ShouldNotUseLazyLoading_WhenDisabled()
     {
         using (var dbContext = GetTestDatabaseContext())
         {
@@ -162,7 +119,7 @@ public class DbIntegrationTests
     }
 
     [Fact]
-    public void EagerLoading()
+    public void ShouldUseEagerLoading_WhenLazyLoadingDisabled()
     {
         using (var dbContext = GetTestDatabaseContext())
         {
@@ -187,7 +144,7 @@ public class DbIntegrationTests
     }
 
     [Fact]
-    public async Task TimeSpanPrecision()
+    public async Task ShouldConvertTimeSpanPrecision()
     {
         TimeSpan testTimeSpan = TimeSpan.FromMinutes(1.23);
 
@@ -300,6 +257,7 @@ public class DbIntegrationTests
     public async Task ShouldConsiderMultiTenancyWithDifferentTenant()
     {
         using var context = GetTestDatabaseContext();
+        CurrentLeagueId = 0;
         var league = await context.Leagues.FirstAsync();
 
         var seasons = await context.Seasons.ToListAsync();
