@@ -8,6 +8,7 @@ public partial class AddPenaltyEntity
     public long LeagueId { get; set; }
     public long AddPenaltyId { get; set; }
     public long ScoredResultRowId { get; set; }
+    public string Reason { get; set; }
     public PenaltyValue Value { get; set; }
 
     public virtual ScoredResultRowEntity ScoredResultRow { get; set; }
@@ -30,6 +31,9 @@ public class AddPenaltyEntityConfiguration : IEntityTypeConfiguration<AddPenalty
             .ValueGeneratedOnAdd();
 
         entity.HasIndex(e => new { e.LeagueId, e.ScoredResultRowId });
+
+        entity.Property(e => e.Reason)
+            .HasMaxLength(2048);
 
         entity.Property(e => e.Value)
             .HasColumnType("json")
