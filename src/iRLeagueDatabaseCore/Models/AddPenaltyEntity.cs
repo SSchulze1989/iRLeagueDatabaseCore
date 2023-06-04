@@ -16,10 +16,10 @@ public partial class AddPenaltyEntity
 
 public class AddPenaltyEntityConfiguration : IEntityTypeConfiguration<AddPenaltyEntity>
 {
-    private static readonly JsonSerializerOptions jsonOptions = new()
-    {
-        Converters = { new JsonTimeSpanToTicksConverter() }
-    };
+    //private static readonly JsonSerializerOptions jsonOptions = new()
+    //{
+    //    //Converters = { new JsonTimeSpanToTicksConverter() }
+    //};
 
     public void Configure(EntityTypeBuilder<AddPenaltyEntity> entity)
     {
@@ -38,8 +38,8 @@ public class AddPenaltyEntityConfiguration : IEntityTypeConfiguration<AddPenalty
         entity.Property(e => e.Value)
             .HasColumnType("json")
             .HasConversion(
-                v => JsonSerializer.Serialize(v, jsonOptions),
-                v => JsonSerializer.Deserialize<PenaltyValue>(v, jsonOptions));
+                v => JsonSerializer.Serialize(v, default(JsonSerializerOptions)),
+                v => JsonSerializer.Deserialize<PenaltyValue>(v, default(JsonSerializerOptions)));
 
         entity.HasOne(d => d.ScoredResultRow)
             .WithMany(p => p.AddPenalties)

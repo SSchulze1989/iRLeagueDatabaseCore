@@ -17,13 +17,7 @@ public partial class ReviewPenaltyEntity
 }
 
 public class ReviewPenaltyEntityConfiguration : IEntityTypeConfiguration<ReviewPenaltyEntity>
-{
-    private static readonly JsonSerializerOptions jsonOptions = new()
-    {
-        Converters = { new JsonTimeSpanToTicksConverter() }
-    };
-
-    public void Configure(EntityTypeBuilder<ReviewPenaltyEntity> entity)
+{    public void Configure(EntityTypeBuilder<ReviewPenaltyEntity> entity)
     {
         entity.HasKey(e => new { e.LeagueId, e.ResultRowId, e.ReviewId, e.ReviewVoteId });
 
@@ -36,8 +30,8 @@ public class ReviewPenaltyEntityConfiguration : IEntityTypeConfiguration<ReviewP
         entity.Property(e => e.Value)
             .HasColumnType("json")
             .HasConversion(
-                v => JsonSerializer.Serialize(v, jsonOptions),
-                v => JsonSerializer.Deserialize<PenaltyValue>(v, jsonOptions));
+                v => JsonSerializer.Serialize(v, default(JsonSerializerOptions)),
+                v => JsonSerializer.Deserialize<PenaltyValue>(v, default(JsonSerializerOptions)));
 
         entity.HasOne(d => d.ResultRow)
             .WithMany(p => p.ReviewPenalties)

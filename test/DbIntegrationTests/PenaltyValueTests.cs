@@ -46,26 +46,33 @@ public sealed class PenaltyValueTests : DatabaseTestBase
 
         var test = await DbContext.AddPenaltys.FirstAsync(x => x.AddPenaltyId == addPenalty.AddPenaltyId);
         test.Value.Type.Should().Be(addPenalty.Value.Type);
-        test.Value.Points.Should().Be(addPenalty.Value.Points);
+        test.Value.Positions.Should().Be(addPenalty.Value.Positions);
     }
 
     [Fact]
     public async Task ShouldStoreTimePenaltyData()
     {
         //using var tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
-        var resultRow = await DbContext.ScoredResultRows.FirstAsync();
-        var addPenalty = new AddPenaltyEntity()
+        AddPenaltyEntity addPenalty;
+        using (var dbContext = GetTestDatabaseContext())
         {
-            LeagueId = resultRow.LeagueId,
-            ScoredResultRow = resultRow,
-            Value = new() { Type = PenaltyType.Time, Time = TimeSpan.FromSeconds(10) }
-        };
-        resultRow.AddPenalties.Add(addPenalty);
-        await DbContext.SaveChangesAsync();
+            var resultRow = await dbContext.ScoredResultRows.FirstAsync();
+            addPenalty = new AddPenaltyEntity()
+            {
+                LeagueId = resultRow.LeagueId,
+                ScoredResultRow = resultRow,
+                Value = new() { Type = PenaltyType.Time, Time = TimeSpan.FromSeconds(10) }
+            };
+            resultRow.AddPenalties.Add(addPenalty);
+            await dbContext.SaveChangesAsync();
+        }
 
-        var test = await DbContext.AddPenaltys.FirstAsync(x => x.AddPenaltyId == addPenalty.AddPenaltyId);
-        test.Value.Type.Should().Be(addPenalty.Value.Type);
-        test.Value.Points.Should().Be(addPenalty.Value.Points);
+        using (var dbContext = GetTestDatabaseContext())
+        {
+            var test = await dbContext.AddPenaltys.FirstAsync(x => x.AddPenaltyId == addPenalty.AddPenaltyId);
+            test.Value.Type.Should().Be(addPenalty.Value.Type);
+            test.Value.Time.Should().Be(addPenalty.Value.Time);
+        }
     }
 
     [Fact]
