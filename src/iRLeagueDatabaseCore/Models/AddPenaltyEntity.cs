@@ -8,6 +8,8 @@ public partial class AddPenaltyEntity
     public long LeagueId { get; set; }
     public long AddPenaltyId { get; set; }
     public long ScoredResultRowId { get; set; }
+    public string Lap { get; set; }
+    public string Corner { get; set; }
     public string Reason { get; set; }
     public PenaltyValue Value { get; set; }
 
@@ -34,6 +36,12 @@ public class AddPenaltyEntityConfiguration : IEntityTypeConfiguration<AddPenalty
 
         entity.Property(e => e.Reason)
             .HasMaxLength(2048);
+
+        entity.Property(e => e.Lap)
+            .HasMaxLength(255);
+
+        entity.Property(e => e.Corner)
+            .HasMaxLength(255);
 
         entity.Property(e => e.Value)
             .HasColumnType("json")
