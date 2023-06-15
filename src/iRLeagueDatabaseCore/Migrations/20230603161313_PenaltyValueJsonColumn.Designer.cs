@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using iRLeagueDatabaseCore.Models;
 
@@ -10,9 +11,10 @@ using iRLeagueDatabaseCore.Models;
 namespace iRLeagueDatabaseCore.Migrations
 {
     [DbContext(typeof(LeagueDbContext))]
-    partial class LeagueDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230603161313_PenaltyValueJsonColumn")]
+    partial class PenaltyValueJsonColumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -87,18 +89,6 @@ namespace iRLeagueDatabaseCore.Migrations
                     b.Property<long>("AddPenaltyId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
-
-                    b.Property<string>("Corner")
-                        .HasMaxLength(255)
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("Lap")
-                        .HasMaxLength(255)
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("Reason")
-                        .HasMaxLength(2048)
-                        .HasColumnType("varchar(2048)");
 
                     b.Property<long>("ScoredResultRowId")
                         .HasColumnType("bigint");
@@ -1490,13 +1480,13 @@ namespace iRLeagueDatabaseCore.Migrations
                     b.Property<long>("ReviewId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("ReviewVoteId")
+                    b.Property<long?>("ReviewVoteId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Value")
                         .HasColumnType("json");
 
-                    b.HasKey("LeagueId", "ResultRowId", "ReviewId", "ReviewVoteId");
+                    b.HasKey("LeagueId", "ResultRowId", "ReviewId");
 
                     b.HasIndex("ReviewId");
 
@@ -3144,8 +3134,7 @@ namespace iRLeagueDatabaseCore.Migrations
                     b.HasOne("iRLeagueDatabaseCore.Models.AcceptedReviewVoteEntity", "ReviewVote")
                         .WithMany("ReviewPenaltys")
                         .HasForeignKey("LeagueId", "ReviewVoteId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.ClientCascade);
 
                     b.Navigation("ResultRow");
 
