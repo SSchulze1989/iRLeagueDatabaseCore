@@ -33,6 +33,8 @@ public class LeagueEntity : Revision, IVersionEntity
     /// </summary>
     public ProtestPublicSetting ProtestsPublic { get; set; }
     public LeaguePublicSetting LeaguePublic { get; set; }
+    public SubscriptionStatus Subscription { get; set; }
+    public DateTime? Expires { get; set; }
 
     public virtual ICollection<SeasonEntity> Seasons { get; set; }
     public virtual ICollection<ResultConfigurationEntity> ResultConfigs { get; set; }
