@@ -45,6 +45,7 @@ public class LeagueEntity : Revision, IVersionEntity
     public virtual ICollection<VoteCategoryEntity> VoteCategories { get; set; }
     public virtual ICollection<ChampionshipEntity> Championships { get; set; }
     public virtual ICollection<StandingConfigurationEntity> StandingConfigs { get; set; }
+    public virtual IEnumerable<PaymentEntity> Payments { get; set; }
 }
 
 public class LeagueEntityConfiguration : IEntityTypeConfiguration<LeagueEntity>
