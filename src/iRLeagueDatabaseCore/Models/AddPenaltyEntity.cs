@@ -18,11 +18,6 @@ public partial class AddPenaltyEntity
 
 public class AddPenaltyEntityConfiguration : IEntityTypeConfiguration<AddPenaltyEntity>
 {
-    //private static readonly JsonSerializerOptions jsonOptions = new()
-    //{
-    //    //Converters = { new JsonTimeSpanToTicksConverter() }
-    //};
-
     public void Configure(EntityTypeBuilder<AddPenaltyEntity> entity)
     {
         entity.HasKey(e => new { e.LeagueId, e.AddPenaltyId });
