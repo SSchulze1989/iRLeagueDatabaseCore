@@ -280,7 +280,8 @@ public class DbIntegrationTests : DatabaseTestBase
                         FilterType = iRLeagueApiCore.Common.Enums.FilterType.ColumnProperty,
                         FilterValues = { "4" },
                         ColumnPropertyName = "Incidents",
-                        Comparator = iRLeagueApiCore.Common.Enums.ComparatorType.ForEach
+                        Comparator = iRLeagueApiCore.Common.Enums.ComparatorType.ForEach,
+                        Action = iRLeagueApiCore.Common.Enums.MatchedValueAction.Remove,
                     },
                 },
                 Description = "Test Penalty",
@@ -308,6 +309,7 @@ public class DbIntegrationTests : DatabaseTestBase
             autoPenalty.Conditions.First().Comparator.Should().Be(iRLeagueApiCore.Common.Enums.ComparatorType.ForEach);
             autoPenalty.Conditions.First().ColumnPropertyName.Should().Be("Incidents");
             autoPenalty.Conditions.First().FilterValues.Should().BeEquivalentTo(new[] { "4" });
+            autoPenalty.Conditions.First().Action.Should().Be(iRLeagueApiCore.Common.Enums.MatchedValueAction.Remove);
         }
     }
 
