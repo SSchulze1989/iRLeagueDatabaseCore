@@ -10,7 +10,7 @@ public partial class AutoPenaltyConfigEntity
 
     public long LeagueId { get; set; }
     public long PenaltyConfigId { get; set; }
-    public long ResultConfigId { get; set; }
+    public long PointRuleId { get; set; }
 
     public string Description { get; set; }
     public PenaltyType Type { get; set; }
@@ -18,7 +18,7 @@ public partial class AutoPenaltyConfigEntity
     public TimeSpan Time { get; set; }
     public int Positions { get; set; }
 
-    public virtual ResultConfigurationEntity ResultConfig { get; set; }
+    public virtual PointRuleEntity PointRule { get; set; }
     public virtual ICollection<FilterCondition> Conditions { get; set; }
 }
 
@@ -30,6 +30,11 @@ public sealed class AutoPenaltyConfigEntityConfiguration : IEntityTypeConfigurat
 
         entity.HasKey(e => new { e.LeagueId, e.PenaltyConfigId });
 
+        entity.HasAlternateKey(e => e.PenaltyConfigId);
+
+        entity.Property(e => e.PenaltyConfigId)
+            .ValueGeneratedOnAdd();
+
         entity.Property(e => e.Conditions)
             .HasColumnType("json")
             .HasConversion(
@@ -38,8 +43,9 @@ public sealed class AutoPenaltyConfigEntityConfiguration : IEntityTypeConfigurat
                 new ValueComparer<ICollection<FilterCondition>>(false))
             .IsRequired(true);
 
-        entity.HasOne(d => d.ResultConfig)
+        entity.HasOne(d => d.PointRule)
             .WithMany(p => p.AutoPenalties)
-            .HasForeignKey(d => new { d.LeagueId, d.ResultConfigId });
+            .HasForeignKey(d => new { d.LeagueId, d.PointRuleId })
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

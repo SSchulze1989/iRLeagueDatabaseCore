@@ -289,8 +289,8 @@ public class DbIntegrationTests : DatabaseTestBase
                 Positions = 2,
                 Type = iRLeagueApiCore.Common.Enums.PenaltyType.Time,
             };
-            var config = await context.ResultConfigurations.FirstAsync();
-            config.AutoPenalties.Add(autoPenalty);
+            var pointRule = await context.PointRules.FirstAsync();
+            pointRule.AutoPenalties.Add(autoPenalty);
             await context.SaveChangesAsync();
         }
 

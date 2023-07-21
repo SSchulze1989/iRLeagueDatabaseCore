@@ -2,6 +2,12 @@
 
 public class PointRuleEntity : IVersionEntity
 {
+    public PointRuleEntity()
+    {
+        Scorings = new HashSet<ScoringEntity>();
+        AutoPenalties = new HashSet<AutoPenaltyConfigEntity>();
+    }
+
     public long LeagueId { get; set; }
     public long PointRuleId { get; set; }
 
@@ -15,6 +21,7 @@ public class PointRuleEntity : IVersionEntity
 
     public virtual LeagueEntity League { get; set; }
     public virtual IEnumerable<ScoringEntity> Scorings { get; set; }
+    public virtual ICollection<AutoPenaltyConfigEntity> AutoPenalties { get; set; }
 
     #region version
     public DateTime? CreatedOn { get; set; }

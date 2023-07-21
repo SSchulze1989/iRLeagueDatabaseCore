@@ -121,6 +121,7 @@ namespace iRLeagueDatabaseCore.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<long>("PenaltyConfigId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
                     b.Property<string>("Conditions")
@@ -130,14 +131,14 @@ namespace iRLeagueDatabaseCore.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("longtext");
 
+                    b.Property<long>("PointRuleId")
+                        .HasColumnType("bigint");
+
                     b.Property<int>("Points")
                         .HasColumnType("int");
 
                     b.Property<int>("Positions")
                         .HasColumnType("int");
-
-                    b.Property<long>("ResultConfigId")
-                        .HasColumnType("bigint");
 
                     b.Property<TimeSpan>("Time")
                         .HasColumnType("time(6)");
@@ -147,7 +148,9 @@ namespace iRLeagueDatabaseCore.Migrations
 
                     b.HasKey("LeagueId", "PenaltyConfigId");
 
-                    b.HasIndex("LeagueId", "ResultConfigId");
+                    b.HasAlternateKey("PenaltyConfigId");
+
+                    b.HasIndex("LeagueId", "PointRuleId");
 
                     b.ToTable("AutoPenaltyConfigs", (string)null);
                 });
@@ -2790,13 +2793,13 @@ namespace iRLeagueDatabaseCore.Migrations
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.AutoPenaltyConfigEntity", b =>
                 {
-                    b.HasOne("iRLeagueDatabaseCore.Models.ResultConfigurationEntity", "ResultConfig")
+                    b.HasOne("iRLeagueDatabaseCore.Models.PointRuleEntity", "PointRule")
                         .WithMany("AutoPenalties")
-                        .HasForeignKey("LeagueId", "ResultConfigId")
+                        .HasForeignKey("LeagueId", "PointRuleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ResultConfig");
+                    b.Navigation("PointRule");
                 });
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.ChampionshipEntity", b =>
@@ -3676,13 +3679,13 @@ namespace iRLeagueDatabaseCore.Migrations
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.PointRuleEntity", b =>
                 {
+                    b.Navigation("AutoPenalties");
+
                     b.Navigation("Scorings");
                 });
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.ResultConfigurationEntity", b =>
                 {
-                    b.Navigation("AutoPenalties");
-
                     b.Navigation("PointFilters");
 
                     b.Navigation("ResultFilters");
