@@ -34,8 +34,9 @@ public sealed class AutoPenaltyConfigEntityConfiguration : IEntityTypeConfigurat
             .HasColumnType("json")
             .HasConversion(
                 v => JsonSerializer.Serialize(v, default(JsonSerializerOptions)),
-                v => JsonSerializer.Deserialize<ICollection<FilterCondition>>(v, default(JsonSerializerOptions)))
-            .HasDefaultValue("{[]}");
+                v => JsonSerializer.Deserialize<ICollection<FilterCondition>>(v, default(JsonSerializerOptions)),
+                new ValueComparer<ICollection<FilterCondition>>(false))
+            .IsRequired(true);
 
         entity.HasOne(d => d.ResultConfig)
             .WithMany(p => p.AutoPenalties)

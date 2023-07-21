@@ -265,6 +265,52 @@ public class DbIntegrationTests : DatabaseTestBase
         seasons.Should().BeEmpty();
     }
 
+    [Fact]
+    public async Task ShouldAddAutoPenalty()
+    {
+        //using var tx = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+        using (var context = GetTestDatabaseContext())
+        {
+            SetCurrentLeague(await context.Leagues.FirstAsync());
+            var autoPenalty = new AutoPenaltyConfigEntity()
+            {
+                Conditions =
+                {
+                    new() {
+                        FilterType = iRLeagueApiCore.Common.Enums.FilterType.ColumnProperty,
+                        FilterValues = { "4" },
+                        ColumnPropertyName = "Incidents",
+                        Comparator = iRLeagueApiCore.Common.Enums.ComparatorType.ForEach
+                    },
+                },
+                Description = "Test Penalty",
+                Points = 1,
+                Time = new TimeSpan(1, 2, 3),
+                Positions = 2,
+                Type = iRLeagueApiCore.Common.Enums.PenaltyType.Time,
+            };
+            var config = await context.ResultConfigurations.FirstAsync();
+            config.AutoPenalties.Add(autoPenalty);
+            await context.SaveChangesAsync();
+        }
+
+        using (var context = GetTestDatabaseContext())
+        {
+            SetCurrentLeague(await context.Leagues.FirstAsync());
+            var autoPenalty = context.AutoPenaltyConfigs.First();
+            autoPenalty.Description.Should().Be("Test Penalty");
+            autoPenalty.Points.Should().Be(1);
+            autoPenalty.Positions.Should().Be(2);
+            autoPenalty.Time.Should().Be(new TimeSpan(1, 2, 3));
+            autoPenalty.Type.Should().Be(iRLeagueApiCore.Common.Enums.PenaltyType.Time);
+            autoPenalty.Conditions.Should().HaveCount(1);
+            autoPenalty.Conditions.First().FilterType.Should().Be(iRLeagueApiCore.Common.Enums.FilterType.ColumnProperty);
+            autoPenalty.Conditions.First().Comparator.Should().Be(iRLeagueApiCore.Common.Enums.ComparatorType.ForEach);
+            autoPenalty.Conditions.First().ColumnPropertyName.Should().Be("Incidents");
+            autoPenalty.Conditions.First().FilterValues.Should().BeEquivalentTo(new[] { "4" });
+        }
+    }
+
     /// <summary>
     /// Set the current league id for multi tenancy - must be called before any league specific entity is queried
     /// </summary>
