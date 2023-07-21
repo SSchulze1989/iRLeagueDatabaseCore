@@ -1,11 +1,12 @@
-﻿using System.Text.Json;
+﻿using iRLeagueApiCore.Common.Models;
+using System.Text.Json;
 
 namespace iRLeagueDatabaseCore.Models;
 public partial class AutoPenaltyConfigEntity
 {
     public AutoPenaltyConfigEntity()
     {
-        Conditions = new HashSet<FilterCondition>();
+        Conditions = new HashSet<FilterConditionModel>();
     }
 
     public long LeagueId { get; set; }
@@ -19,7 +20,7 @@ public partial class AutoPenaltyConfigEntity
     public int Positions { get; set; }
 
     public virtual PointRuleEntity PointRule { get; set; }
-    public virtual ICollection<FilterCondition> Conditions { get; set; }
+    public virtual ICollection<FilterConditionModel> Conditions { get; set; }
 }
 
 public sealed class AutoPenaltyConfigEntityConfiguration : IEntityTypeConfiguration<AutoPenaltyConfigEntity>
@@ -39,8 +40,8 @@ public sealed class AutoPenaltyConfigEntityConfiguration : IEntityTypeConfigurat
             .HasColumnType("json")
             .HasConversion(
                 v => JsonSerializer.Serialize(v, default(JsonSerializerOptions)),
-                v => JsonSerializer.Deserialize<ICollection<FilterCondition>>(v, default(JsonSerializerOptions)),
-                new ValueComparer<ICollection<FilterCondition>>(false))
+                v => JsonSerializer.Deserialize<ICollection<FilterConditionModel>>(v, default(JsonSerializerOptions)),
+                new ValueComparer<ICollection<FilterConditionModel>>(false))
             .IsRequired(true);
 
         entity.HasOne(d => d.PointRule)
