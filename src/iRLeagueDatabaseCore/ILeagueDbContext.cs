@@ -4,6 +4,7 @@ public interface ILeagueDbContext
 {
     public DbSet<AcceptedReviewVoteEntity> AcceptedReviewVotes { get; set; }
     public DbSet<AddPenaltyEntity> AddPenaltys { get; set; }
+    public DbSet<AutoPenaltyConfigEntity> AutoPenaltyConfigs { get; set; }
     public DbSet<ReviewCommentEntity> ReviewComments { get; set; }
     public DbSet<ReviewCommentVoteEntity> ReviewCommentVotes { get; set; }
     public DbSet<CustomIncidentEntity> CustomIncidents { get; set; }
