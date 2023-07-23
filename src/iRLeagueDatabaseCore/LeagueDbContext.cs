@@ -1,5 +1,7 @@
 ﻿#nullable disable
 
+using Microsoft.EntityFrameworkCore.Metadata.Conventions.Infrastructure;
+
 namespace iRLeagueDatabaseCore.Models;
 
 public partial class LeagueDbContext : DbContext, ILeagueDbContext
@@ -14,6 +16,7 @@ public partial class LeagueDbContext : DbContext, ILeagueDbContext
 
     public virtual DbSet<AcceptedReviewVoteEntity> AcceptedReviewVotes { get; set; }
     public virtual DbSet<AddPenaltyEntity> AddPenaltys { get; set; }
+    public virtual DbSet<AutoPenaltyConfigEntity> AutoPenaltyConfigs { get; set; }
     public virtual DbSet<ReviewCommentEntity> ReviewComments { get; set; }
     public virtual DbSet<ReviewCommentVoteEntity> ReviewCommentVotes { get; set; }
     public virtual DbSet<CustomIncidentEntity> CustomIncidents { get; set; }
@@ -72,6 +75,8 @@ public partial class LeagueDbContext : DbContext, ILeagueDbContext
         builder.Entity<AcceptedReviewVoteEntity>()
             .HasQueryFilter(mt => mt.LeagueId == LeagueProvider.LeagueId);
         builder.Entity<AddPenaltyEntity>()
+            .HasQueryFilter(mt => mt.LeagueId == LeagueProvider.LeagueId);
+        builder.Entity<AutoPenaltyConfigEntity>()
             .HasQueryFilter(mt => mt.LeagueId == LeagueProvider.LeagueId);
         builder.Entity<ReviewCommentEntity>()
             .HasQueryFilter(mt => mt.LeagueId == LeagueProvider.LeagueId);

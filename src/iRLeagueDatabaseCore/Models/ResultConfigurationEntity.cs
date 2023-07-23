@@ -27,7 +27,6 @@ public class ResultConfigurationEntity : IVersionEntity
     public virtual IEnumerable<EventEntity> Events { get; set; }
     public virtual ICollection<FilterOptionEntity> PointFilters { get; set; }
     public virtual ICollection<FilterOptionEntity> ResultFilters { get; set; }
-
     #region version
     public DateTime? CreatedOn { get; set; }
     public DateTime? LastModifiedOn { get; set; }
