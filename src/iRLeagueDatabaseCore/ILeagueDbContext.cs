@@ -16,6 +16,7 @@ public interface ILeagueDbContext
     public DbSet<LeagueEntity> Leagues { get; set; }
     public DbSet<MemberEntity> Members { get; set; }
     public DbSet<LeagueMemberEntity> LeagueMembers { get; set; }
+    public DbSet<PaymentEntity> Payments { get; set; }
     public DbSet<PointRuleEntity> PointRules { get; set; }
     public DbSet<ProtestEntity> Protests { get; set; }
     public DbSet<EventResultEntity> EventResults { get; set; }
@@ -33,6 +34,7 @@ public interface ILeagueDbContext
     public DbSet<SeasonEntity> Seasons { get; set; }
     public DbSet<SessionEntity> Sessions { get; set; }
     public DbSet<StatisticSetEntity> StatisticSets { get; set; }
+    public DbSet<SubscriptionEntity> Subscriptions { get; set; }
     public DbSet<TeamEntity> Teams { get; set; }
     public DbSet<VoteCategoryEntity> VoteCategories { get; set; }
     public DbSet<TrackGroupEntity> TrackGroups { get; set; }
