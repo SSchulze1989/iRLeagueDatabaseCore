@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using iRLeagueDatabaseCore.Models;
 
@@ -10,9 +11,10 @@ using iRLeagueDatabaseCore.Models;
 namespace iRLeagueDatabaseCore.Migrations
 {
     [DbContext(typeof(LeagueDbContext))]
-    partial class LeagueDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230721102020_AutoPenaltyConfiguration")]
+    partial class AutoPenaltyConfiguration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -989,9 +991,6 @@ namespace iRLeagueDatabaseCore.Migrations
                     b.Property<bool>("EnableProtests")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<DateTime?>("Expires")
-                        .HasColumnType("datetime(6)");
-
                     b.Property<bool>("IsInitialized")
                         .HasColumnType("tinyint(1)");
 
@@ -1022,9 +1021,6 @@ namespace iRLeagueDatabaseCore.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<int>("ProtestsPublic")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Subscription")
                         .HasColumnType("int");
 
                     b.Property<int>("Version")
@@ -1084,51 +1080,6 @@ namespace iRLeagueDatabaseCore.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Members");
-                });
-
-            modelBuilder.Entity("iRLeagueDatabaseCore.Models.PaymentEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<DateTime>("LastPaymentReceived")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<long>("LeagueId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime?>("NextPaymentDue")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("PlanId")
-                        .HasMaxLength(255)
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("SubscriptionId")
-                        .HasMaxLength(255)
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("varchar(255)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LeagueId");
-
-                    b.HasIndex("PlanId");
-
-                    b.ToTable("Payments", (string)null);
                 });
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.PointRuleEntity", b =>
@@ -2604,27 +2555,6 @@ namespace iRLeagueDatabaseCore.Migrations
                     b.ToTable("StatisticSets");
                 });
 
-            modelBuilder.Entity("iRLeagueDatabaseCore.Models.SubscriptionEntity", b =>
-                {
-                    b.Property<string>("PlanId")
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<int>("Interval")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<double>("Price")
-                        .HasColumnType("double");
-
-                    b.HasKey("PlanId");
-
-                    b.ToTable("Subscriptions", (string)null);
-                });
-
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.TeamEntity", b =>
                 {
                     b.Property<long>("LeagueId")
@@ -3103,23 +3033,6 @@ namespace iRLeagueDatabaseCore.Migrations
                     b.Navigation("Member");
 
                     b.Navigation("Team");
-                });
-
-            modelBuilder.Entity("iRLeagueDatabaseCore.Models.PaymentEntity", b =>
-                {
-                    b.HasOne("iRLeagueDatabaseCore.Models.LeagueEntity", "League")
-                        .WithMany("Payments")
-                        .HasForeignKey("LeagueId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("iRLeagueDatabaseCore.Models.SubscriptionEntity", "Subscription")
-                        .WithMany("Payments")
-                        .HasForeignKey("PlanId");
-
-                    b.Navigation("League");
-
-                    b.Navigation("Subscription");
                 });
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.PointRuleEntity", b =>
@@ -3732,8 +3645,6 @@ namespace iRLeagueDatabaseCore.Migrations
 
                     b.Navigation("LeagueMembers");
 
-                    b.Navigation("Payments");
-
                     b.Navigation("PointRules");
 
                     b.Navigation("ResultConfigs");
@@ -3865,11 +3776,6 @@ namespace iRLeagueDatabaseCore.Migrations
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.StatisticSetEntity", b =>
                 {
                     b.Navigation("DriverStatisticRows");
-                });
-
-            modelBuilder.Entity("iRLeagueDatabaseCore.Models.SubscriptionEntity", b =>
-                {
-                    b.Navigation("Payments");
                 });
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.TeamEntity", b =>
