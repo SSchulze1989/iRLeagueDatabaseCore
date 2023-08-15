@@ -28,6 +28,7 @@ public partial class LeagueDbContext : DbContext, ILeagueDbContext
     public virtual DbSet<LeagueEntity> Leagues { get; set; }
     public virtual DbSet<MemberEntity> Members { get; set; }
     public virtual DbSet<LeagueMemberEntity> LeagueMembers { get; set; }
+    public virtual DbSet<PaymentEntity> Payments { get; set; }
     public virtual DbSet<PointRuleEntity> PointRules { get; set; }
     public virtual DbSet<ProtestEntity> Protests { get; set; }
     public virtual DbSet<EventResultEntity> EventResults { get; set; }
@@ -43,6 +44,7 @@ public partial class LeagueDbContext : DbContext, ILeagueDbContext
     public virtual DbSet<ScoringEntity> Scorings { get; set; }
     public virtual DbSet<StandingEntity> Standings { get; set; }
     public virtual DbSet<StandingConfigurationEntity> StandingConfigurations { get; set; }
+    public virtual DbSet<SubscriptionEntity> Subscriptions { get; set; }
     public virtual DbSet<SeasonEntity> Seasons { get; set; }
     public virtual DbSet<SessionEntity> Sessions { get; set; }
     public virtual DbSet<StatisticSetEntity> StatisticSets { get; set; }
