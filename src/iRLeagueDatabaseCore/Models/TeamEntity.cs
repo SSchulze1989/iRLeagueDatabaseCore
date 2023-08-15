@@ -11,6 +11,7 @@ public partial class TeamEntity : IVersionEntity
 
     public long LeagueId { get; set; }
     public long TeamId { get; set; }
+    public long? IRacingTeamId { get; set; }
     public string Name { get; set; }
     public string Profile { get; set; }
     public string TeamColor { get; set; }
