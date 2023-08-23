@@ -1,4 +1,5 @@
-﻿using iRLeagueDatabaseCore.Models;
+﻿using iRLeagueApiCore.Common.Models;
+using iRLeagueDatabaseCore.Models;
 
 namespace DbIntegrationTests;
 
@@ -237,10 +238,22 @@ public static class PopulateTestDatabase
                 Season = season,
             };
             championship.ChampSeasons.Add(champSeason);
+            var resultFilter = new FilterOptionEntity()
+            {
+                Conditions = new[] { new FilterConditionModel()
+                {
+                    Action = MatchedValueAction.Remove,
+                    ColumnPropertyName = "Shame",
+                    Comparator = ComparatorType.ForEach,
+                    FilterType = FilterType.Member,
+                    FilterValues = new[] { "Eins", "Zwei", "Drei" },
+                }},
+            };
             var resultConfig = new ResultConfigurationEntity()
             {
                 League = league1,
                 ChampSeason = champSeason,
+                ResultFilters = new[] { resultFilter },
             };
             league1.ResultConfigs.Add(resultConfig);
             for (int i = 0; i < 2; i++)
