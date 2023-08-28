@@ -35,7 +35,6 @@ public partial class LeagueDbContext : DbContext, ILeagueDbContext
     public virtual DbSet<ResultConfigurationEntity> ResultConfigurations { get; set; }
     public virtual DbSet<ResultRowEntity> ResultRows { get; set; }
     public virtual DbSet<FilterOptionEntity> FilterOptions { get; set; }
-    public virtual DbSet<FilterConditionEntity> FilterConditions { get; set; }
     public virtual DbSet<ReviewPenaltyEntity> ReviewPenaltys { get; set; }
     public virtual DbSet<ScheduleEntity> Schedules { get; set; }
     public virtual DbSet<ScoredEventResultEntity> ScoredEventResults { get; set; }
@@ -109,8 +108,6 @@ public partial class LeagueDbContext : DbContext, ILeagueDbContext
         builder.Entity<ResultRowEntity>()
             .HasQueryFilter(mt => mt.LeagueId == LeagueProvider.LeagueId);
         builder.Entity<FilterOptionEntity>()
-            .HasQueryFilter(mt => mt.LeagueId == LeagueProvider.LeagueId);
-        builder.Entity<FilterConditionEntity>()
             .HasQueryFilter(mt => mt.LeagueId == LeagueProvider.LeagueId);
         builder.Entity<ReviewPenaltyEntity>()
             .HasQueryFilter(mt => mt.LeagueId == LeagueProvider.LeagueId);

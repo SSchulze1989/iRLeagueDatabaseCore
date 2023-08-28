@@ -1,10 +1,13 @@
-﻿namespace iRLeagueDatabaseCore.Models;
+﻿using iRLeagueApiCore.Common.Models;
+using System.Text.Json;
+
+namespace iRLeagueDatabaseCore.Models;
 
 public partial class FilterOptionEntity : IVersionEntity
 {
     public FilterOptionEntity()
     {
-        Conditions = new HashSet<FilterConditionEntity>();
+        Conditions = new HashSet<FilterConditionModel>();
     }
 
     public long LeagueId { get; set; }
@@ -23,7 +26,7 @@ public partial class FilterOptionEntity : IVersionEntity
     #endregion
     public virtual ResultConfigurationEntity PointFilterResultConfig { get; set; }
     public virtual ResultConfigurationEntity ResultFilterResultConfig { get; set; }
-    public virtual ICollection<FilterConditionEntity> Conditions { get; set; }
+    public virtual ICollection<FilterConditionModel> Conditions { get; set; }
 }
 
 public sealed class FilterOptionEntityConfiguration : IEntityTypeConfiguration<FilterOptionEntity>
@@ -40,6 +43,14 @@ public sealed class FilterOptionEntityConfiguration : IEntityTypeConfiguration<F
         entity.Property(e => e.CreatedOn).HasColumnType("datetime");
 
         entity.Property(e => e.LastModifiedOn).HasColumnType("datetime");
+
+        entity.Property(e => e.Conditions)
+            .HasColumnType("json")
+            .HasConversion(
+                v => JsonSerializer.Serialize(v, default(JsonSerializerOptions)),
+                v => JsonSerializer.Deserialize<ICollection<FilterConditionModel>>(v, default(JsonSerializerOptions)),
+                new ValueComparer<ICollection<FilterConditionModel>>(false))
+            .IsRequired(true);
 
         entity.HasOne(d => d.PointFilterResultConfig)
             .WithMany(p => p.PointFilters)

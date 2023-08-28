@@ -1,4 +1,5 @@
 using FluentAssertions;
+using iRLeagueApiCore.Common.Models;
 using iRLeagueDatabaseCore.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -225,7 +226,7 @@ public class DbIntegrationTests : DatabaseTestBase
         var filterOption = new FilterOptionEntity()
         {
             Conditions = new[] {
-                new FilterConditionEntity() { FilterValues = new[] { "Value1", "Value2" } },
+                new FilterConditionModel() { FilterValues = new[] { "Value1", "Value2" } },
             },
         };
         var config = await context.ResultConfigurations.FirstAsync();
