@@ -25,6 +25,7 @@ public partial class ChampSeasonEntity : IVersionEntity
     public virtual StandingConfigurationEntity StandingConfiguration { get; set; }
     public virtual IEnumerable<ScoredEventResultEntity> EventResults { get; set; }
     public virtual IEnumerable<StandingEntity> Standings { get; set; }
+    public virtual ICollection<FilterOptionEntity> Filters { get; set; }
 
     #region version
     public DateTime? CreatedOn { get; set; }

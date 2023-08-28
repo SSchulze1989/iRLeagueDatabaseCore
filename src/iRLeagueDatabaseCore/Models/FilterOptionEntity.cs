@@ -14,6 +14,7 @@ public partial class FilterOptionEntity : IVersionEntity
     public long FilterOptionId { get; set; }
     public long? PointFilterResultConfigId { get; set; }
     public long? ResultFilterResultConfigId { get; set; }
+    public long? ChampSeasonId { get; set; }
 
     #region version
     public DateTime? CreatedOn { get; set; }
@@ -26,6 +27,7 @@ public partial class FilterOptionEntity : IVersionEntity
     #endregion
     public virtual ResultConfigurationEntity PointFilterResultConfig { get; set; }
     public virtual ResultConfigurationEntity ResultFilterResultConfig { get; set; }
+    public virtual ChampSeasonEntity ChampSeason { get; set; }
     public virtual ICollection<FilterConditionModel> Conditions { get; set; }
 }
 
@@ -61,6 +63,12 @@ public sealed class FilterOptionEntityConfiguration : IEntityTypeConfiguration<F
         entity.HasOne(d => d.ResultFilterResultConfig)
             .WithMany(p => p.ResultFilters)
             .HasForeignKey(d => new { d.LeagueId, d.ResultFilterResultConfigId })
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.ClientCascade);
+
+        entity.HasOne(d => d.ChampSeason)
+            .WithMany(p => p.Filters)
+            .HasForeignKey(d => new { d.LeagueId, d.ChampSeasonId })
             .IsRequired(false)
             .OnDelete(DeleteBehavior.ClientCascade);
     }
