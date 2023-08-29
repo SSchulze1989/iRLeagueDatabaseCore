@@ -25,6 +25,18 @@ namespace iRLeagueDatabaseCore.Migrations
                 columns: new[] { "LeagueId", "ChampSeasonId" },
                 principalTable: "ChampSeasons",
                 principalColumns: new[] { "LeagueId", "ChampSeasonId" });
+
+            migrationBuilder.Sql(@"
+            UPDATE FilterOptions AS f
+	            JOIN ResultConfigurations AS rc
+		            ON rc.ResultConfigId=f.ResultFilterResultConfigId
+	            JOIN ChampSeasons AS cs
+		            ON cs.ChampSeasonId=rc.ChampSeasonId
+	            JOIN Seasons AS s
+		            ON cs.SeasonId=s.SeasonId
+	            SET f.ChampSeasonId = rc.ChampSeasonId, f.ResultFilterResultConfigId=NULL
+                WHERE s.Finished=0 AND cs.IsActive;
+            ");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
