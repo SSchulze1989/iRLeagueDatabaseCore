@@ -8,6 +8,7 @@ public partial class ChampSeasonEntity : IVersionEntity
         ResultConfigurations = new HashSet<ResultConfigurationEntity>();
         EventResults = new HashSet<ScoredEventResultEntity>();
         Standings = new HashSet<StandingEntity>();
+        Filters = new HashSet<FilterOptionEntity>();
     }
 
     public long LeagueId { get; set; }
