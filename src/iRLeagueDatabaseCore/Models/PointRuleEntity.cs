@@ -1,4 +1,7 @@
-﻿namespace iRLeagueDatabaseCore.Models;
+﻿using iRLeagueApiCore.Common.Models;
+using System.Text.Json;
+
+namespace iRLeagueDatabaseCore.Models;
 
 public class PointRuleEntity : IVersionEntity
 {
@@ -13,7 +16,7 @@ public class PointRuleEntity : IVersionEntity
 
     public string Name { get; set; }
     public ICollection<int> PointsPerPlace { get; set; }
-    public IDictionary<string, int> BonusPoints { get; set; }
+    public ICollection<BonusPointModel> BonusPoints { get; set; }
     public int MaxPoints { get; set; }
     public int PointDropOff { get; set; }
     public ICollection<SortOptions> PointsSortOptions { get; set; }
@@ -55,7 +58,12 @@ public class PointsRuleEntityConfiguration : IEntityTypeConfiguration<PointRuleE
             .HasConversion(new CollectionToStringConverter<int>(), new ValueComparer<ICollection<int>>(true));
 
         entity.Property(e => e.BonusPoints)
-            .HasConversion(new DictionaryToStringConverter<string, int>(), new ValueComparer<IDictionary<string, int>>(true));
+            .HasColumnType("json")
+            .HasConversion(
+                v => JsonSerializer.Serialize(v, default(JsonSerializerOptions)),
+                v => JsonSerializer.Deserialize<ICollection<BonusPointModel>>(v, default(JsonSerializerOptions)),
+                new ValueComparer<ICollection<BonusPointModel>>(false))
+            .IsRequired(true);
 
         entity.Property(e => e.PointsSortOptions)
             .HasConversion(new CollectionToStringConverter<SortOptions>(), new ValueComparer<ICollection<SortOptions>>(true));
