@@ -206,11 +206,11 @@ public static class PopulateTestDatabase
         {
             Name = "Points Rule",
             PointsPerPlace = new List<int>() { 5, 4, 3, 2, 1 },
-            BonusPoints = new Dictionary<string, int>()
+            BonusPoints = new List<BonusPointModel>()
             {
-                { "p1", 3 },
-                { "p2", 2 },
-                { "p3", 1 },
+                new() { Type = BonusPointType.Position, Value = 1, Points = 3 },
+                new() { Type = BonusPointType.Position, Value = 2, Points = 2 },
+                new() { Type = BonusPointType.Position, Value = 3, Points = 1 },
             },
             PointsSortOptions = new List<SortOptions>() {
                 SortOptions.PosAsc,

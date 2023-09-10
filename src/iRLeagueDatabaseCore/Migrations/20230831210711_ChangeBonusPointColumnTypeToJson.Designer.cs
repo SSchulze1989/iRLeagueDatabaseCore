@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using iRLeagueDatabaseCore.Models;
 
@@ -10,9 +11,10 @@ using iRLeagueDatabaseCore.Models;
 namespace iRLeagueDatabaseCore.Migrations
 {
     [DbContext(typeof(LeagueDbContext))]
-    partial class LeagueDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230831210711_ChangeBonusPointColumnTypeToJson")]
+    partial class ChangeBonusPointColumnTypeToJson
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2425,12 +2427,6 @@ namespace iRLeagueDatabaseCore.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("RacesCounted")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RacesInPoints")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RacesScored")
                         .HasColumnType("int");
 
                     b.Property<long>("StandingId")
