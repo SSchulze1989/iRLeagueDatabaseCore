@@ -9,6 +9,7 @@ public class PointRuleEntity : IVersionEntity
     {
         Scorings = new HashSet<ScoringEntity>();
         AutoPenalties = new HashSet<AutoPenaltyConfigEntity>();
+        BonusPoints = new List<BonusPointModel>();
     }
 
     public long LeagueId { get; set; }
