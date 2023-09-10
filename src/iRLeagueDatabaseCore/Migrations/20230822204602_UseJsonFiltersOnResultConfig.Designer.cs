@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using iRLeagueDatabaseCore.Models;
 
@@ -10,9 +11,10 @@ using iRLeagueDatabaseCore.Models;
 namespace iRLeagueDatabaseCore.Migrations
 {
     [DbContext(typeof(LeagueDbContext))]
-    partial class LeagueDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230822204602_UseJsonFiltersOnResultConfig")]
+    partial class UseJsonFiltersOnResultConfig
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -238,11 +240,6 @@ namespace iRLeagueDatabaseCore.Migrations
 
                     b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<string>("ResultKind")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
 
                     b.Property<long>("SeasonId")
                         .HasColumnType("bigint");
@@ -654,9 +651,6 @@ namespace iRLeagueDatabaseCore.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("ChampSeasonId")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("Conditions")
                         .IsRequired()
                         .HasColumnType("json");
@@ -691,8 +685,6 @@ namespace iRLeagueDatabaseCore.Migrations
                     b.HasKey("LeagueId", "FilterOptionId");
 
                     b.HasAlternateKey("FilterOptionId");
-
-                    b.HasIndex("LeagueId", "ChampSeasonId");
 
                     b.HasIndex("LeagueId", "PointFilterResultConfigId");
 
@@ -1116,8 +1108,7 @@ namespace iRLeagueDatabaseCore.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("BonusPoints")
-                        .IsRequired()
-                        .HasColumnType("json");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("CreatedByUserId")
                         .HasColumnType("longtext");
@@ -1254,6 +1245,10 @@ namespace iRLeagueDatabaseCore.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<string>("Name")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ResultKind")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<int>("ResultsPerTeam")
@@ -2428,12 +2423,6 @@ namespace iRLeagueDatabaseCore.Migrations
                     b.Property<int>("RacesCounted")
                         .HasColumnType("int");
 
-                    b.Property<int>("RacesInPoints")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RacesScored")
-                        .HasColumnType("int");
-
                     b.Property<long>("StandingId")
                         .HasColumnType("bigint");
 
@@ -3013,11 +3002,6 @@ namespace iRLeagueDatabaseCore.Migrations
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.FilterOptionEntity", b =>
                 {
-                    b.HasOne("iRLeagueDatabaseCore.Models.ChampSeasonEntity", "ChampSeason")
-                        .WithMany("Filters")
-                        .HasForeignKey("LeagueId", "ChampSeasonId")
-                        .OnDelete(DeleteBehavior.ClientCascade);
-
                     b.HasOne("iRLeagueDatabaseCore.Models.ResultConfigurationEntity", "PointFilterResultConfig")
                         .WithMany("PointFilters")
                         .HasForeignKey("LeagueId", "PointFilterResultConfigId")
@@ -3027,8 +3011,6 @@ namespace iRLeagueDatabaseCore.Migrations
                         .WithMany("ResultFilters")
                         .HasForeignKey("LeagueId", "ResultFilterResultConfigId")
                         .OnDelete(DeleteBehavior.ClientCascade);
-
-                    b.Navigation("ChampSeason");
 
                     b.Navigation("PointFilterResultConfig");
 
@@ -3665,8 +3647,6 @@ namespace iRLeagueDatabaseCore.Migrations
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.ChampSeasonEntity", b =>
                 {
                     b.Navigation("EventResults");
-
-                    b.Navigation("Filters");
 
                     b.Navigation("ResultConfigurations");
 

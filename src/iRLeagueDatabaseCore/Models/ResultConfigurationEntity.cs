@@ -17,7 +17,6 @@ public class ResultConfigurationEntity : IVersionEntity
 
     public string Name { get; set; }
     public string DisplayName { get; set; }
-    public ResultKind ResultKind { get; set; }
     public int ResultsPerTeam { get; set; }
 
     public virtual LeagueEntity League { get; set; }
@@ -49,8 +48,6 @@ public sealed class ResultConfigurationEntityConfiguration : IEntityTypeConfigur
 
         entity.Property(e => e.ResultConfigId)
             .ValueGeneratedOnAdd();
-
-        entity.Property(e => e.ResultKind).HasConversion<EnumToStringConverter<ResultKind>>();
 
         entity.Property(e => e.CreatedOn).HasColumnType("datetime");
 

@@ -25,6 +25,8 @@ public class StandingRowEntity
     public int TotalPointsChange { get; set; }
     public int Races { get; set; }
     public int RacesCounted { get; set; }
+    public int RacesScored { get; set; }
+    public int RacesInPoints { get; set; }
     public int DroppedResultCount { get; set; }
     public int CompletedLaps { get; set; }
     public int CompletedLapsChange { get; set; }

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using iRLeagueDatabaseCore.Models;
 
@@ -10,9 +11,10 @@ using iRLeagueDatabaseCore.Models;
 namespace iRLeagueDatabaseCore.Migrations
 {
     [DbContext(typeof(LeagueDbContext))]
-    partial class LeagueDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230904070324_AddRacesScored")]
+    partial class AddRacesScored
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -238,11 +240,6 @@ namespace iRLeagueDatabaseCore.Migrations
 
                     b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<string>("ResultKind")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
 
                     b.Property<long>("SeasonId")
                         .HasColumnType("bigint");
@@ -1116,8 +1113,7 @@ namespace iRLeagueDatabaseCore.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("BonusPoints")
-                        .IsRequired()
-                        .HasColumnType("json");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("CreatedByUserId")
                         .HasColumnType("longtext");
@@ -1254,6 +1250,10 @@ namespace iRLeagueDatabaseCore.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<string>("Name")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ResultKind")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<int>("ResultsPerTeam")
