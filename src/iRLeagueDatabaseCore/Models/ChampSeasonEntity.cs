@@ -17,6 +17,7 @@ public partial class ChampSeasonEntity : IVersionEntity
     public long SeasonId { get; set; }
     public long? DefaultResultConfigId { get; set; }
     public long? StandingConfigId { get; set; }
+    public ResultKind ResultKind { get; set; }
     public bool IsActive { get; set; }
 
     public virtual ChampionshipEntity Championship { get; set; }
@@ -51,6 +52,10 @@ public sealed class ChampSeasonEntityConfiguration : IEntityTypeConfiguration<Ch
 
         entity.Property(e => e.ChampSeasonId)
             .ValueGeneratedOnAdd();
+
+        entity.Property(e => e.ResultKind)
+            .HasConversion<EnumToStringConverter<ResultKind>>()
+            .HasMaxLength(50);
 
         entity.HasOne(d => d.Championship)
             .WithMany(p => p.ChampSeasons)
