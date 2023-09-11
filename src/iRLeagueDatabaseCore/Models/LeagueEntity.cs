@@ -32,7 +32,9 @@ public class LeagueEntity : Revision, IVersionEntity
     /// Set public visibility of protests
     /// </summary>
     public ProtestPublicSetting ProtestsPublic { get; set; }
+    public ProtestFormAccess ProtestFormAccess { get; set; }
     public LeaguePublicSetting LeaguePublic { get; set; }
+    public bool EnableLiveReviews { get; set; }
     public SubscriptionStatus Subscription { get; set; }
     public DateTime? Expires { get; set; }
 
