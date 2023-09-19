@@ -15,6 +15,7 @@ public partial class StandingConfigurationEntity : IVersionEntity
     public ResultKind ResultKind { get; set; }
     public bool UseCombinedResult { get; set; }
     public int WeeksCounted { get; set; }
+    public ICollection<SortOptions> SortOptions { get; set; }
 
     public virtual LeagueEntity League { get; set; }
     public virtual IEnumerable<ChampSeasonEntity> ChampSeasons { get; set; }
@@ -41,6 +42,9 @@ public sealed class StandingConfigurationEntityConfiguration : IEntityTypeConfig
 
         entity.Property(e => e.StandingConfigId)
             .ValueGeneratedOnAdd();
+
+        entity.Property(e => e.SortOptions)
+            .HasConversion(new CollectionToStringConverter<SortOptions>(), new ValueComparer<ICollection<SortOptions>>(true));
 
         entity.HasOne(d => d.League)
             .WithMany(p => p.StandingConfigs)
