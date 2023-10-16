@@ -8,6 +8,7 @@ public partial class ReviewCommentVoteEntity
     public long ReviewVoteId { get; set; }
     public long CommentId { get; set; }
     public long? MemberAtFaultId { get; set; }
+    public long? TeamAtFaultId { get; set; }
     public long? VoteCategoryId { get; set; }
     public string Description { get; set; }
     /// <summary>
@@ -19,6 +20,7 @@ public partial class ReviewCommentVoteEntity
     public virtual ReviewCommentEntity Comment { get; set; }
     public virtual VoteCategoryEntity VoteCategory { get; set; }
     public virtual MemberEntity MemberAtFault { get; set; }
+    public virtual TeamEntity TeamAtFault { get; set;}
 }
 
 public class CommentReviewVoteEntityConfiguration : IEntityTypeConfiguration<ReviewCommentVoteEntity>
@@ -49,5 +51,9 @@ public class CommentReviewVoteEntityConfiguration : IEntityTypeConfiguration<Rev
         entity.HasOne(d => d.MemberAtFault)
             .WithMany(p => p.CommentReviewVotes)
             .HasForeignKey(d => d.MemberAtFaultId);
+
+        entity.HasOne(d => d.TeamAtFault)
+            .WithMany()
+            .HasForeignKey(d => new { d.LeagueId, d.TeamAtFaultId });
     }
 }
