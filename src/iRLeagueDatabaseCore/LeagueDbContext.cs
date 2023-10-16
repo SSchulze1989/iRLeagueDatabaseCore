@@ -95,6 +95,8 @@ public partial class LeagueDbContext : DbContext, ILeagueDbContext
             .HasQueryFilter(mt => mt.LeagueId == LeagueProvider.LeagueId);
         builder.Entity<IncidentReviewEntity>()
             .HasQueryFilter(mt => mt.LeagueId == LeagueProvider.LeagueId);
+        builder.Entity<IncidentReviewsInvolvedTeams>()
+            .HasQueryFilter(mt => mt.LeagueId == LeagueProvider.LeagueId);
         builder.Entity<LeagueMemberEntity>()
             .HasQueryFilter(mt => mt.LeagueId == LeagueProvider.LeagueId);
         builder.Entity<PointRuleEntity>()

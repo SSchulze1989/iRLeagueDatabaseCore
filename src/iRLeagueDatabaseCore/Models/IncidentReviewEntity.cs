@@ -77,6 +77,9 @@ public class IncidentReviewEntityConfiguration : IEntityTypeConfiguration<Incide
 
         entity.HasMany(d => d.InvolvedTeams)
             .WithMany(p => p.InvolvedReviews)
-            .UsingEntity(e => e.ToTable("IncidentReviewsInvolvedTeams"));
+            .UsingEntity<IncidentReviewsInvolvedTeams>(
+                right => right.HasOne(x => x.Team).WithMany().HasForeignKey(x => new { x.LeagueId, x.TeamRefId }),
+                left => left.HasOne(x => x.Review).WithMany().HasForeignKey(x => new { x.LeagueId, x.ReviewRefId })
+            );
     }
 }
