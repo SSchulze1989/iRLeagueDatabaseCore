@@ -9,6 +9,7 @@ public partial class IncidentReviewEntity : IVersionEntity
         AcceptedReviewVotes = new HashSet<AcceptedReviewVoteEntity>();
         Comments = new HashSet<ReviewCommentEntity>();
         InvolvedMembers = new HashSet<MemberEntity>();
+        InvolvedTeams = new HashSet<TeamEntity>();
         ReviewPenaltys = new HashSet<ReviewPenaltyEntity>();
     }
 
