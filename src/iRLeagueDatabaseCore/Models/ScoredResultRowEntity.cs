@@ -102,6 +102,8 @@ public class ScoredResultRowEntityConfiguration : IEntityTypeConfiguration<Score
 
         entity.HasIndex(e => e.TeamId);
 
+        entity.Property(e => e.CarNumber).HasMaxLength(8);
+
         entity.Property(e => e.QualifyingTimeAt).HasColumnType("datetime");
 
         entity.Property(e => e.AvgLapTime).HasConversion<TimeSpanToTicksConverter>();

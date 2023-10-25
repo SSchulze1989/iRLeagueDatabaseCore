@@ -4,7 +4,7 @@ public class ResultRowBase
 {
     public double StartPosition { get; set; }
     public double FinishPosition { get; set; }
-    public int CarNumber { get; set; }
+    public string CarNumber { get; set; }
     public int ClassId { get; set; }
     public string Car { get; set; }
     public string CarClass { get; set; }
