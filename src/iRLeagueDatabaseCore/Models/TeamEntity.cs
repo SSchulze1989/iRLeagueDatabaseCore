@@ -31,6 +31,7 @@ public partial class TeamEntity : IVersionEntity
 
     public virtual ICollection<LeagueMemberEntity> Members { get; set; }
     public virtual LeagueEntity League { get; set; }
+    public virtual IEnumerable<IncidentReviewEntity> InvolvedReviews { get; set; }
 }
 
 public class TeamEntityConfiguration : IEntityTypeConfiguration<TeamEntity>

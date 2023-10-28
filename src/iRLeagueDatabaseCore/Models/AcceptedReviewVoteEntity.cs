@@ -13,6 +13,7 @@ public partial class AcceptedReviewVoteEntity
     public long LeagueId { get; set; }
     public long ReviewId { get; set; }
     public long? MemberAtFaultId { get; set; }
+    public long? TeamAtFaultId { get; set; }
     public long? VoteCategoryId { get; set; }
     public string Description { get; set; }
     /// <summary>
@@ -23,6 +24,7 @@ public partial class AcceptedReviewVoteEntity
 
     public virtual VoteCategoryEntity VoteCategory { get; set; }
     public virtual MemberEntity MemberAtFault { get; set; }
+    public virtual TeamEntity TeamAtFault { get; set; }
     public virtual IncidentReviewEntity Review { get; set; }
     public virtual ICollection<ReviewPenaltyEntity> ReviewPenaltys { get; set; }
 }
@@ -51,6 +53,10 @@ public class AcceptedReviewVoteEntityConfiguration : IEntityTypeConfiguration<Ac
         entity.HasOne(d => d.MemberAtFault)
             .WithMany(p => p.AcceptedReviewVotes)
             .HasForeignKey(d => d.MemberAtFaultId);
+
+        entity.HasOne(d => d.TeamAtFault)
+            .WithMany()
+            .HasForeignKey(d => new { d.LeagueId, d.TeamAtFaultId });
 
         entity.HasOne(d => d.Review)
             .WithMany(p => p.AcceptedReviewVotes)

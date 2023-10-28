@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using iRLeagueDatabaseCore.Models;
 
@@ -10,9 +11,10 @@ using iRLeagueDatabaseCore.Models;
 namespace iRLeagueDatabaseCore.Migrations
 {
     [DbContext(typeof(LeagueDbContext))]
-    partial class LeagueDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231016191207_ReviewsTeamAtFault")]
+    partial class ReviewsTeamAtFault
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1328,9 +1330,8 @@ namespace iRLeagueDatabaseCore.Migrations
                     b.Property<int>("CarId")
                         .HasColumnType("int");
 
-                    b.Property<string>("CarNumber")
-                        .HasMaxLength(8)
-                        .HasColumnType("varchar(8)");
+                    b.Property<int>("CarNumber")
+                        .HasColumnType("int");
 
                     b.Property<int>("ClassId")
                         .HasColumnType("int");
@@ -1749,9 +1750,8 @@ namespace iRLeagueDatabaseCore.Migrations
                     b.Property<int>("CarId")
                         .HasColumnType("int");
 
-                    b.Property<string>("CarNumber")
-                        .HasMaxLength(8)
-                        .HasColumnType("varchar(8)");
+                    b.Property<int>("CarNumber")
+                        .HasColumnType("int");
 
                     b.Property<int>("ClassId")
                         .HasColumnType("int");
