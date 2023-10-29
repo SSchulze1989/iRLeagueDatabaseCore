@@ -32,6 +32,8 @@ public class ResultRowEntityConfiguration : IEntityTypeConfiguration<ResultRowEn
         entity.Property(e => e.ResultRowId)
             .ValueGeneratedOnAdd();
 
+        entity.Property(e => e.CarNumber).HasMaxLength(8);
+
         entity.Property(e => e.QualifyingTimeAt).HasColumnType("datetime");
 
         entity.Property(e => e.AvgLapTime).HasConversion<TimeSpanToTicksConverter>();

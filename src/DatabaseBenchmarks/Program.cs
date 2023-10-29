@@ -1,4 +1,5 @@
 ﻿using BenchmarkDotNet.Attributes;
+using iRLeagueApiCore.Common.Enums;
 using iRLeagueApiCore.Common.Models;
 using iRLeagueDatabaseCore.Models;
 using Microsoft.EntityFrameworkCore;
@@ -213,7 +214,7 @@ public class QuerySeasonResultsBenchmarks
                 PositionChange = row.PositionChange,
                 QualifyingTime = row.QualifyingTime,
                 SeasonStartIrating = row.SeasonStartIRating,
-                Status = row.Status,
+                Status = (RaceStatus)row.Status,
                 TeamId = row.TeamId
             }),
             CreatedOn = sessionResult.CreatedOn,

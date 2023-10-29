@@ -9,6 +9,7 @@ public partial class IncidentReviewEntity : IVersionEntity
         AcceptedReviewVotes = new HashSet<AcceptedReviewVoteEntity>();
         Comments = new HashSet<ReviewCommentEntity>();
         InvolvedMembers = new HashSet<MemberEntity>();
+        InvolvedTeams = new HashSet<TeamEntity>();
         ReviewPenaltys = new HashSet<ReviewPenaltyEntity>();
     }
 
@@ -42,6 +43,7 @@ public partial class IncidentReviewEntity : IVersionEntity
     public virtual ICollection<AcceptedReviewVoteEntity> AcceptedReviewVotes { get; set; }
     public virtual ICollection<ReviewCommentEntity> Comments { get; set; }
     public virtual ICollection<MemberEntity> InvolvedMembers { get; set; }
+    public virtual ICollection<TeamEntity> InvolvedTeams { get; set; }
     public virtual ICollection<ReviewPenaltyEntity> ReviewPenaltys { get; set; }
 }
 
@@ -73,5 +75,12 @@ public class IncidentReviewEntityConfiguration : IEntityTypeConfiguration<Incide
         entity.HasMany(d => d.InvolvedMembers)
             .WithMany(p => p.InvolvedReviews)
             .UsingEntity(e => e.ToTable("IncidentReviewsInvolvedMembers"));
+
+        entity.HasMany(d => d.InvolvedTeams)
+            .WithMany(p => p.InvolvedReviews)
+            .UsingEntity<IncidentReviewsInvolvedTeams>(
+                right => right.HasOne(x => x.Team).WithMany().HasForeignKey(x => new { x.LeagueId, x.TeamRefId }),
+                left => left.HasOne(x => x.Review).WithMany().HasForeignKey(x => new { x.LeagueId, x.ReviewRefId })
+            );
     }
 }
