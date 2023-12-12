@@ -81,6 +81,7 @@ public partial class ScoredResultRowEntity : ResultRowBase
     public virtual TeamEntity Team { get; set; }
     public virtual ScoredSessionResultEntity ScoredSessionResult { get; set; }
     public virtual ICollection<AddPenaltyEntity> AddPenalties { get; set; }
+    public virtual ICollection<AddBonusEntity> AddBonuses { get; set; }
     public virtual IEnumerable<ScoredResultRowEntity> TeamParentRows { get; set; }
     public virtual ICollection<ReviewPenaltyEntity> ReviewPenalties { get; set; }
     public virtual ICollection<ScoredResultRowEntity> TeamResultRows { get; set; }

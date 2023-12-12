@@ -77,6 +77,8 @@ public partial class LeagueDbContext : DbContext, ILeagueDbContext
             .HasQueryFilter(mt => mt.LeagueId == LeagueProvider.LeagueId);
         builder.Entity<AddPenaltyEntity>()
             .HasQueryFilter(mt => mt.LeagueId == LeagueProvider.LeagueId);
+        builder.Entity<AddBonusEntity>()
+            .HasQueryFilter(mt => mt.LeagueId == LeagueProvider.LeagueId);
         builder.Entity<AutoPenaltyConfigEntity>()
             .HasQueryFilter(mt => mt.LeagueId == LeagueProvider.LeagueId);
         builder.Entity<ReviewCommentEntity>()
