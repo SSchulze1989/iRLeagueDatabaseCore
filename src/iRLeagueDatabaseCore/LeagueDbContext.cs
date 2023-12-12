@@ -16,6 +16,7 @@ public partial class LeagueDbContext : DbContext, ILeagueDbContext
 
     public virtual DbSet<AcceptedReviewVoteEntity> AcceptedReviewVotes { get; set; }
     public virtual DbSet<AddPenaltyEntity> AddPenaltys { get; set; }
+    public virtual DbSet<AddBonusEntity> AddBonuses { get; set; }
     public virtual DbSet<AutoPenaltyConfigEntity> AutoPenaltyConfigs { get; set; }
     public virtual DbSet<ReviewCommentEntity> ReviewComments { get; set; }
     public virtual DbSet<ReviewCommentVoteEntity> ReviewCommentVotes { get; set; }
