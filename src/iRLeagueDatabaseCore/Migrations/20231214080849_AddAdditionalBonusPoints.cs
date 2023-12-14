@@ -10,7 +10,7 @@ namespace iRLeagueDatabaseCore.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "AddBonusEntity",
+                name: "AddBonuses",
                 columns: table => new
                 {
                     LeagueId = table.Column<long>(type: "bigint", nullable: false),
@@ -22,10 +22,10 @@ namespace iRLeagueDatabaseCore.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AddBonusEntity", x => new { x.LeagueId, x.AddBonusId });
-                    table.UniqueConstraint("AK_AddBonusEntity_AddBonusId", x => x.AddBonusId);
+                    table.PrimaryKey("PK_AddBonuses", x => new { x.LeagueId, x.AddBonusId });
+                    table.UniqueConstraint("AK_AddBonuses_AddBonusId", x => x.AddBonusId);
                     table.ForeignKey(
-                        name: "FK_AddBonusEntity_ScoredResultRows_LeagueId_ScoredResultRowId",
+                        name: "FK_AddBonuses_ScoredResultRows_LeagueId_ScoredResultRowId",
                         columns: x => new { x.LeagueId, x.ScoredResultRowId },
                         principalTable: "ScoredResultRows",
                         principalColumns: new[] { "LeagueId", "ScoredResultRowId" },
@@ -33,15 +33,15 @@ namespace iRLeagueDatabaseCore.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AddBonusEntity_LeagueId_ScoredResultRowId",
-                table: "AddBonusEntity",
+                name: "IX_AddBonuses_LeagueId_ScoredResultRowId",
+                table: "AddBonuses",
                 columns: new[] { "LeagueId", "ScoredResultRowId" });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AddBonusEntity");
+                name: "AddBonuses");
         }
     }
 }

@@ -11,7 +11,7 @@ using iRLeagueDatabaseCore.Models;
 namespace iRLeagueDatabaseCore.Migrations
 {
     [DbContext(typeof(LeagueDbContext))]
-    [Migration("20231212183823_AddAdditionalBonusPoints")]
+    [Migration("20231214080849_AddAdditionalBonusPoints")]
     partial class AddAdditionalBonusPoints
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -111,7 +111,7 @@ namespace iRLeagueDatabaseCore.Migrations
 
                     b.HasIndex("LeagueId", "ScoredResultRowId");
 
-                    b.ToTable("AddBonusEntity");
+                    b.ToTable("AddBonuses");
                 });
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.AddPenaltyEntity", b =>

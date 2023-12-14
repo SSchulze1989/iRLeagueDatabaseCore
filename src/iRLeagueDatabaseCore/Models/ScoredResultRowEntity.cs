@@ -10,6 +10,8 @@ public partial class ScoredResultRowEntity : ResultRowBase
         TeamParentRows = new HashSet<ScoredResultRowEntity>();
         TeamResultRows = new HashSet<ScoredResultRowEntity>();
         StandingRows = new HashSet<StandingRows_ScoredResultRows>();
+        AddPenalties = new HashSet<AddPenaltyEntity>();
+        AddBonuses = new HashSet<AddBonusEntity>();
     }
 
     public ScoredResultRowEntity(ResultRowEntity resultRow)

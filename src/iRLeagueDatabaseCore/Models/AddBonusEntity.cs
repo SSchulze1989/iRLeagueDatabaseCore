@@ -28,6 +28,8 @@ public sealed class AddBonusEntityConfiguration : IEntityTypeConfiguration<AddBo
 
         entity.HasOne(x => x.ScoredResultRow)
             .WithMany(x => x.AddBonuses)
-            .HasForeignKey(d => new { d.LeagueId, d.ScoredResultRowId });
+            .HasForeignKey(d => new { d.LeagueId, d.ScoredResultRowId })
+            .IsRequired(true)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

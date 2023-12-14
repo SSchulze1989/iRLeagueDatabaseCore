@@ -109,7 +109,7 @@ namespace iRLeagueDatabaseCore.Migrations
 
                     b.HasIndex("LeagueId", "ScoredResultRowId");
 
-                    b.ToTable("AddBonusEntity");
+                    b.ToTable("AddBonuses");
                 });
 
             modelBuilder.Entity("iRLeagueDatabaseCore.Models.AddPenaltyEntity", b =>
