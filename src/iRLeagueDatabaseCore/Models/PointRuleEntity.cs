@@ -16,8 +16,10 @@ public class PointRuleEntity : IVersionEntity
     public long PointRuleId { get; set; }
 
     public string Name { get; set; }
+    public PointRuleType RuleType { get; set; }
     public ICollection<int> PointsPerPlace { get; set; }
     public ICollection<BonusPointModel> BonusPoints { get; set; }
+    public string Formula { get; set; }
     public int MaxPoints { get; set; }
     public int PointDropOff { get; set; }
     public ICollection<SortOptions> PointsSortOptions { get; set; }
